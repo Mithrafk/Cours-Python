@@ -12,3 +12,7 @@
 * Présentation des outils disponibles
     * scikit-learn
 * Travail sur les protocoles de machine-learning
+
+## Avancement Theo
+
+* Etape 1 :
