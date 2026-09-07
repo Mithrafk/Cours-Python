@@ -1,8 +1,9 @@
 #%% Initialisation
 import numpy as np
+import pandas as pd
 
-X_init = np.array(['A', 'C', 'C', 'G', 'A', 'C', 'T', 'T', 'A', 'G', 'A', 'C', 'A', 'G', 'G', 'T'])
-Y_init = np.array(['T', 'T', 'A', 'C', 'C', 'G', 'A', 'C', 'G', 'T', 'A', 'T', 'A', 'C', 'A', 'G', 'C', 'G', 'T', 'A'])
+X_init = np.array(['A', 'C', 'C', 'G', 'A', 'C', 'T', 'T', 'A', 'G', 'A', 'C', 'A', 'G', 'G', 'T'], dtype=str)
+Y_init = np.array(['T', 'T', 'A', 'C', 'C', 'G', 'A', 'C', 'G', 'T', 'A', 'T', 'A', 'C', 'A', 'G', 'C', 'G', 'T', 'A'],dtype=str)
 
 X_test = np.copy(X_init)
 Y_test = np.copy(Y_init)
@@ -39,14 +40,22 @@ def Sim(A,B,i,j):
     return score
 
 def alignement(A,B):
+    # recherche du chemin optimum
     n1 = len(A)
     n2 = len(B)
 
 
-def mat_sim():
-    return
-#%% Run
-print(Sim(X_test, Y_test, 5,8))
+def mat_sim(A,B):
+    # construire la matrice
+    n = len(A)
+    p = len(B)
 
+    M = np.zeros((n+1,p+1))
+
+    return M
+#%% Run
+#print(Sim(X_test, Y_test, 15,20))
+
+print(mat_sim(X_test,Y_test))
 
 # %%
