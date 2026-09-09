@@ -1,0 +1,47 @@
+Apprendre un construire un fichier markdown
+
+perf de 82% pas toujours bien : dépend de l'endroit ou on l'applique
+    dépend aussi du jeux de donné (dans DS 82% gauche 18% droite, decision toujours gauche bah 82% bonne reponse mais modele nul)
+
+Approches ensemblistes (Arbres foret +/- aléatoire, XGBoost ...)
+    bon modèle qu'on duplique et on prend le moyenne des resultats : score globale meilleur
+- S10 :
+Comment  ca marche :
+    Basiquement X contient echantantillons avec ses carac et Y la supervision
+    Plus efficace de combiner des décisions simples : discriminer selon une seule variable explicative
+        On peut trouver des critères enthropique facilement avec des algo recursif performant et efficace
+
+- S16 : Les arbres de décisions
+Approche Ancienne : C4.5, mais aussi XGBoost ... d'actualité
+    La base = faire des sous-ensemble : tout les échantillons mais avec des variables différentes : Random-Forest
+    Ensuite gradient ...
+    Le Boosting = base de Random-Forest mais pas vrm random. Les arbres d'après sont choisis en fonction des résultats des précédents = On regarde les arbres qui donnaient de bons scores et les mauvais, et l'arbre d'après on tente de corriger les erreurs : on fait un tirage aléatoire des échantillons mais l'aléatoire est biaisé sur les points qui rendaient des erreurs, pour finir a W que sur des pnt erreurs et donc le modèle fit tout mieux
+
+
+- S17 : Les SVM (Support de Vecteur Machine)
+Modèle pomme banane ou clown : Trouver un vecteur w pour obtenir
+f(x) = w . X On fait ca avec modèle de pondération linéaire et on separe les points pas trop mal.
+
+Si on cherche la manière de prédire les point proches k(xi, xj) avec un vecteur w qu'on construit
+On fait ca avec f(x) = Kx . w. Ca permet de faire un modèle non linéaire pour discriminer des points, meilleur que linéaire dans certains certains
+Ce qu'il faut regler, c'est le "noyau" autour de nos points suivant des lois gausienne, polynomiales ... 
+Ex S21 : différence linéaire, gaussien réglé et gaussienne relgé trop faible
+
+- S22 :
+Regression logistique = classifieur linéaire qui rend 2 classes en sorties
+    Passer en n classes ? "1 contre tous"
+    On tourne le classifieur n fois et on ressort n groupes qui est positif dans chaque classifieur
+    Problème :
+        Rejet en distance : score négatif dans les n fonctions donc "pas de foyer". 
+        On peut se dire on le met dans le score le plus élevé OU on ne le traite pas / l'expert le traitera --> Necessite l'humain, mais au moins pour quelques point et pas tous. Donc le modèle a un bon score sur les points ou ca passe bien, et les autres posé par expert qui donne un modèle acceptable
+        Rejet en ambiguité : score positif dans > 2 classes. On peut fixer des seuils ou rejeter
+
+- S26: Evaluation
+On ne peut pas train et evaluer le modele sur les memes données
+On va donc prendre jeu(x) de train et jeu test
+Problème : 
+    Comment couper ? Penser à mélanger car elles sont peut etre ordonner
+    Données trop peu nombreuses : 1/2% du DS est dans la cat B donc on pourrait les louper en dans le train ou le test
+    Jeu trop petit = Validation croisée : train et test sur plusieurs itération en modifiant les train/test a chaque fois
+
+    - Fuite de données : on va tester sur DS qui contient des données contenant des données du train, parfois sans "savoir". Ex replica bio, données "identiques" mais dans des pots différents sans mélange.
