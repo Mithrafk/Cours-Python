@@ -93,19 +93,39 @@ class carnivore:
         self.age = 1
         self.vivant = True
 
-    def deplacement(self, dx, dy):
-        x = self.pos[0] + dx
-        y = self.pos[1] + dy
-        if x < 0:
-            x = Taille_carte - 1
-        elif x >= Taille_carte:
-            x = 0
-        if y < 0:
-            y = Taille_carte - 1
-        elif y >= Taille_carte:
-            y = 0
-        self.pos = (x,y)
-        self.nourriture -= 0.5
+    def deplacement(self, xh, yh):
+            x = self.pos[0]
+            y = self.pos[1]
+    
+            if xh and yh:   # si on a des plantes
+                dist = [((xh[i]-x)**2 + (yh[i]-y)**2, i) for i in range(len(xh))]
+                nearest = min(dist) 
+    
+                if np.sqrt(nearest[0]) <= 10:
+                    dx = np.sign(xh[nearest[1]] - x)
+                    dy = np.sign(yh[nearest[1]] - y)
+                    x += dx
+                    y += dy
+
+                else:
+                    x += rd.randint(-1, 1)
+                    y += rd.randint(-1,1)
+    
+            else:
+                x += rd.randint(-1, 1)
+                y += rd.randint(-1,1)
+                
+            if x < 0:
+                x = Taille_carte - 1
+            elif x >= Taille_carte:
+                x = 0
+            if y < 0:
+                y = Taille_carte - 1
+            elif y >= Taille_carte:
+                y = 0
+
+            self.pos = (x,y)
+            self.nourriture -= 0.5
 
     def manger(self, herbivore):
         if herbivore.vivant:
@@ -126,7 +146,7 @@ class carnivore:
             self.mort()
             return None
         
-        self.deplacement(rd.randint(-1,1),rd.randint(-1,1)) # mouvement aléatoire
+        self.deplacement(xh,yh) # mouvement aléatoire
 
         for herbivore in herbivore_list:
             if herbivore.vivant and herbivore.pos == self.pos:
