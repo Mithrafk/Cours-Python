@@ -1,0 +1,9 @@
+{
+    "Print newline": {
+        "prefix": "pn",
+        "body": [
+            "print('\\n')"
+        ],
+        "description": "Affiche une ligne vide"
+    }
+}
