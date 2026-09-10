@@ -1,0 +1,52 @@
+- Evaluation des modèles :
+    MSE : Mean Square Error (R : Root)
+    Accuracy : taux bonne classification (précision signifie autre chose en fr)
+
+    Matrice de confusion : permet de ressortir quel classes confond le modèle
+        ex : nombre --> confusion entre 4 et 9 plus important que les autres
+
+    Cas ou dispersion des données déséquillibré (90% de a, 10% de b)
+        précision : taux de faux positif - on est sur que si on detecte une erreur, c'est a raison ?
+        rappel (couverture) : taux faux negatif - on a detecté toutes les erreurs ?
+        --> F1 = moyenne harmonique precision et rappel ( elevé = bien dans les 2 métriques)
+        /!\ On calcul la précision et les rappel sur une seule classe /!\
+
+    Courbe ROC (Receiver Operating Characteristic) : 
+        Permet de challenger le modèle 
+        --> AUC (Ara Under the Curve) : 0,5 = aléatoire, meilleur à 1
+
+    Méthodes d'évaluation indépendant des méthodes d'optentions des métriques (on peu modèles reg mais passer eval classe en "modifiant" les données)
+
+- Selection de modèles :
+    Choisir les paramètres :
+        paramètre : réglé par le modèle lors du "fit"
+        hyper-paramètre : réglé par l'utilisateur pour choisir choisir celui qui donne le meilleur modèle
+            Great Search : chercher les meilleurs hyper-paramètres
+            Optnua : Algo pour chercher le jeux de paramètre otpimal de n-hyperparamètre en lui disant de tester N jeu différents (son "budget calcul")
+        Pour ne pas over fitter, rajouter un paramètre de pénalisation de la complexité = On ne tente pas d'apprendre par coeur tout, mais une méthode de tout retrouver
+        On a donc besoin de 3 jeux de données ? 1 pour les paramètres, 1 pour les hyperparamètre puis 1 de test ?
+
+- Selection de variables :
+    Imshow : (Heatmap) donne de manière visuel les distances entre des points
+        Permet egalement de discerner facielemnt le bruit à l'oeil humain, mais la machine a du mal a voir
+        --> Penser à nettoyer ses données
+    Rajouter bruit (= des colonnes) tendances à partir dans le surapprentissage (modèle très complexe mais faible en test)
+    Comment savoir bonne ou mauvaise variable ?
+        Etude de corrélation bon indice mais pas magique (seulement linéaire et pas l'interet combiné)
+        De même manière que pour le choix des paramètres, on peut choisir des sous jeux de données et faire des modèles, pour voir quel jeu de base donne meilleur modèle
+            --> Peut vite couter chere de faire combinatoire sur combinatoire
+        On peut aussi regarder l'influence des wi sur le calcul. Un wi petit n'influence pas trop
+            --> Attention à l'effet d'echelle (normalisation std/mean)
+                              effet de masquage avec des var corrélées, on peut avoir des wi qui diminuent
+        Pour des modèles non linéaires, l'importance des décisions est plus complexe a voir
+            --> nombre de fois qu'on choisit un axe/une variable
+            --> La hauteur dans l'arbre (haut = très disciminant)
+    
+    Méthode de selection des carac par itération :
+        - Recursive Backward Elimination : compare score du modèle sur N-1 cat des données
+            on retire la moins bonne colonne, puis on recommence.
+            la perf atteind un max : on a enlever le bruit, si on continue on enleve des colonnes qui contiennent de l'info
+    
+    Par PCA : Les sors un X' qui reduit la dimensionnalité, et induit (pas trivialement) une reduction du nombre de variables
+        (méthode du coude pour choisir le nombre de vp à keep)
+        
