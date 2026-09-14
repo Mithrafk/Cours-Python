@@ -1,6 +1,8 @@
 #%%
 import numpy as np
-import pandas as pd
+import matplotlib.pyplot as plt 
+
+#import pandas as pd
 
 #%% Definir une matrice en numpy
 A = np.array([[1,2,3,4], [1,3,4,5], [1,4,2,12]])
@@ -44,4 +46,36 @@ print(B2)
 print(np.shape(A), np.shape(B))
 np.concatenate( (B,B2), axis = 1)
 
+
+# %%
+A = np.random.rand(3,3)
+B = np.random.rand(3,3)
+print(A)
+print('\n')
+print(B)
+print('\n')
+print(A[np.round(B)==0])
+
+# %%
+C = np.round(A) - np.round(B)
+print(np.round(A), '\n'*2, np.round(B), '\n'*2, C)
+# %%
+print(B)
+print(np.argmax(B,0), np.argmax(B,1))
+print(np.where(B == B.max()))
+print(B.max())
+print(B[B.argmax()])
+
+
+# %%
+x = np.linspace(0, 10, 30)
+y = np.linspace(-3, 3, 30)
+xgrid, ygrid = np.meshgrid(x, y)
+zgrid = 3*xgrid - 5*ygrid
+
+plt.contourf(xgrid, ygrid, zgrid)
+
+fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
+ax.plot_surface(xgrid, ygrid, zgrid, cmap='coolwarm')
+plt.show()
 # %%

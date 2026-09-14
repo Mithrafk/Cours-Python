@@ -1,11 +1,35 @@
-# 📊 Cheat Sheet Matplotlib
+# 📊 Cheat Sheet Affichage graphique (Matplotlib & Seaborn)
 
 > Basée sur les notebooks *Affichage matplotlib* et *Affichage avancé*.
-> Convention : `import matplotlib.pyplot as plt` (et souvent `import numpy as np`)
+> Convention : `import matplotlib.pyplot as plt` (et souvent `import numpy as np`) ; `import seaborn as sns` pour la partie II.
+
+## Sommaire
+
+**I. Matplotlib**
+1. [Structure de base d'un graphique](#i1-structure-de-base-dun-graphique)
+2. [Nuages de points et courbes](#i2-nuages-de-points-et-courbes)
+3. [Sous-graphiques (`subplot`)](#i3-sous-graphiques-subplot)
+4. [Affichage de matrices (images)](#i4-affichage-de-matrices-images)
+5. [Histogrammes](#i5-histogrammes)
+6. [Remplissage entre courbes et intervalles de confiance](#i6-remplissage-entre-courbes-et-intervalles-de-confiance)
+7. [Boîtes à moustaches (boxplot)](#i7-boîtes-à-moustaches-boxplot)
+8. [Affichage 3D et grilles (`meshgrid`)](#i8-affichage-3d-et-grilles-meshgrid)
+9. [Interactivité (usage avancé)](#i9-interactivité-usage-avancé)
+
+**II. Seaborn**
+1. [Style général](#ii1-style-général)
+2. [Distributions (1D / 2D)](#ii2-distributions-1d--2d)
+3. [Relations entre variables](#ii3-relations-entre-variables)
+4. [Variables catégorielles](#ii4-variables-catégorielles)
+5. [Matrices et évaluation de modèles (ML/DL)](#ii5-matrices-et-évaluation-de-modèles-mldl)
+
+[Récapitulatif des pièges classiques](#-récapitulatif-des-pièges-classiques)
 
 ---
 
-## 1. Structure de base d'un graphique
+# I. Matplotlib
+
+## I.1. Structure de base d'un graphique
 
 | Fonction | Paramètres essentiels | Explication |
 |---|---|---|
@@ -16,7 +40,7 @@
 | `plt.legend(loc=n)` | `loc` = position (1=haut droite, 2=haut gauche, 3=bas gauche, 4=bas droite...) | Affiche la légende, à condition d'avoir donné un `label=` à chaque tracé. |
 | `plt.axis([xmin,xmax,ymin,ymax])` | liste des 4 bornes | Force manuellement les limites des axes (utile pour éviter les effets d'optique liés à un zoom automatique). |
 | `plt.savefig(fichier)` | `fichier` (ex `'fig.pdf'`) | Sauvegarde la figure **courante**. Préférer un format **vectoriel** (`.pdf`, `.svg`) pour un zoom sans perte de qualité, notamment pour un rapport. |
-| `plt.grid()` | — | Affiche une grille en fond. |
+| `plt.grid(visible, which=, axis=, color=, linestyle=, linewidth=, alpha=)` | `visible` (`True`/`False`) ; `which`=`'major'`/`'minor'`/`'both'` ; `axis`=`'both'`/`'x'`/`'y'` ; `color` (ex `'gray'`) ; `linestyle`(ou `ls`) = `'-'`/`'--'`/`'-.'`/`':'` ; `linewidth`(ou `lw`) ; `alpha` (0 à 1) | Affiche une grille en fond, avec un contrôle fin du style. Équivalent objet : `ax.grid(...)`. |
 
 ```python
 plt.figure()
@@ -24,12 +48,13 @@ plt.plot(x, y)
 plt.title('Mon titre')
 plt.xlabel('x')
 plt.ylabel('y')
+plt.grid(True, which='major', axis='both', color='gray', linestyle='--', linewidth=0.5, alpha=0.7)
 plt.show()
 ```
 
 ---
 
-## 2. Nuages de points et courbes
+## I.2. Nuages de points et courbes
 
 | Fonction | Paramètres essentiels | Explication |
 |---|---|---|
@@ -58,7 +83,7 @@ plt.plot(x[y==-1, 0], x[y==-1, 1], 'r*')  # classe -1 en étoiles rouges
 
 ---
 
-## 3. Sous-graphiques (`subplot`)
+## I.3. Sous-graphiques (`subplot`)
 
 | Fonction | Paramètres essentiels | Explication |
 |---|---|---|
@@ -77,7 +102,7 @@ plt.show()
 
 ---
 
-## 4. Affichage de matrices (images)
+## I.4. Affichage de matrices (images)
 
 | Fonction | Paramètres essentiels | Explication |
 |---|---|---|
@@ -95,7 +120,7 @@ plt.colorbar()
 
 ---
 
-## 5. Histogrammes
+## I.5. Histogrammes
 
 | Fonction | Paramètres essentiels | Explication |
 |---|---|---|
@@ -116,7 +141,7 @@ plt.hist(notes, bins=10)          # équivalent automatique, en jouant sur bins
 
 ---
 
-## 6. Remplissage entre courbes et intervalles de confiance
+## I.6. Remplissage entre courbes et intervalles de confiance
 
 | Fonction | Paramètres essentiels | Explication |
 |---|---|---|
@@ -131,7 +156,7 @@ plt.fill_between(t, upper_bound, X, where=X > upper_bound, fc='red', alpha=0.4) 
 
 ---
 
-## 7. Boîtes à moustaches (boxplot)
+## I.7. Boîtes à moustaches (boxplot)
 
 | Fonction | Paramètres essentiels | Explication |
 |---|---|---|
@@ -139,7 +164,7 @@ plt.fill_between(t, upper_bound, X, where=X > upper_bound, fc='red', alpha=0.4) 
 
 ---
 
-## 8. Affichage 3D et grilles (`meshgrid`)
+## I.8. Affichage 3D et grilles (`meshgrid`)
 
 Organisation générale pour tracer $z = f(x,y)$ :
 1. Définir les plages sur `x` et `y` (`linspace`).
@@ -170,18 +195,71 @@ ax.plot_surface(xgrid, ygrid, zgrid, cmap='coolwarm')
 
 ---
 
-## 9. Aller plus loin : seaborn et pandas
+## I.9. Interactivité (usage avancé)
 
-- `seaborn` (`import seaborn as sns`) : bibliothèque construite sur matplotlib, pour des graphiques statistiques "clés en main" plus esthétiques (ex. `sns.displot(data, x=..., hue=..., kind="kde")`).
-- Ces fonctions travaillent souvent directement avec un **DataFrame pandas** plutôt que des tableaux numpy bruts → voir la cheat sheet Pandas.
+| Fonction | Paramètres essentiels | Explication |
+|---|---|---|
+| `fig.canvas.mpl_connect(evenement, callback)` | `evenement` (ex `'button_press_event'`), `callback` = fonction appelée | Associe une fonction à un événement sur la figure. Ne fonctionne pas dans les notebooks Jupyter classiques, mais dans un script python avec fenêtre graphique. |
 
 ---
 
-## 10. Interactivité (usage avancé)
+# II. Seaborn
 
-| Fonction | Explication |
-|---|---|
-| `fig.canvas.mpl_connect(evenement, callback)` | Associe une fonction `callback` à un événement (ex `'button_press_event'`) sur la figure. Ne fonctionne pas dans les notebooks Jupyter classiques, mais dans un script python avec fenêtre graphique. |
+`seaborn` (`import seaborn as sns`) est construit sur matplotlib et propose des graphiques statistiques "clés en main", plus esthétiques et souvent plus rapides à écrire. La plupart des fonctions travaillent directement sur un **DataFrame pandas** (`data=df`) en désignant les colonnes par leur nom → voir la cheat sheet Pandas pour la construction des DataFrames.
+
+## II.1. Style général
+
+| Fonction | Paramètres essentiels | Explication |
+|---|---|---|
+| `sns.set_theme(style=...)` | `style` = `'darkgrid'`, `'whitegrid'`, `'white'`, `'ticks'`... | Configure le style global pour tous les graphiques suivants, y compris ceux en matplotlib pur. |
+| `sns.set_palette(nom)` | `nom` = nom de palette (ex `'viridis'`, `'pastel'`) ou liste de couleurs | Change la palette de couleurs utilisée par défaut. |
+
+## II.2. Distributions (1D / 2D)
+
+| Fonction | Paramètres essentiels | Explication |
+|---|---|---|
+| `sns.histplot(data, x=, hue=, kde=)` | `data` = DataFrame, `x` = colonne à tracer, `hue` = colonne de catégorie (couleur), `kde` = `True`/`False` (ajoute une estimation de densité) | Histogramme enrichi, équivalent de `plt.hist`. |
+| `sns.kdeplot(data, x=, y=, fill=)` | `x` (et `y` optionnel pour la 2D), `fill` = `True`/`False` (remplissage sous la courbe) | Estimation de densité (courbe lissée). En 2D, affiche une carte de densité. |
+| `sns.displot(data, x=, hue=, kind=, col=)` | `kind` = `'hist'`/`'kde'`/`'ecdf'`, `col` = colonne pour générer un sous-graphique par catégorie | Fonction générique de distribution, gère automatiquement le découpage en sous-graphiques. |
+| `sns.ecdfplot(data, x=)` | `x` = colonne | Fonction de répartition empirique (cumulative). |
+
+## II.3. Relations entre variables
+
+| Fonction | Paramètres essentiels | Explication |
+|---|---|---|
+| `sns.scatterplot(data, x=, y=, hue=, size=)` | `hue` = couleur par catégorie, `size` = taille des points par valeur | Nuage de points, pratique pour visualiser 3-4 dimensions à la fois (position + couleur + taille). |
+| `sns.lineplot(data, x=, y=, hue=)` | `hue` = une courbe par catégorie | Courbe, avec **intervalle de confiance ombré automatique** si plusieurs observations par valeur de `x` (pratique pour des courbes d'apprentissage moyennées sur plusieurs runs). |
+| `sns.regplot(data, x=, y=)` | `x`, `y` = colonnes numériques | Nuage de points + droite de régression linéaire ajustée automatiquement. |
+| `sns.jointplot(data, x=, y=, kind=)` | `kind` = `'scatter'`, `'kde'`, `'hex'`, `'reg'` | Combine un nuage de points central et les distributions marginales sur les côtés. |
+| `sns.pairplot(df, hue=)` | `hue` = colonne de catégorie pour la couleur | Matrice de nuages de points **croisant toutes les paires de colonnes numériques** d'un DataFrame — excellent premier réflexe pour explorer un jeu de données avant un modèle de machine learning. |
+
+## II.4. Variables catégorielles
+
+| Fonction | Paramètres essentiels | Explication |
+|---|---|---|
+| `sns.boxplot(data, x=, y=, hue=)` | `x` = catégorie, `y` = valeur numérique | Boîtes à moustaches par catégorie. |
+| `sns.violinplot(data, x=, y=, hue=)` | idem | Comme un boxplot mais affiche la forme de la distribution (densité miroir). |
+| `sns.barplot(data, x=, y=, hue=)` | idem | Barres avec la moyenne (+ intervalle de confiance) par catégorie — pas un simple comptage. |
+| `sns.countplot(data, x=)` | `x` = catégorie | Comptage du nombre d'observations par catégorie (l'équivalent catégoriel d'un histogramme). |
+| `sns.stripplot(data, x=, y=)` / `sns.swarmplot(data, x=, y=)` | idem | Affiche chaque point individuel réparti par catégorie (`swarmplot` évite les recouvrements). |
+
+## II.5. Matrices et évaluation de modèles (ML/DL)
+
+| Fonction | Paramètres essentiels | Explication |
+|---|---|---|
+| `sns.heatmap(matrice, annot=, cmap=, fmt=)` | `annot` = `True`/`False` (écrit les valeurs dans chaque case), `cmap` (ex `'coolwarm'`, `'Blues'`), `fmt` = format d'affichage (ex `'d'` pour des entiers) | Affiche une matrice sous forme de carte de chaleur. **Usage très courant** : matrice de corrélation (`df.corr()`), ou **matrice de confusion** d'un modèle de classification (`sklearn.metrics.confusion_matrix`). |
+
+```python
+import seaborn as sns
+sns.set_theme(style="whitegrid")
+
+sns.pairplot(df, hue="classe")                     # exploration rapide d'un dataset
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm') # matrice de corrélation
+sns.lineplot(data=df, x="epoch", y="loss", hue="run")  # courbe d'apprentissage avec IC
+```
+
+> 💡 Pour une matrice de confusion (classification), le réflexe courant est :
+> `sns.heatmap(confusion_matrix(y_true, y_pred), annot=True, fmt='d', cmap='Blues')`
 
 ---
 
@@ -194,3 +272,4 @@ ax.plot_surface(xgrid, ygrid, zgrid, cmap='coolwarm')
 5. **`np.meshgrid` renvoie des matrices**, pas des vecteurs : bien vérifier les `.shape` avant de calculer `zgrid`.
 6. **Oublier `plt.colorbar()`** après un `imshow` → impossible d'interpréter les couleurs.
 7. Pour un rapport, privilégier `plt.savefig('fig.pdf')` (format **vectoriel**) plutôt qu'un PNG, pour un zoom sans perte.
+8. **Seaborn attend en général un DataFrame** (`data=df`) avec des noms de colonnes en `x=`/`y=`/`hue=`, plutôt que des tableaux numpy bruts.

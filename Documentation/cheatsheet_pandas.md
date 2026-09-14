@@ -5,6 +5,19 @@
 
 **Idée générale** : un `DataFrame` pandas ≈ une matrice numpy + des **noms de colonnes** (et souvent un index de lignes) → une philosophie proche des bases de données / tableurs Excel. Chaque ligne = une observation, chaque colonne peut avoir un type différent (texte, date, nombre...).
 
+## Sommaire
+1. [Chargement et inspection des données](#1-chargement-et-inspection-des-données)
+2. [Sélection de colonnes et de lignes](#2-sélection-de-colonnes-et-de-lignes)
+3. [Statistiques de base](#3-statistiques-de-base)
+4. [`groupby` : agrégation par catégorie](#4-groupby--agrégation-par-catégorie)
+5. [Valeurs manquantes et tri](#5-valeurs-manquantes-et-tri)
+6. [Ajout / calcul de nouvelles colonnes](#6-ajout--calcul-de-nouvelles-colonnes)
+7. [Discrétisation et tableaux croisés](#7-discrétisation-et-tableaux-croisés)
+8. [Fusion de tables (`merge`)](#8-fusion-de-tables-merge)
+9. [Affichage direct depuis pandas](#9-affichage-direct-depuis-pandas)
+10. [Passerelles numpy ↔ pandas](#10-passerelles-numpy--pandas-à-retenir)
+11. [Récapitulatif des pièges classiques](#-récapitulatif-des-pièges-classiques)
+
 ---
 
 ## 1. Chargement et inspection des données

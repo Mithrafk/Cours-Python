@@ -3,26 +3,21 @@
 > Basée sur les notebooks *Tutoriel numpy - création de matrice*, *Numpy Matrices* et *Numpy advanced*.
 > Convention : `import numpy as np`
 
----
-
-## 📑 Table des matières
-
-| # | Section | Notions & Mots-clés principaux |
-| :-: | :--- | :--- |
-| **01** | [1. Création de tableaux (arrays)](#1-création-de-tableaux-arrays) | `zeros`, `ones`, `arange`, `linspace`, `random` |
-| **02** | [2. Vecteurs vs matrices, dimensions et reshape](#2-vecteurs-vs-matrices-dimensions-et-reshape) | `shape`, `reshape`, `T`, dimensions `(n,)` vs `(1,n)` |
-| **03** | [3. Indexation et slicing](#3-indexation-et-slicing) | `A[i,j]`, masques, indexation booléenne |
-| **04** | [4. Concaténation](#4-concaténation) | Empilement vertical (`vstack`) & horizontal (`hstack`) |
-| **05** | [5. Opérations arithmétiques : terme à terme vs matriciel](#5-opérations-arithmétiques--terme-à-terme-vs-matriciel) | Produit terme à terme (`*`) vs Produit matriciel (`@`) |
-| **06** | [6. Fonctions d'agrégation et de statistiques](#6-fonctions-dagrégation-et-de-statistiques) | `mean`, `std`, `sum`, rôle de l'axe (`axis=0/1`) |
-| **07** | [7. Recherche, sélection conditionnelle : `np.where`](#7-recherche-sélection-conditionnelle--npwhere) | `np.where`, `unique`, `all`, `any` |
-| **08** | [8. Tests booléens sur des matrices](#8-tests-booléens-sur-des-matrices) | Agrégation pour conditions (`if (m > 1).all():`) |
-| **09** | [9. Broadcasting (dispatch dynamique)](#9-broadcasting-dispatch-dynamique) | Alignement et compatibilité des dimensions |
-| **10** | [10. Vectorisation de fonctions](#10-vectorisation-de-fonctions) | Appliquer une fonction scalaire via `np.vectorize` |
-| **11** | [11. Types de données](#11-types-de-données) | Forcer les types (`int`, `bool`, `float`) |
-| **12** | [12. Sauvegarde / chargement](#12-sauvegarde--chargement) | Exporter / importer (`loadtxt`, `savetxt`, `pickle`) |
-| **13** | [13. Boucles utiles avec numpy](#13-boucles-utiles-avec-numpy-rappel-python-pas-numpy-à-proprement-parler) | Parcourir plusieurs tableaux (`zip`, `enumerate`) |
-| **📌** | [ Récapitulatif des pièges classiques](#-récapitulatif-des-pièges-classiques) | Résumé des 7 erreurs les plus fréquentes |
+## Sommaire
+1. [Création de tableaux (arrays)](#1-création-de-tableaux-arrays)
+2. [Vecteurs vs matrices, dimensions et reshape](#2-vecteurs-vs-matrices-dimensions-et-reshape)
+3. [Indexation et slicing](#3-indexation-et-slicing)
+4. [Concaténation et répétition](#4-concaténation-et-répétition)
+5. [Opérations arithmétiques : terme à terme vs matriciel](#5-opérations-arithmétiques--terme-à-terme-vs-matriciel)
+6. [Fonctions d'agrégation et de statistiques](#6-fonctions-dagrégation-et-de-statistiques)
+7. [Recherche, sélection conditionnelle : `np.where`](#7-recherche-sélection-conditionnelle--npwhere)
+8. [Tests booléens sur des matrices](#8-tests-booléens-sur-des-matrices)
+9. [Broadcasting (dispatch dynamique)](#9-broadcasting-dispatch-dynamique)
+10. [Vectorisation de fonctions](#10-vectorisation-de-fonctions)
+11. [Types de données](#11-types-de-données)
+12. [Sauvegarde / chargement](#12-sauvegarde--chargement)
+13. [Boucles utiles avec numpy](#13-boucles-utiles-avec-numpy-rappel-python-pas-numpy-à-proprement-parler)
+14. [Récapitulatif des pièges classiques](#-récapitulatif-des-pièges-classiques)
 
 ---
 
@@ -106,7 +101,7 @@ mat[:, [0,-1]] = 1     # première et dernière colonne à 1 (=contour)
 
 ---
 
-## 4. Concaténation
+## 4. Concaténation et répétition
 
 Même philosophie que `zeros`/`ones` : **un seul argument, sous forme de tuple** contenant les tableaux à assembler.
 
@@ -114,12 +109,19 @@ Même philosophie que `zeros`/`ones` : **un seul argument, sous forme de tuple**
 |---|---|---|
 | `np.vstack((A, B, ...))` | tuple de tableaux | Empile **verticalement** (ajoute des lignes). Les tableaux doivent avoir le même nombre de colonnes. |
 | `np.hstack((A, B, ...))` | tuple de tableaux | Empile **horizontalement** (ajoute des colonnes). Les tableaux doivent avoir le même nombre de lignes. |
+| `np.tile(arr, reps)` | `arr`, `reps` = nombre de répétitions (entier, ou tuple pour répéter selon plusieurs dimensions) | **Répète** un tableau comme un carrelage (d'où le nom "tile"). `reps` entier → répète à la suite (sur la dernière dimension) ; `reps` en tuple → répète indépendamment sur chaque dimension. Pratique pour dupliquer un vecteur en plusieurs lignes/colonnes sans écrire de boucle. |
+| `np.repeat(arr, n, axis)` | `n` = nb de répétitions par élément, `axis` optionnel | Différent de `tile` : répète **chaque élément individuellement** `n` fois (au lieu de répéter le tableau entier). Sans `axis`, aplatit d'abord le tableau. |
 
 ```python
 col1 = np.arange(1,11).reshape(-1,1)
 col2 = np.random.rand(10,1)
 M = np.hstack((col1, col2))   # assemble deux colonnes côte à côte
 M2 = np.vstack((np.array([[1,2]]), M))  # ajoute une ligne en haut
+
+v = np.array([1, 2, 3])
+np.tile(v, 2)        # [1 2 3 1 2 3]            (répète la suite)
+np.tile(v, (3, 1))   # matrice 3x3, v recopié sur 3 lignes
+np.repeat(v, 2)      # [1 1 2 2 3 3]            (répète chaque élément)
 ```
 
 ---
@@ -131,7 +133,7 @@ C'est **le piège n°2 de numpy**.
 | Opérateur / fonction | Explication |
 |---|---|
 | `A + s`, `A - s`, `A * s` (scalaire `s`) | Opération appliquée à **chaque élément**. |
-| `A * B` | Produit **terme à terme** (element-wise). Nécessite que `A` et `B` aient la **même dimension** (ou soient "broadcastables", voir §7). |
+| `A * B` | Produit **terme à terme** (element-wise). Nécessite que `A` et `B` aient la **même dimension** (ou soient "broadcastables", voir §9). |
 | `A @ B` ou `A.dot(B)` | **Produit matriciel** (au sens algèbre linéaire). Le nombre de colonnes de `A` doit être égal au nombre de lignes de `B`. `@` est la syntaxe la plus claire ; `.dot` est équivalente. |
 
 ```python
@@ -164,6 +166,13 @@ Paramètre clé : **`axis`**
 | `np.sort(arr, axis)` | Tri (par défaut ligne par ligne, `axis=0` pour trier par colonne). |
 | `np.round(arr)` / `np.ceil(arr)` / `np.floor(arr)` | Arrondi au plus proche / au-dessus / en-dessous. |
 | `np.minimum(a, b)` / `np.maximum(a, b)` | Minimum/maximum **élément par élément** entre deux tableaux (ou un tableau et un scalaire, pour seuiller). ⚠️ Différent de `min`/`max` classiques de python ! |
+
+⚠️ **La dimension réduite disparaît du résultat** : sur une matrice `(n,m)`, `arr.sum(axis=1)` (ou `.mean`, `.std`, `.min`, `.max`, `.prod`, `.argmin`, `.argmax` avec `axis`) renvoie un **vecteur** de shape `(n,)`, pas une matrice colonne `(n,1)`. C'est le même piège que l'extraction `A[i,:]` vue en §2. Pour conserver la dimension (utile pour ensuite faire du broadcasting proprement), ajouter `keepdims=True` :
+```python
+m1.sum(axis=1)                  # shape (n,)   -> vecteur, dimension perdue
+m1.sum(axis=1, keepdims=True)   # shape (n,1)  -> matrice colonne, dimension conservée
+```
+👉 Exception : `arr.cumsum(axis=...)` **ne réduit pas** la dimension (résultat cumulatif, même shape que l'entrée) ; c'est seulement `arr.cumsum()` **sans axis** qui aplatit tout le tableau en un vecteur 1D.
 
 ```python
 m1.mean(axis=0)      # moyenne de chaque colonne
