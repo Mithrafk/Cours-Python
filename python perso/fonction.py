@@ -78,4 +78,3 @@ plt.contourf(xgrid, ygrid, zgrid)
 fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
 ax.plot_surface(xgrid, ygrid, zgrid, cmap='coolwarm')
 plt.show()
-# %%
