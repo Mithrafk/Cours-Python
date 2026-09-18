@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Synthèse · Introduction à l'apprentissage automatique</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650&family=Public+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F8F7; --surface:#FFFFFF; --ink:#1C2B36; --muted:#5A6B78;
+  --moss:#3F6B4A; --moss-soft:#E3EFE6; --rule:#D3DCDF;
+  --plus:#2F7A4E; --minus:#B0413E; --unknown:#C9D3D8; --warn:#8A5A00; --warn-bg:#FBF1DC;
+  --serif:"Newsreader", Georgia, "Times New Roman", serif;
+  --sans:"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11181C; --surface:#18222A; --ink:#E3EBEE; --muted:#9AAAB4;
+    --moss:#8DC29A; --moss-soft:#1F3327; --rule:#2C3A43;
+    --plus:#6FC08F; --minus:#E07A76; --unknown:#34434C; --warn:#E8B75A; --warn-bg:#2E2615;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11181C; --surface:#18222A; --ink:#E3EBEE; --muted:#9AAAB4;
+  --moss:#8DC29A; --moss-soft:#1F3327; --rule:#2C3A43;
+  --plus:#6FC08F; --minus:#E07A76; --unknown:#34434C; --warn:#E8B75A; --warn-bg:#2E2615;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:1rem;line-height:1.6}
+img{max-width:100%}
+a{color:var(--moss)}
+:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
+
+.layout{display:grid;grid-template-columns:15rem minmax(0,1fr);gap:3rem;max-width:72rem;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+nav.toc{position:sticky;top:1.5rem;align-self:start;font-size:.9rem}
+nav.toc p{margin:0 0 .6rem;color:var(--muted);font-weight:600}
+nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:t}
+nav.toc li{counter-increment:t;margin:.15rem 0}
+nav.toc a{display:flex;gap:.6rem;padding:.3rem .5rem;border-radius:4px;color:var(--ink);text-decoration:none}
+nav.toc a::before{content:counter(t);font-family:var(--mono);color:var(--moss);min-width:1rem}
+nav.toc a:hover{background:var(--moss-soft)}
+main{max-width:48rem}
+
+header.hero{border-bottom:1px solid var(--rule);padding-bottom:1.75rem;margin-bottom:2rem}
+header.hero h1{font-family:var(--serif);font-weight:650;font-size:clamp(2rem,4.5vw,3rem);line-height:1.1;margin:0 0 .75rem;letter-spacing:-.01em}
+header.hero p{margin:0;color:var(--muted);max-width:40rem}
+.focus{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.1rem}
+.focus a{font-size:.85rem;padding:.3rem .7rem;border:1px solid var(--moss);border-radius:999px;text-decoration:none}
+
+section{padding-top:1.5rem;margin-bottom:2.5rem;scroll-margin-top:1rem}
+h2{font-family:var(--serif);font-weight:650;font-size:1.75rem;line-height:1.2;margin:0 0 1rem;display:flex;gap:.75rem;align-items:baseline}
+h2 .n{font-family:var(--mono);font-size:1rem;color:var(--moss);font-weight:600}
+h3{font-size:1.05rem;margin:1.75rem 0 .5rem}
+p{margin:.5rem 0 .9rem}
+ul,ol{padding-left:1.25rem;margin:.4rem 0 1rem}
+li{margin:.2rem 0}
+strong{font-weight:700}
+code,.f{font-family:var(--mono);font-size:.9em}
+
+.scroll{overflow-x:auto;margin:1rem 0 1.25rem;border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.92rem;min-width:36rem}
+th,td{text-align:left;vertical-align:top;padding:.65rem .8rem;border-bottom:1px solid var(--rule)}
+th{background:var(--moss-soft);font-weight:700}
+tr:last-child td{border-bottom:0}
+td.sub{color:var(--muted);font-style:italic}
+
+.note{border-left:3px solid var(--warn);background:var(--warn-bg);padding:.7rem 1rem;border-radius:0 6px 6px 0;margin:1rem 0;font-size:.93rem}
+.key{border-left:3px solid var(--moss);background:var(--moss-soft);padding:.8rem 1rem;border-radius:0 6px 6px 0;margin:1rem 0}
+.key p{margin:.2rem 0}
+
+/* Timeline */
+.timeline{list-style:none;padding:0;margin:1rem 0;position:relative}
+.timeline::before{content:"";position:absolute;left:6.4rem;top:.4rem;bottom:.4rem;width:2px;background:var(--rule)}
+.timeline li{display:grid;grid-template-columns:5.6rem 1fr;gap:1.6rem;margin:0 0 1.1rem;position:relative}
+.timeline li::after{content:"";position:absolute;left:6.05rem;top:.45rem;width:.8rem;height:.8rem;border-radius:50%;background:var(--surface);border:2px solid var(--moss)}
+.timeline li.fail::after{border-color:var(--minus)}
+.timeline .d{font-family:var(--mono);font-size:.82rem;color:var(--muted);text-align:right;padding-top:.15rem}
+.timeline .t{font-weight:700}
+.timeline .b{font-size:.93rem;color:var(--ink)}
+.timeline li.fail .t{color:var(--minus)}
+.hopes{counter-reset:h;list-style:none;padding:0;display:grid;gap:.5rem}
+.hopes li{counter-increment:h;display:flex;gap:.75rem;align-items:baseline}
+.hopes li::before{content:counter(h);font-family:var(--mono);color:var(--moss);font-weight:600}
+
+/* Induction lab */
+.lab{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:1.25rem 1.25rem 1.4rem;margin:1.25rem 0}
+.lab h3{margin-top:0;font-family:var(--serif);font-size:1.3rem;font-weight:650}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:1rem 1.5rem;margin:.75rem 0 1rem}
+.controls label{display:block;font-size:.9rem;font-weight:600;margin-bottom:.3rem}
+.controls output{font-family:var(--mono);color:var(--moss);margin-left:.35rem}
+input[type=range]{width:100%;accent-color:var(--moss)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(10rem,1fr));gap:.75rem;margin-bottom:1rem}
+.stat{border:1px solid var(--rule);border-radius:6px;padding:.6rem .75rem}
+.stat .v{font-family:var(--mono);font-size:1.05rem;font-weight:600;word-break:break-all}
+.stat .l{font-size:.8rem;color:var(--muted)}
+.stat .fx{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(1.9rem,1fr));gap:4px;margin:.5rem 0 .75rem}
+.cell{aspect-ratio:1;border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:600;font-size:.85rem;background:var(--unknown);color:var(--muted)}
+.cell.p{background:var(--plus);color:#fff}
+.cell.m{background:var(--minus);color:#fff}
+.legend{font-size:.85rem;color:var(--muted);margin:0}
+.verdict{margin:.6rem 0 0;font-size:.93rem}
+
+/* Self test */
+details{border:1px solid var(--rule);border-radius:6px;background:var(--surface);margin:.5rem 0}
+summary{cursor:pointer;padding:.7rem .9rem;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:1rem}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"Voir";font-weight:400;font-size:.82rem;color:var(--moss);flex-shrink:0}
+details[open] summary::after{content:"Masquer"}
+details[open] summary{border-bottom:1px solid var(--rule)}
+details .a{padding:.7rem .9rem}
+details .a p{margin:0}
+.bar{display:flex;gap:.5rem;margin:.5rem 0 1rem}
+button{font:inherit;font-size:.85rem;padding:.35rem .8rem;border-radius:4px;border:1px solid var(--moss);background:transparent;color:var(--moss);cursor:pointer}
+button:hover{background:var(--moss-soft)}
+
+footer{border-top:1px solid var(--rule);padding-top:1rem;color:var(--muted);font-size:.85rem}
+
+@media (max-width: 60rem){
+  .layout{grid-template-columns:1fr;gap:1rem;padding-top:1.5rem}
+  nav.toc{position:static;border:1px solid var(--rule);border-radius:6px;padding:.75rem;background:var(--surface)}
+  nav.toc ol{display:grid;grid-template-columns:repeat(auto-fill,minmax(11rem,1fr))}
+}
+@media (max-width: 34rem){
+  .timeline::before{left:.35rem}
+  .timeline li{grid-template-columns:1fr;gap:.1rem;padding-left:1.6rem}
+  .timeline li::after{left:0}
+  .timeline .d{text-align:left}
+}
+@media print{
+  nav.toc,.bar,.lab .controls{display:none}
+  .layout{display:block}
+  details{break-inside:avoid}
+  details .a{display:block}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc" aria-label="Sommaire">
+  <p>Sommaire</p>
+  <ol>
+    <li><a href="#types">Types d'apprentissage</a></li>
+    <li><a href="#histoire">Historique</a></li>
+    <li><a href="#biais">Le biais inductif</a></li>
+    <li><a href="#nfl">No Free Lunch</a></li>
+    <li><a href="#ingredients">Trois ingrédients</a></li>
+    <li><a href="#versions">Espace des versions</a></li>
+    <li><a href="#limites">Limites</a></li>
+    <li><a href="#test">Auto-test</a></li>
+  </ol>
+</nav>
+
+<main>
+<header class="hero">
+  <h1>Introduction à l'apprentissage automatique</h1>
+  <p>Synthèse du cours d'Antoine Cornuéjols (AgroParisTech, IODAA 2026–27), organisée pour réviser avant le test.</p>
+  <div class="focus" aria-label="Points prioritaires">
+    <a href="#types">Grands types</a>
+    <a href="#histoire">Historique</a>
+    <a href="#biais">Biais : quoi et pourquoi</a>
+    <a href="#nfl">No Free Lunch</a>
+  </div>
+</header>
+
+<!-- 1 -->
+<section id="types">
+  <h2><span class="n">1</span>Les grands types d'apprentissage</h2>
+  <p>Le cours part de trois objectifs : <strong>comprendre</strong> ses données, <strong>prédire</strong>, <strong>prescrire</strong>. S'y ajoute l'apprentissage par renforcement.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Type</th><th>Données d'entrée</th><th>Objectif</th><th>Exemples du cours</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Descriptif</strong><br>(non supervisé)</td><td>S = {x<sub>i</sub>}, <strong>sans étiquette</strong></td><td>Trouver des régularités qui rendent compte de S : <strong>clustering</strong> (ex. mélange de gaussiennes), <strong>motifs fréquents / règles d'association</strong></td><td>Groupes de consommateurs Nutrinet ; paniers fréquents (pizza, coca, glace)</td></tr>
+      <tr><td><strong>Prédictif</strong><br>(supervisé)</td><td>S = {(x<sub>i</sub>, y<sub>i</sub>)}, <strong>étiqueté</strong></td><td>Apprendre h ≈ f pour prédire y sur de <strong>nouveaux</strong> x. <strong>Classification</strong> (y discret) ou <strong>régression</strong> (y continu)</td><td>Spam, chiens/chats, filtrage d'articles pour le GIEC (précision/rappel), nombre d'accidents d'un conducteur</td></tr>
+      <tr><td><strong>Prescriptif</strong></td><td>Observations et interventions</td><td>Trouver des <strong>relations causales</strong> pour agir : corrélation ≠ causalité</td><td>Glaces et maillot de bain ; « quel rendement si j'avais planté X au lieu de Y ? » (contrefactuel)</td></tr>
+      <tr><td><strong>Par renforcement</strong></td><td>Séquence (s<sub>t</sub>, a<sub>t</sub>, r<sub>t</sub>) : perceptions, actions, récompenses</td><td>Apprendre une politique <em>situation → action</em> qui <strong>maximise le gain à long terme</strong> ; la récompense peut dépendre d'actions très antérieures</td><td>Hélicoptère, backgammon (1992), Go (2016), portefeuille d'investissements</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>Autres variantes citées :</strong> semi-supervisé, ranking, apprentissage en ligne.</p>
+
+  <h3>Familles d'applications</h3>
+  <ul>
+    <li><strong>Reconnaissance et prédiction</strong> : vision, séries temporelles, parole.</li>
+    <li><strong>IA générative</strong> : images, texte, code, AlphaFold, ITHACA.</li>
+    <li><strong>IA agentique</strong> : agents autonomes spécialisés qui agissent dans leur environnement.</li>
+  </ul>
+
+  <h3>Vocabulaire des données</h3>
+  <ul>
+    <li><strong>Exemple</strong> (instance) = une ligne.</li>
+    <li><strong>Descripteur / attribut</strong> (feature) = une colonne.</li>
+    <li><strong>Étiquette</strong> (label) = la valeur à prédire.</li>
+  </ul>
+  <p>Types de données : vectorielles, séquences, structurées, temporelles, spatiales.</p>
+</section>
+
+<!-- 2 -->
+<section id="histoire">
+  <h2><span class="n">2</span>Historique</h2>
+  <ol class="timeline">
+    <li><span class="d">Préquel</span><div><div class="t">Calcul formalisé</div><div class="b">Pascal, Leibniz, Babbage, Lovelace, Boole.</div></div></li>
+    <li><span class="d">1936–1956</span><div><div class="t">Pionniers et cybernétique</div><div class="b">Turing (calculabilité), von Neumann, <strong>McCulloch &amp; Pitts 1943</strong> (1er neurone formel), <strong>Hebb 1949</strong> (règle d'apprentissage), conférences Macy, Wiener 1948, Shannon 1948. Le vivant vu comme un système de traitement de l'information.</div></div></li>
+    <li><span class="d">1956–1968</span><div><div class="t">Méthodes générales de raisonnement</div><div class="b">IA symbolique : démonstrateurs de théorèmes (résolution, puis Prolog), GPS, CHECKER. Premier connexionnisme : <strong>Perceptron de Rosenblatt (1957–62)</strong>.</div></div></li>
+    <li class="fail"><span class="d">fin 1960s</span><div><div class="t">Échecs</div><div class="b">Traduction automatique ; les experts ne sont pas universels ; le Perceptron est limité.</div></div></li>
+    <li><span class="d">1968/70–1985</span><div><div class="t">« Knowledge is power »</div><div class="b">Représentation des connaissances (réseaux sémantiques, frames, scripts), logiques non monotones et floues, <strong>systèmes experts</strong>, projet CYC.</div></div></li>
+    <li class="fail"><span class="d">limite</span><div><div class="t">Goulot de l'acquisition des connaissances</div><div class="b">Processus lourd, peu systématique, maintenance difficile.</div></div></li>
+    <li><span class="d">1980–2011</span><div><div class="t">Méthodes générales d'apprentissage</div><div class="b">Symbolique : arbres de décision, <strong>espace des versions</strong>, méthode de l'étoile. Connexionnisme : <strong>Hopfield 1982</strong>, <strong>PMC 1985</strong>. Algorithmes génétiques.</div></div></li>
+    <li><span class="d">1995–</span><div><div class="t">Apprentissage statistique</div><div class="b">SVM, boosting, réseaux bayésiens, renforcement. Théorie statistique sous hypothèse <strong>i.i.d.</strong>, tirée par l'industrie. On ne parle plus de connaissances.</div></div></li>
+    <li><span class="d">2012–</span><div><div class="t">Deep learning</div><div class="b">CNN, GAN, modèles génératifs, LLM.</div></div></li>
+    <li><span class="d">2022 / 2024</span><div><div class="t">IA générative, puis IA agentique</div><div class="b">Retour possible de la connaissance (causalité) et des interactions avec les experts.</div></div></li>
+  </ol>
+
+  <div class="key">
+    <p><strong>Logique d'ensemble : les « espoirs » successifs</strong></p>
+    <ol class="hopes">
+      <li>L'intelligence repose sur un raisonnement général.</li>
+      <li>Puis sur beaucoup de connaissances.</li>
+      <li>Ces connaissances s'obtiendront par un apprentissage général.</li>
+    </ol>
+  </div>
+  <div class="note">Les slides donnent deux découpages pour « Knowledge is power » (1968–1980 et 1970–1985). Retiens l'ordre des périodes plutôt que les dates exactes.</div>
+</section>
+
+<!-- 3 -->
+<section id="biais">
+  <h2><span class="n">3</span>Le biais inductif</h2>
+
+  <h3>Le problème de l'induction (calcul à savoir refaire)</h3>
+  <p>Exemples décrits par 4 attributs binaires : nombre, taille, forme, couleur.</p>
+  <ul>
+    <li>|X| = 2<sup>4</sup> = <strong>16</strong> exemples possibles.</li>
+    <li>Fonctions possibles de X vers {+, −} : 2<sup>16</sup> = <strong>65 536</strong>.</li>
+    <li>Après 6 exemples étiquetés, 10 restent inconnus : 2<sup>10</sup> = <strong>1 024</strong> fonctions compatibles.</li>
+    <li>Pour chaque exemple non vu, <strong>exactement la moitié</strong> de ces fonctions prédit + et l'autre −. Les données seules ne permettent rien prédire.</li>
+  </ul>
+  <p><strong>Avec biais de représentation</strong> (2 descripteurs seulement) : |X| = 4, donc 16 fonctions ; après 3 exemples différents, il en reste 2. L'espace est beaucoup plus contraint, mais si le vrai concept dépend d'un attribut écarté, on ne peut pas le trouver.</p>
+
+  <div class="lab" id="lab">
+    <h3>Simulateur : ce que les données seules permettent de conclure</h3>
+    <div class="controls">
+      <div><label for="n">Attributs binaires n <output id="nOut">4</output></label><input type="range" id="n" min="1" max="6" value="4"></div>
+      <div><label for="k">Exemples étiquetés k <output id="kOut">6</output></label><input type="range" id="k" min="0" max="16" value="6"></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="l">Exemples possibles</div><div class="v" id="sX">16</div><div class="fx">|X| = 2ⁿ</div></div>
+      <div class="stat"><div class="l">Fonctions possibles</div><div class="v" id="sF">65 536</div><div class="fx">2^(2ⁿ)</div></div>
+      <div class="stat"><div class="l">Fonctions compatibles</div><div class="v" id="sR">1 024</div><div class="fx">2^(2ⁿ − k)</div></div>
+    </div>
+    <div class="grid" id="grid" aria-label="Espace des exemples"></div>
+    <p class="legend">Chaque case est un exemple de X : vert = étiqueté +, rouge = étiqueté −, gris = inconnu.</p>
+    <p class="verdict" id="verdict"></p>
+  </div>
+
+  <h3>Définition</h3>
+  <div class="key"><p>Un <strong>biais</strong> est toute hypothèse <em>a priori</em>, extérieure aux données, qui fait préférer certaines hypothèses à d'autres.</p></div>
+  <div class="scroll"><table>
+    <thead><tr><th>Type de biais</th><th>Nature</th><th>Exemples</th></tr></thead>
+    <tbody>
+      <tr><td><strong>De représentation</strong><br>(déclaratif)</td><td>Restreint l'espace des hypothèses H ; en général H ≠ F (F = toutes les fonctions possibles)</td><td>Modèles linéaires, conjonctions d'attributs, choix des descripteurs</td></tr>
+      <tr><td><strong>De recherche</strong><br>(procédural)</td><td>Détermine comment on explore H et quelle hypothèse on préfère</td><td>Préférer la plus simple (rasoir d'Ockham), recherche gloutonne, arrêt précoce</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Pourquoi il est nécessaire</h3>
+  <ul>
+    <li><strong>L'apprentissage est une extrapolation.</strong> Sans biais, on ne fait que mémoriser S et on ne peut rien dire hors de S (voir le simulateur).</li>
+    <li><strong>La perception fonctionne de la même manière.</strong> Illusions d'optique, complétion de percepts, « cratère ou colline » : la perception humaine repose aussi sur des a priori.</li>
+    <li><strong>Le choix du biais conditionne la qualité du modèle.</strong> H trop pauvre : <strong>sous-apprentissage</strong>. H trop riche : <strong>sur-apprentissage</strong>. Le clustering dépend aussi fortement de ses biais.</li>
+    <li><strong>Les garanties sont « de lampadaire ».</strong> Si le monde satisfait mes hypothèses, l'algorithme produit (presque) sûrement une bonne hypothèse. Sinon, il peut en produire de très mauvaises (ex. un monde qui n'est pas parcimonieux).</li>
+  </ul>
+</section>
+
+<!-- 4 -->
+<section id="nfl">
+  <h2><span class="n">4</span>Le No Free Lunch theorem</h2>
+  <div class="key"><p><strong>Énoncé</strong> (Wolpert, années 1990) : en moyenne sur <strong>tous les problèmes possibles</strong> (toutes les fonctions cibles, également probables), <strong>tous les algorithmes d'apprentissage ont la même performance</strong> en généralisation, c'est-à-dire sur les exemples hors échantillon. Cette performance moyenne n'est pas meilleure que le hasard.</p></div>
+  <h3>Conséquences</h3>
+  <ul>
+    <li>Aucun algorithme n'est universellement meilleur.</li>
+    <li>Si un algorithme gagne sur une classe de problèmes, il perd nécessairement ailleurs.</li>
+    <li>Il faut <strong>choisir l'algorithme, c'est-à-dire son biais, adapté à la classe de problèmes étudiée.</strong></li>
+  </ul>
+  <h3>Lien avec le biais</h3>
+  <p>Le NFL généralise le calcul des 1 024 fonctions : sans hypothèse sur le monde, rien ne permet de préférer une prédiction à une autre. Un algorithme ne peut être bon que si son biais correspond au monde réel.</p>
+</section>
+
+<!-- 5 -->
+<section id="ingredients">
+  <h2><span class="n">5</span>Les trois ingrédients de l'apprentissage</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Ingrédient</th><th>Question posée</th></tr></thead>
+    <tbody>
+      <tr><td><strong>L'espace des hypothèses H</strong></td><td>Quelle représentation choisir ? En général H ≠ F.</td></tr>
+      <tr><td><strong>Le critère inductif</strong></td><td>Comment évaluer une hypothèse h à partir de S ?</td></tr>
+      <tr><td><strong>La méthode d'exploration de H</strong></td><td>Comment trouver une bonne hypothèse, voire la meilleure ?</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 6 -->
+<section id="versions">
+  <h2><span class="n">6</span>Bonus : l'espace des versions (Mitchell)</h2>
+  <p>L'apprentissage supervisé est vu comme une <strong>recherche dans H</strong>.</p>
+  <ul>
+    <li><strong>Relation de généralité</strong> : h₁ est plus générale que h₂ si les exemples couverts par h₂ sont inclus dans ceux couverts par h₁. C'est un <strong>ordre partiel</strong> sur H, qui forme un <strong>treillis</strong>.</li>
+    <li><strong>Complète</strong> : couvre tous les positifs. <strong>Correcte</strong> : ne couvre aucun négatif. <strong>Cohérente</strong> (consistante) : les deux.</li>
+  </ul>
+
+  <h3>Opérateurs d'exploration</h3>
+  <ul>
+    <li><strong>Généralisation</strong> : supprimer une conjonction (<span class="f">A∧B → C</span> devient <span class="f">A → C</span>) ; ajouter une alternative (<span class="f">A∨B</span>) ; étendre le domaine d'une valeur (rouge devient rouge ∨ bleu) ; monter dans la hiérarchie (chlore et brome deviennent halogène).</li>
+    <li><strong>Spécialisation</strong> : l'inverse.</li>
+    <li><strong>Reformulation</strong> : réécriture logiquement équivalente.</li>
+  </ul>
+
+  <h3>Deux bornes suffisent</h3>
+  <p>L'<strong>espace des versions</strong> est l'ensemble des hypothèses de H cohérentes avec les exemples. Il est entièrement défini par <strong>S</strong> (les plus spécifiques) et <strong>G</strong> (les plus générales).</p>
+
+  <h3>Algorithme d'élimination des candidats</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Exemple reçu</th><th>Mise à jour de S</th><th>Mise à jour de G</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Positif</strong></td><td>Généraliser <strong>minimalement</strong> pour le couvrir, puis éliminer ce qui couvre un négatif ou est plus général qu'un autre élément de S</td><td>Éliminer les hypothèses qui ne le couvrent pas</td></tr>
+      <tr><td><strong>Négatif</strong></td><td>Éliminer les hypothèses qui le couvrent</td><td>Spécialiser <strong>minimalement</strong> pour l'exclure, garder ce qui est plus général qu'au moins un élément de S, éliminer ce qui est plus spécifique qu'un autre élément de G</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Exemple minimal</h3>
+  <p>Hypothèses notées <span class="f">⟨Taille, Forme, Couleur⟩</span>, « ? » = n'importe quelle valeur.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Étape</th><th>Exemple</th><th>S</th><th>G</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>+ (grand, carré, rouge)</td><td class="f">⟨grand, carré, rouge⟩</td><td class="f">⟨?, ?, ?⟩</td></tr>
+      <tr><td>2</td><td>+ (grand, cercle, rouge)</td><td class="f">⟨grand, ?, rouge⟩</td><td class="f">⟨?, ?, ?⟩</td></tr>
+      <tr><td>3</td><td>− (petit, cercle, rouge)</td><td class="f">⟨grand, ?, rouge⟩</td><td class="f">⟨grand, ?, ?⟩</td></tr>
+      <tr><td class="sub" colspan="4">Candidats à l'étape 3 : ⟨grand, ?, ?⟩, ⟨?, carré, ?⟩, ⟨?, ?, vert⟩. Seul le premier reste plus général que S.</td></tr>
+      <tr><td>4</td><td>− (grand, cercle, vert)</td><td class="f">⟨grand, ?, rouge⟩</td><td class="f">⟨grand, ?, rouge⟩</td></tr>
+      <tr><td class="sub" colspan="4">S = G : convergence.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Propriétés (questions probables)</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Question</th><th>Réponse</th></tr></thead>
+    <tbody>
+      <tr><td>Incrémental ?</td><td>Oui, il traite les exemples un par un.</td></tr>
+      <tr><td>Complexité ?</td><td>G peut croître <strong>exponentiellement</strong>.</td></tr>
+      <tr><td>Que faire sans convergence ?</td><td>Faire <strong>voter</strong> les hypothèses de l'espace des versions.</td></tr>
+      <tr><td>Que signifie S = G = ∅ ?</td><td>Aucune hypothèse de H n'est cohérente : données <strong>bruitées</strong> ou <strong>biais inadapté</strong> (le concept cible n'est pas dans H).</td></tr>
+      <tr><td>Apprentissage actif possible ?</td><td>Oui : demander l'étiquette de l'exemple qui <strong>coupe l'espace des versions en deux</strong>.</td></tr>
+      <tr><td>Données bruitées ?</td><td>Très fragile : un seul exemple mal étiqueté élimine la bonne hypothèse.</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>Illustration du cours :</strong> LEX (Mitchell), qui apprend des heuristiques d'intégration symbolique.</p>
+</section>
+
+<!-- 7 -->
+<section id="limites">
+  <h2><span class="n">7</span>Limites évoquées</h2>
+  <ul>
+    <li><strong>Exemples adversariaux</strong> : une perturbation imperceptible suffit à changer la prédiction.</li>
+    <li><strong>Explicabilité</strong> : les cartes Grad-CAM montrent que l'explication d'un réseau profond reste difficile.</li>
+    <li><strong>Voiture dans la piscine</strong> (Bottou) : le modèle s'appuie sur des corrélations de contexte plutôt que sur l'objet.</li>
+    <li><strong>Données non représentatives</strong> : Nutrinet compte ~80 % de femmes, surtout de milieux socio-professionnels élevés, avec beaucoup d'abandons.</li>
+  </ul>
+</section>
+
+<!-- 8 -->
+<section id="test">
+  <h2><span class="n">8</span>Auto-test</h2>
+  <p>Réponds de tête, puis vérifie.</p>
+  <div class="bar"><button type="button" id="openAll">Tout afficher</button><button type="button" id="closeAll">Tout masquer</button></div>
+
+  <details><summary>Qu'est-ce qui distingue supervisé et non supervisé ?</summary><div class="a"><p>La présence ou non d'étiquettes y dans l'échantillon S.</p></div></details>
+  <details><summary>Pourquoi l'apprentissage prescriptif est-il difficile ?</summary><div class="a"><p>Il exige des relations causales, pas seulement des corrélations (glaces et maillots de bain).</p></div></details>
+  <details><summary>Qu'est-ce qui distingue le renforcement du supervisé ?</summary><div class="a"><p>Une récompense éventuellement retardée au lieu d'une étiquette par exemple, et l'objectif de maximiser un gain à long terme.</p></div></details>
+  <details><summary>Citer les grandes périodes de l'IA dans l'ordre.</summary><div class="a"><p>Cybernétique et pionniers → raisonnement général (IA symbolique, Perceptron) → « Knowledge is power » (systèmes experts) → méthodes générales d'apprentissage → apprentissage statistique → deep learning → IA générative puis agentique.</p></div></details>
+  <details><summary>Qu'est-ce qui a mis fin à l'ère des systèmes experts ?</summary><div class="a"><p>Le goulot de l'acquisition des connaissances : ingénierie lourde, peu systématique, maintenance difficile.</p></div></details>
+  <details><summary>Combien de fonctions pour n attributs binaires ? Combien après k exemples distincts ?</summary><div class="a"><p><span class="f">2^(2ⁿ)</span>, puis <span class="f">2^(2ⁿ − k)</span>.</p></div></details>
+  <details><summary>Qu'est-ce qu'un biais et pourquoi est-il nécessaire ?</summary><div class="a"><p>Une hypothèse a priori, extérieure aux données, qui fait préférer certaines hypothèses. Sans elle, toutes les fonctions compatibles avec S restent également plausibles et aucune généralisation n'est possible.</p></div></details>
+  <details><summary>Biais de représentation ou biais de recherche ?</summary><div class="a"><p>Le premier restreint ce qu'on peut apprendre (H), le second détermine comment on choisit parmi les hypothèses possibles.</p></div></details>
+  <details><summary>Énoncer le No Free Lunch theorem et sa conséquence pratique.</summary><div class="a"><p>En moyenne sur tous les problèmes possibles, tous les algorithmes se valent en généralisation. En pratique : tester plusieurs modèles et choisir celui dont le biais correspond au domaine.</p></div></details>
+  <details><summary>Quels sont les trois ingrédients de l'apprentissage ?</summary><div class="a"><p>L'espace des hypothèses H, le critère inductif, la méthode d'exploration de H.</p></div></details>
+  <details><summary>Que signifie S = G = ∅ dans l'algorithme d'élimination des candidats ?</summary><div class="a"><p>Aucune hypothèse de H n'est cohérente avec les données : bruit ou biais inadapté.</p></div></details>
+</section>
+
+<footer>Source : transparents « Introduction à l'Apprentissage Automatique », A. Cornuéjols, AgroParisTech. Référence : Cornuéjols, Miclet &amp; Barra, <em>L'apprentissage artificiel</em>, Eyrolles, 4e éd. 2021.</footer>
+</main>
+</div>
+
+<script>
+(function(){
+  var nEl=document.getElementById('n'), kEl=document.getElementById('k');
+  var nOut=document.getElementById('nOut'), kOut=document.getElementById('kOut');
+  var grid=document.getElementById('grid'), verdict=document.getElementById('verdict');
+  function fmt(b){return b.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'\u202F');}
+  function pow2(e){return 1n<<BigInt(e);}
+  // étiquettes pseudo-aléatoires stables
+  function label(i){return ((i*2654435761)>>>0)%3===0?'m':'p';}
+  function render(){
+    var n=+nEl.value, size=1<<n;
+    kEl.max=size; if(+kEl.value>size) kEl.value=size;
+    var k=+kEl.value;
+    nOut.textContent=n; kOut.textContent=k;
+    document.getElementById('sX').textContent=fmt(BigInt(size));
+    document.getElementById('sF').textContent=fmt(pow2(size));
+    document.getElementById('sR').textContent=fmt(pow2(size-k));
+    var html='';
+    for(var i=0;i<size;i++){
+      if(i<k){var l=label(i);html+='<div class="cell '+l+'">'+(l==='p'?'+':'−')+'</div>';}
+      else html+='<div class="cell">?</div>';
+    }
+    grid.innerHTML=html;
+    var u=size-k;
+    if(u===0){
+      verdict.innerHTML='Tous les exemples sont étiquetés : une seule fonction reste, mais il n\u2019y a plus rien à prédire. Sans biais, on ne fait que <strong>mémoriser</strong>.';
+    } else {
+      verdict.innerHTML='Pour chacun des <strong>'+u+'</strong> exemples inconnus, <strong>'+fmt(pow2(u-1))+'</strong> fonctions compatibles prédisent + et autant prédisent −. Sans biais, aucune prédiction n\u2019est justifiée.';
+    }
+  }
+  nEl.addEventListener('input',render); kEl.addEventListener('input',render);
+  render();
+  var ds=document.querySelectorAll('#test details');
+  document.getElementById('openAll').addEventListener('click',function(){ds.forEach(function(d){d.open=true;});});
+  document.getElementById('closeAll').addEventListener('click',function(){ds.forEach(function(d){d.open=false;});});
+})();
+</script>
+</body>
+</html>

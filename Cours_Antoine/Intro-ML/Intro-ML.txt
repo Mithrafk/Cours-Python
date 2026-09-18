@@ -1,0 +1,184 @@
+Pourquoi faire des modèles d'apprentissage plutot que système expert ?
+    modèle linéaire simple (temps demain = celui d'auj est deja très bon)
+    On ne peut pas facilement coder un modèle pour reconnaitre un objet ou la parole, car on est enfermé dans nos biais, et la machine ne "comprend" pas pareil
+        plus "simple" : donner l'entrée et la sortie à la machine, et on lui demande de trouver seul le calcul pour traduire depuis un audio
+        --> Necessite bcp de données et de puissance de calcul
+        Après ca souleve d'autre question, comment on fait, comment on mesure ce qu'elle fait ...
+
+T6. 1 - IA Reconnaissance, prédiction :
+reconnaissance voiture, velo ... (Les captcha quoi)
+reconnaissance de molécule bio-actives ou non contre le cancer (et des zones qui font ca)
+prédiction à partir de séries temporelle (dépend de plusieurs facteur du passées, et de ce présent découlera plusieurs evenement du futur)
+
+T13. 2 - IA Génératives : 
+Alpha Fold : IAG permet de prédire conformation spatial d'une prot a partir d'une sequence génomique
+ITHACA : prédiction de mot manquant pour completer des texte trouées (archéologies - tablettes d'argile)
+--> Des IA qui "pense" différement des humains et jouent hors de la théorie/du set de train : créativité ?
+
+T24. 3 - IA Agentique :
+partiellement autonome, fonctionne en groupe avec des agents spécialisés, peuvent agir sur leur environnement
+Aide au code, debuggage, maintenance ... Mais aussi à la découverte scientifique
+Plus gros enjeu maintenant : apprendre à raisonner
+Adversarial learning =  à IA, invisible par l'homme mais fait dérailler les IA (ajout de texte invisible par l'homme, pixel dans des images ...)
+    Peut cabler avec des tout petit défauts, ou des situations jamais rencontrés (un vieu de 80 ans qui saut en parachute ? Nous dis que c'est un jeune athlete car il a jamais vu de vieux sauter)
+
+Méthodes générales de raisonnement :
+IA symbolique : Etat initial, descripteur de changement d'état et un graph pour aboutir à la solution. Successions d'étapes discretes
+Mais on s'est rendu compte que les experts ne raisonnaient pas extremeement bien, mais avaient bcp de connaissances
+puis
+"Knowledge is power" :
+Coder plein de connaissances puis la machine fait les liens
+    mais la connaissance est très longue à acquérir. On va donc revenir à des processus généraux pour obtenir la connaissance
+    On a tenté de données plein de connaissance, puis la machine fabrique des systèmes experts qui nous permettent d'avoir une vision sur le raisonnement et méthode de décision. 
+        mais le bruit dans les données brise le modèle
+    Perceptron multicouche (réseau de neuronnes) : enorme apprentissage robustes aux bruitage, mais comment ca fonctionne ? Aucune idée, juste des poids de connexions
+
+- L'apprentissage :
+Mieux comprendre les données, prediction et prescription
+
+Apprentissage descriptif / non supervisé : 
+    Identifier des régularité 
+        Clustering : trouver des groupes pour classer les échantillons (avec plus ou moins de définition)
+        Motifs fréquent (ex: quand on achete du lait et des oeufs : ya de la farine après ...)
+    Gros problèmes : évaluation !
+        Le modèle depend de ce qu'on veut trouver, pas de la réalité. Si on cherche 4 clusters, le modèle nous en donne 4 même si ya pas de "raison"
+        Les experts vont permettrent de dire si les clusters trouvé sont justifiés, si y'en manque ou trop. 
+            Mais attention : les experts vont toujours chercher à expliquer pourquoi la machine trouve le cluster, et "invente" ou cherche des liens, mais ca ne donne pas la réponse absolue 
+            L'expert peut mal interpreter / juger vu que c'est un monde exploratoire, ya pas de vérité connue (c'est un chat ...)
+        --> Très difficile d'évaluer du non superviser
+
+Apprentissage prédictif / supervisé :
+    Ce dont on a besoin : Un échantillon d'apprentissage (couple X,y) qui permet de trouver la fonction W
+    Problème : Comment filter les données pour savoir lesquels sont les mieux.
+    Discrimination : Sur des cas discret 
+     : sur des cas continus
+
+Apprentissage prescriptif / pour "intervenir" :
+    Important : notion de causalité (correlation ex : temps beau et baromètre haut. Lié mais l'un n'influence pas l'autre, c'est la pression qui va lier les deux et autre ....)
+    /!\ Correlation ne donne pas causalité /!\
+    Problème : Quand on ne connait pas les causalité (parfois impossible de les avoir), mais il faut quand meme faire le taff
+
+Apprentissage par renforcement :
+    On va avoir une boucle : Perception - Action - Récompense | et on veut maximiser le gain
+    Problème : manque d'information ? Récompense ponctuelle qui permet pas d'échelonner et la recompense peut venir longtemps de l'evennement qui a mener à cette cause.
+
+    On peut aussi voir un système par renforcement avec 2 agents qui font une action qui influe l'autre, et donc s'entraine seul (tir au but IA tir et fait le goal : on va avoir un bon tireur et gardin)
+
+l'IA comprend et piège du renforcement ?
+    Apprentissage de 2 agents goal et tirreur : on obtient un truc "parfait"
+    Puis on enleve IA gardien et on le met juste au sol et fait nimp, en gardant l'IA tireur
+    --> Le tireur devient incompétant : il n'a jamais eu cette situation, et ne sait plus quoi faire. Alors que marquer est encore plus simple, mais calcquer sur action du goal.
+        On a donc un exemple du fait que l'IA ne comprend pas, et se casse quand on sort hors de la box (prbl de robustesse)
+
+--> Pas de méthode uniformement parfaite, et emplie de biais.
+
+
+T92. Les données : organisation et types :
+Exemple : echantillon, instance, sample |
+Descripteur :                           | Les X
+Etiquette : classes ...                 | Les Y
+
+Apprentissage supervisé --> Induction :
+    Tester le modèle sur un individu jamais observer (robustesse)
+    * La majorité des fonctions ne sont pas compréssible. Il faut etre exhaustif sur les étiquettes pour la decripter
+    Une solution (incomplète) est de restreindre les hypothèdes pour ne pas avoir a echantilloner trop large (par exemple un gène ne fait jamais plus de x pair de base, la couleur des yeux c'est que sur les chromosomes 2,7et9)
+    --> Il faut se mettre des oeillère pour arriver a le faire avec des données raisonner et un temps simple / Mais ce biais doit etre alligné avec la vérité pour que ca marche bien (si on dit gene 150pb mais fait 200 en réalité, jamais on le trouve)
+Un biais est donc necessaire :
+    Un biais : ce qui restreind le monde (ensemble), ce qui fait qu'on prefere certaines hypothèses p/r à d'autre
+    Biais de representation (déclaratif) : On choisit un sous-ensemble de l'univers quand on est sur que les autres hypothèses sont impossibles
+    Biais de recherche (procédural) : Dans l'univers, on va chercher (par gradiant ...) une hypothèse qui a une performance optimale (mais indique pas unicité de la solution)
+    Biais de cursus : "quel est le meilleur ordre pour présenter les données ?", par exemple les arbres si on rajoute des données à la fin rajoute bcp d'étapes qui auraient pu etre mieux codées avant ?
+
+
+No Free Lunch Theorem :
+    "aucune méthode d'induction n'est supérieur à une autre, même une prédiction au hasard"
+    Ca tiens parce qu'on mélange tout les type de problèmes sans avoir aucun biais
+        mais si on prend une catégorie de prbl ou on choisit un biais adapté a ce prbl, alors certains modele sont meilleurs que d'autres, mais ce n'est pas généralisable. Il faut donc dire sur quoi fonctionne l'algo et sur quoi ca fonctionne pas
+        ca dis donc qu'on ne peut pas apprendre le biais ?
+
+T118. Les trois ingrédients de l'apprentissage artificiel :
+- Le choix de l'espace des hypithèses H 
+- Le critère inductif : comment évaluer chaque hypothèse en fonction de S
+- La méthode d'exploration de H : Comment trouver une bonne (optimale?) hypothèse ?
+
+Sous/Sur apprentissage : lié aux données
+    Sur-apprentissage = on s'adapte bcp trop aux données d'apprentissage. C'est à dire qu'on est très stricte pour fitter. Mais si on change a peine données d'app, ca change le fit (et donc peut robustes aux modifs)
+    Sous-apprentissage :  On ne capte pas asser les variations (modele linéaire pour fonction quadratique ...)
+
+Le critère inductif : 
+    fonction de perte/cout : l( h(x), y )
+    souvent erreur² ou 1|0 si bien|mal place.
+        attention non-symetrique dans certains domaine (en medecine, on prefere les TN que FP)
+    espérance de cout = risque réel si je choisis h : h* = argmin(R(h))
+        R(h) = Ixy[l(h(x),y) * Pxy(x,y) *dx*dy]
+    --> On va plutit chercher a minimiser le risque empirique (ERM: empirical risk minimisation) (car le risque reel n'est pas possible a avoir)
+    R^(h) = 1/M * S1m ( l(h(xi),yi))
+    et h^ = argmin(R^(h))
+
+PAC Learning (Apprentissage Probablement Aproximativement Correct) : 
+
+
+Faire une prediction/classification lors d'un prbl d'induction :
+    solution simple : on prend les plus proches voisins (necessite une notion de distance)
+    augmenter la couverture = generaliser en necessitant moins de parametre en entrée (augmenter les exemples validants)
+    reduire la couverture = specialiser en ajoutant des parametre necessaire (reduire les exemples validants)
+    --> Différence du réseau de neuronne avec du gradient. Ici on va specialiser/generaliser (avec les operateurs) mais pas tres efficace de tt explorer
+        --> on va faire les operateurs que dans espace des echantillons. Et parler du trelli dans l'espace d'hypothese : borne sup generique (tout +) et borne inf specifique (tout -), entre les 2 on va jongler en +/- specifique et generique : on va apprendre les 2 bornes du trelli et naviguer avec la regle de maintenir ces bornes --> convergence des bornes pour obtenir le meilleur modele 
+            --> /!\ Ne fonctionne que si les données ne sont pas bruités /!\ 
+    
+    G-set = ensemble d'hypothèses candidates qui sont correctes (couvrent +) et complete (exlus -) et maximalement générale (on ne peut pas generaliser plus = borne supérieure)
+    S-set = ensem correctes et complete et maximalement spécifique (on ne peut pas specifier plus = borne inférieure)
+    Si entre G-set et S-set : espace des version = toutes les hypothèses de risques empirique nulle (h ds H tq R^(h) = 0) (ne font aucune erreur sur set de test)
+
+- Generalisation rule :
+    remove a conjecture : A&B -> C => A -> C
+    add an laternative : A -> C => AvB -> C
+    extand the range of a descriptor : 
+
+- Specification rules :
+
+
+- Updating S-set : 
+
+
+- Question : que signifie H, S, F ...
+
+
+
+Exemples 
+ciel -> soleil, nuage, pluie
+Airtemp -> chaud, froid
+Humidité -> Noarmale, élevée
+Vent -> fort, faible
+Eau -> chaude, fraiche
+Prévision -> égale, change
+==> 3*2^5 = 96 exemples possibles
+
+2 classes : + ou -
+==> 2^96 fonctions possibles
+
+Hypothèses : conjonction d'attributs "?" ou "Vide"
+==> 4*3^5 = 972 hypothèses (+1 pour hypothèse vide)
+
+S = maximalement spécifique (on ne peut pas specifier plus sans oublier des +) - Le plus spécifique sans couvrir de -, il n'accepte que des +
+G = maximalement générale (on ne peut pas generaliser plus sans couvrir de -) - il accepte TOUT les plus (et peut etre des moins)
+
+Le but c'est de trouver dans quelles condition on va jouer au golf 
+exemple 1 : {soleil ^ chaud ^ normale ^ fort ^ chaude ^ egale} = +
+    S1 = { {soleil ^ chaud ^ normale ^ fort ^ chaude ^ egale} } --> Le plus spécifique sans couvrir de -, il n'accepte que des +
+    G1 = { (? ^ ? ^ ? ^ ? ^ ? ^ ?) } --> Tout est encore positif pour le plus, pas de contre exemple - 
+
+exemple 2 : {soleil ^ chaud ^ élevée ^ fort ^ chaude ^ égale} = +
+    S2 = { {soleil ^ chaud ^ ? ^ fort ^ chaude ^ égale} } --> on accepte normale et élevée = ? pour l'humidité
+    G2 = G1 --> inchangé
+
+exemple 3 : {pluie ^ froid ^ élevée ^ fort ^ chaude ^ change} = -
+    S3 = S2 --> inchangé
+    G3 = { (soleil ^ ?*5), (? ^ chaud ^ ?*4), ( ?*5 ^ égale) } --> Le plus générale, on va garder les cas ou on est sur d'etre a 100% +, il accepte TOUT les plus (et peut etre des moins)
+
+exemple 4 : {soleil ^ chaud ^ élevée ^ fort ^ fraiche ^ change } = +
+    S4 = { {soleil ^ chaud ^ ? ^ fort ^ ? ^ ?} }
+    G4 = { (soleil ^ ?*5), (? ^ chaud ^ ?*4) } --> on ne peut plus éliminer change
+
+
+

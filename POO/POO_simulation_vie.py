@@ -446,7 +446,7 @@ def lancer_dashboard(history):
 # ============================================================
 #%% Affichage graphique fait pas Claude
 Taille_carte = 100
-NB_JOURS = 1000          # nombre de jours simulés
+NB_JOURS = 400          # nombre de jours simulés
  
 if __name__ == "__main__":
     history = run_simulation(

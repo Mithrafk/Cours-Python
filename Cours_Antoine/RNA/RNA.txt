@@ -1,0 +1,15 @@
+Perceptron : modèle de classification (discrimination entre 2 classes)
+    g : fonction d'activation (non linéaire). Prend en entrée la somme, et donne la sortie : up/down de l'hyper-plan
+    Si on a une erreur, on modifie le vecteur normal par la distance "ox" (??? qu'est ce que c'est) --> Solution = somme pondéré des exemples 
+    S'il existe une forme linéaire pour separer les 2 ensembles, alors il va le trouver en un nombre fini d'étapes
+    -> indépendamment du nombre d'exemples
+    -> indépendamment de la distribution des exemples
+    -> indépendammentde la dimension de l'espace d'entrée
+
+Limites Perceptron : 
+    très sensible au bruitage
+    s'arrete dès qu'on trouve une séparatrice, même si ca semble très peu robuste des qu'on passe sur de l'evaluation
+    Simple couche peu efficient ?--> Perceptron multicouche
+
+T37. Perceptron multicouche :
+    problème initial : si on change un poids, ca devrait changer tout les autres ?
