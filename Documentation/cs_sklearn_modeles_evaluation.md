@@ -8,12 +8,13 @@
 2. [Données : jeux d'exemple et séparation train/test](#2-données--jeux-dexemple-et-séparation-traintest)
 3. [Catalogue de modèles de classification](#3-catalogue-de-modèles-de-classification)
 4. [Introspection des modèles](#4-introspection-des-modèles)
-5. [Métriques d'évaluation](#5-métriques-dévaluation)
-6. [Cas déséquilibré : courbe ROC et AUC](#6-cas-déséquilibré--courbe-roc-et-auc)
-7. [Validation croisée](#7-validation-croisée)
-8. [Sélection de modèle et d'hyperparamètres](#8-sélection-de-modèle-et-dhyperparamètres)
-9. [Étendre scikit-learn : créer son propre estimateur](#9-étendre-scikit-learn--créer-son-propre-estimateur)
-10. [Récapitulatif des pièges classiques](#-récapitulatif-des-pièges-classiques)
+5. [Vocabulaire de l'évaluation : matrice de confusion et métriques de base](#5-vocabulaire-de-lévaluation--matrice-de-confusion-et-métriques-de-base)
+6. [Métriques d'évaluation](#6-métriques-dévaluation)
+7. [Cas déséquilibré : courbe ROC et AUC](#7-cas-déséquilibré--courbe-roc-et-auc)
+8. [Validation croisée](#8-validation-croisée)
+9. [Sélection de modèle et d'hyperparamètres](#9-sélection-de-modèle-et-dhyperparamètres)
+10. [Étendre scikit-learn : créer son propre estimateur](#10-étendre-scikit-learn--créer-son-propre-estimateur)
+11. [Récapitulatif des pièges classiques](#-récapitulatif-des-pièges-classiques)
 
 ---
 
@@ -109,7 +110,43 @@ plt.bar(np.arange(len(mod.coef_[0])), mod.coef_[0])  # poids d'un modèle linéa
 
 ---
 
-## 5. Métriques d'évaluation
+## 5. Vocabulaire de l'évaluation : matrice de confusion et métriques de base
+
+Avant de manipuler les fonctions scikit-learn (§6), il faut maîtriser la définition mathématique de ces métriques — ce sont les briques de base de tout ce qui suit (courbe ROC, précision/rappel, F1...).
+
+**Les 4 quantités de base**, à partir d'une matrice de confusion, pour une classe désignée comme "positive" :
+
+| Quantité | Français | Anglais | Explication |
+|---|---|---|---|
+| VP | Vrai Positif | True Positive (TP) | Le modèle prédit positif, et c'est effectivement le cas. |
+| FP | Faux Positif | False Positive (FP) | Le modèle prédit positif, mais c'est faux (fausse alarme). |
+| VN | Vrai Négatif | True Negative (TN) | Le modèle prédit négatif, et c'est effectivement le cas. |
+| FN | Faux Négatif | False Negative (FN) | Le modèle prédit négatif, mais c'est faux (détection manquée). |
+
+**Les métriques dérivées** :
+
+| Métrique | Français / Anglais | Équation | Explication |
+|---|---|---|---|
+| Accuracy | Exactitude / Accuracy | $\dfrac{VP+VN}{VP+VN+FP+FN}$ | Proportion totale de prédictions correctes, toutes classes confondues. ⚠️ Trompeuse sur données déséquilibrées (voir §7). |
+| Recall / TPR | Rappel, Taux de Vrais Positifs, Sensibilité / Recall, True Positive Rate (TPR), Sensitivity | $\dfrac{VP}{VP+FN}$ | Parmi tous les positifs réels, quelle proportion est correctement détectée ? Répond à *"je ne rate rien"*. C'est l'axe des ordonnées de la courbe ROC. |
+| FPR | Taux de Faux Positifs / False Positive Rate (FPR) | $\dfrac{FP}{FP+VN}$ | Parmi tous les négatifs réels, quelle proportion est classée à tort comme positive (fausse alarme) ? C'est l'axe des abscisses de la courbe ROC. |
+| Precision | Précision / Precision | $\dfrac{VP}{VP+FP}$ | Parmi toutes les prédictions positives faites par le modèle, quelle proportion est correcte ? Répond à *"quand j'annonce positif, ai-je raison ?"*. |
+
+```python
+CM = met.confusion_matrix(y_test, mod.predict(X_test))
+VN, FP, FN, VP = CM.ravel()      # cas binaire uniquement ; ordre à vérifier via mod.classes_
+
+accuracy  = (VP + VN) / (VP + VN + FP + FN)
+recall    = VP / (VP + FN)        # rappel / TPR / sensibilité
+fpr       = FP / (FP + VN)        # taux de faux positifs
+precision = VP / (VP + FP)
+```
+
+💡 **Moyen mnémotechnique** : la **précision** répond à "combien de mes alarmes sont vraies ?", le **rappel** répond à "combien de vrais événements ai-je su détecter ?". Les deux évoluent en général en **sens opposé** selon le seuil de décision choisi — d'où l'intérêt de la courbe précision/rappel (§6) pour visualiser ce compromis.
+
+---
+
+## 6. Métriques d'évaluation
 
 ⚠️ **La métrique n'est pas nécessairement la fonction optimisée** par le modèle : la métrique sert à présenter des résultats de façon parlante à un expert métier, la fonction de coût sert à l'optimisation interne.
 
@@ -147,7 +184,7 @@ met.PrecisionRecallDisplay.from_estimator(mod, X_test, y_test)
 
 ---
 
-## 6. Cas déséquilibré : courbe ROC et AUC
+## 7. Cas déséquilibré : courbe ROC et AUC
 
 Sur des données déséquilibrées (classe minoritaire = fraude, alarme, anomalie...), l'accuracy peut être excellente en ne détectant **jamais** la classe rare — il faut donc d'autres outils.
 
@@ -178,7 +215,7 @@ plt.title(f"ROC => AUC = {sc:.2f}")
 
 ---
 
-## 7. Validation croisée
+## 8. Validation croisée
 
 Séparer une seule fois en train/test peut donner une estimation de performance peu fiable (dépendante du hasard du découpage). La validation croisée répète l'opération plusieurs fois.
 
@@ -205,7 +242,7 @@ scores = cross_val_score(SVC(), X, y, cv=5, scoring='accuracy')
 
 ---
 
-## 8. Sélection de modèle et d'hyperparamètres
+## 9. Sélection de modèle et d'hyperparamètres
 
 | Fonction | Import | Paramètres essentiels | Explication |
 |---|---|---|---|
@@ -237,7 +274,7 @@ print(study.best_trial.params)
 
 ---
 
-## 9. Étendre scikit-learn : créer son propre estimateur
+## 10. Étendre scikit-learn : créer son propre estimateur
 
 Grâce à l'héritage, on peut fabriquer un classifieur maison qui reste compatible avec **tous** les outils scikit-learn (validation croisée, grid search, pipelines...).
 
