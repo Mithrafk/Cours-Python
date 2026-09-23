@@ -1,0 +1,34 @@
+Comment gerer les valeurs manquantes :
+    /!\ aux type de valeurs : "?" = valeur manquantes peut conduire à type = str
+    3 options : 
+        Virer la ligne
+        Virer la colonne si trop de NaN
+        Estimer la valeur manquante : moyenne -> mediane (ecarte les valeurs abérantes) | Carrément faire un modèle pour generer ces valeurs
+    
+Feature ingenieuring : (gerer nos attributs)
+On veut virer les variables discrètes
+    "Homme | Femme" en str = chiant => 0 | 1
+    "RGB" : 0|1 impossible => OneHotEncoding (3 nouvelles colonnes avec Oui|Non sur chaque couleur)
+
+Simplification des données :
+    Visualiser les données avant de W pour comprendre
+    Permet de rentrer de nouveau hyperparamètre (qu'on optimisera pas car trop lourd en calcul) => Fier a son instinct sur ce qui marche le mieux
+
+Transformations arbitraires (expert métier):
+    Ramener les données à la mesure (log, exp ...) peut aider le modèle
+    Rajouter des colonnes : ex combinaison de 2 colonnes (largeur x longueur = Surface) si la surface est un question importante dans mon prbl
+
+Target encoding : /!\Sources de nbm prbl (fuite de données)/!\
+    On encode la target (y) dans chacune des variables predictives (feature)
+
+Normaliser les données (colonnes comparables): Z = (X-mean)/std
+    Pour : 
+        - obligatoire entrées réseau neuronne
+    Contre
+        - sert à rien dans Arbre/Gradient Boosting
+        - perd une part d'information directe 
+    
+    ==> Normaliser les lignes :
+        - Si on traite du texte
+        - pour les séries temporelles
+        

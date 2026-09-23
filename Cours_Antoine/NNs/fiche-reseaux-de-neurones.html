@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Fiche de révision interactive : réseaux de neurones artificiels (A. Cornuéjols, IODAA 2026–27)">
+<title>Fiche · Les réseaux de neurones artificiels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650&family=Public+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F8F7; --surface:#FFFFFF; --ink:#1C2B36; --muted:#5A6B78;
+  --moss:#3F6B4A; --moss-soft:#E3EFE6; --rule:#D3DCDF;
+  --plus:#2F7A4E; --minus:#B0413E; --unknown:#C9D3D8; --warn:#8A5A00; --warn-bg:#FBF1DC;
+  --blue:#2B6CB0; --blue-soft:#E4EEF8;
+  --c1:#2B6CB0; --c2:#C2571A; --c3:#2F7A4E; --c4:#8B3FA8; --c5:#B08A00; --c6:#0E8A8A;
+  --serif:"Newsreader", Georgia, "Times New Roman", serif;
+  --sans:"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11181C; --surface:#18222A; --ink:#E3EBEE; --muted:#9AAAB4;
+    --moss:#8DC29A; --moss-soft:#1F3327; --rule:#2C3A43;
+    --plus:#6FC08F; --minus:#E07A76; --unknown:#34434C; --warn:#E8B75A; --warn-bg:#2E2615;
+    --blue:#7FB2E5; --blue-soft:#1B2B3B;
+    --c1:#7FB2E5; --c2:#F0A06A; --c3:#6FC08F; --c4:#C79AE0; --c5:#E8C95A; --c6:#5FCFCF;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11181C; --surface:#18222A; --ink:#E3EBEE; --muted:#9AAAB4;
+  --moss:#8DC29A; --moss-soft:#1F3327; --rule:#2C3A43;
+  --plus:#6FC08F; --minus:#E07A76; --unknown:#34434C; --warn:#E8B75A; --warn-bg:#2E2615;
+  --blue:#7FB2E5; --blue-soft:#1B2B3B;
+  --c1:#7FB2E5; --c2:#F0A06A; --c3:#6FC08F; --c4:#C79AE0; --c5:#E8C95A; --c6:#5FCFCF;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:1rem;line-height:1.6}
+img,svg{max-width:100%}
+a{color:var(--moss)}
+:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
+
+.layout{display:grid;grid-template-columns:15rem minmax(0,1fr);gap:3rem;max-width:74rem;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+nav.toc{position:sticky;top:calc(1.5rem + env(safe-area-inset-top,0px));align-self:start;font-size:.9rem;max-height:calc(100vh - 3rem);overflow:auto}
+nav.toc p{margin:0 0 .6rem;color:var(--muted);font-weight:600}
+nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:t}
+nav.toc li{counter-increment:t;margin:.1rem 0}
+nav.toc a{display:flex;gap:.6rem;padding:.28rem .5rem;border-radius:4px;color:var(--ink);text-decoration:none}
+nav.toc a::before{content:counter(t);font-family:var(--mono);color:var(--moss);min-width:1.1rem}
+nav.toc a:hover{background:var(--moss-soft)}
+main{max-width:50rem;min-width:0}
+
+header.hero{border-bottom:1px solid var(--rule);padding-bottom:1.75rem;margin-bottom:2rem}
+header.hero h1{font-family:var(--serif);font-weight:650;font-size:clamp(2rem,4.5vw,3rem);line-height:1.1;margin:0 0 .75rem;letter-spacing:-.01em}
+header.hero p{margin:0;color:var(--muted);max-width:42rem}
+.focus{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.1rem}
+.focus a{font-size:.85rem;padding:.3rem .7rem;border:1px solid var(--moss);border-radius:999px;text-decoration:none}
+.focus a:hover{background:var(--moss-soft)}
+
+section{padding-top:1.5rem;margin-bottom:2.5rem;scroll-margin-top:1rem}
+h2{font-family:var(--serif);font-weight:650;font-size:1.75rem;line-height:1.2;margin:0 0 1rem;display:flex;gap:.75rem;align-items:baseline}
+h2 .n{font-family:var(--mono);font-size:1rem;color:var(--moss);font-weight:600}
+h3{font-size:1.05rem;margin:1.75rem 0 .5rem}
+p{margin:.5rem 0 .9rem}
+ul,ol{padding-left:1.25rem;margin:.4rem 0 1rem}
+li{margin:.2rem 0}
+strong{font-weight:700}
+code,.f{font-family:var(--mono);font-size:.9em}
+.fx{font-family:var(--mono);font-size:.95em;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:.55rem .8rem;margin:.6rem 0;overflow-x:auto;white-space:pre;line-height:1.7}
+sub,sup{line-height:0}
+
+.scroll{overflow-x:auto;margin:1rem 0 1.25rem;border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.92rem;min-width:34rem}
+th,td{text-align:left;vertical-align:top;padding:.6rem .8rem;border-bottom:1px solid var(--rule)}
+th{background:var(--moss-soft);font-weight:700}
+tr:last-child td{border-bottom:0}
+td.sub{color:var(--muted);font-style:italic}
+
+.note{border-left:3px solid var(--warn);background:var(--warn-bg);padding:.7rem 1rem;border-radius:0 6px 6px 0;margin:1rem 0;font-size:.93rem}
+.key{border-left:3px solid var(--moss);background:var(--moss-soft);padding:.8rem 1rem;border-radius:0 6px 6px 0;margin:1rem 0}
+.key p,.note p,.aside p{margin:.2rem 0}
+.aside{border-left:3px solid var(--blue);background:var(--blue-soft);padding:.7rem 1rem;border-radius:0 6px 6px 0;margin:1rem 0;font-size:.93rem}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--warn);margin-right:.4rem}
+.aside .tag{color:var(--blue)} .key .tag{color:var(--moss)}
+
+/* Timeline */
+.timeline{list-style:none;padding:0;margin:1rem 0;position:relative}
+.timeline::before{content:"";position:absolute;left:6.4rem;top:.4rem;bottom:.4rem;width:2px;background:var(--rule)}
+.timeline li{display:grid;grid-template-columns:5.6rem 1fr;gap:1.6rem;margin:0 0 1.1rem;position:relative}
+.timeline li::after{content:"";position:absolute;left:6.05rem;top:.45rem;width:.8rem;height:.8rem;border-radius:50%;background:var(--surface);border:2px solid var(--moss)}
+.timeline li.fail::after{border-color:var(--minus)}
+.timeline .d{font-family:var(--mono);font-size:.82rem;color:var(--muted);text-align:right;padding-top:.15rem}
+.timeline .t{font-weight:700}
+.timeline .b{font-size:.93rem}
+.timeline li.fail .t{color:var(--minus)}
+.hopes{counter-reset:h;list-style:none;padding:0;display:grid;gap:.5rem}
+.hopes li{counter-increment:h;display:flex;gap:.75rem;align-items:baseline}
+.hopes li::before{content:counter(h);font-family:var(--mono);color:var(--moss);font-weight:600}
+
+/* Labs */
+.lab{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:1.25rem 1.25rem 1.4rem;margin:1.5rem 0}
+.lab>h3{margin:0 0 .25rem;font-family:var(--serif);font-size:1.3rem;font-weight:650}
+.lab .lead{margin:.1rem 0 .9rem;color:var(--muted);font-size:.93rem}
+.lab .lead b{color:var(--ink)}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.8rem 1.5rem;margin:.6rem 0 .9rem}
+.ctl label{display:block;font-size:.88rem;font-weight:600;margin-bottom:.25rem}
+.ctl output{font-family:var(--mono);color:var(--moss);margin-left:.2rem;font-weight:600}
+input[type=range]{width:100%;accent-color:var(--moss)}
+input[type=number],input[type=text],select{font:inherit;font-size:.9rem;padding:.25rem .4rem;border:1px solid var(--rule);border-radius:4px;background:var(--bg);color:var(--ink);max-width:100%}
+input[type=number]{width:4.6rem;font-family:var(--mono)}
+.btns{display:flex;flex-wrap:wrap;gap:.5rem;margin:.6rem 0}
+button{font:inherit;font-size:.85rem;padding:.38rem .8rem;border-radius:4px;border:1px solid var(--moss);background:transparent;color:var(--moss);cursor:pointer}
+button:hover{background:var(--moss-soft)}
+button.pri{background:var(--moss);color:var(--surface)} button.pri:hover{opacity:.9;background:var(--moss)}
+button:disabled{opacity:.45;cursor:default}
+.seg{display:inline-flex;flex-wrap:wrap;gap:0;border:1px solid var(--moss);border-radius:5px;overflow:hidden}
+.seg button{border:0;border-radius:0;border-right:1px solid var(--moss)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"],.btns button[aria-pressed="true"]{background:var(--moss);color:var(--surface)}
+canvas{display:block;width:100%;height:auto;border:1px solid var(--rule);border-radius:6px;background:var(--bg);touch-action:manipulation}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:.9rem;align-items:start}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:.6rem;margin:.8rem 0}
+.stat{border:1px solid var(--rule);border-radius:6px;padding:.5rem .7rem;background:var(--bg)}
+.stat .v{font-family:var(--mono);font-size:1.02rem;font-weight:600;word-break:break-all}
+.stat .l{font-size:.78rem;color:var(--muted)}
+.stat .fx2{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+.verdict{margin:.7rem 0 0;font-size:.93rem}
+.ok{color:var(--plus);font-weight:700} .ko{color:var(--minus);font-weight:700}
+.legend{font-size:.83rem;color:var(--muted);margin:.4rem 0 0}
+.sw{display:inline-block;width:.75rem;height:.75rem;border-radius:2px;vertical-align:-1px;margin-right:.25rem}
+details.obs{margin:.8rem 0 0;font-size:.9rem}
+details.obs summary{cursor:pointer;color:var(--moss);font-weight:600}
+details.obs>div{margin-top:.4rem;padding:.4rem .8rem;border-left:2px solid var(--rule)}
+table.mini{min-width:0;font-size:.85rem}
+table.mini td,table.mini th{padding:.35rem .55rem}
+td.num,th.num{text-align:right;font-family:var(--mono)}
+td.hl,th.hl{background:var(--moss-soft)}
+tr.hl td{background:var(--moss-soft)}
+.mono{font-family:var(--mono)}
+.bar{height:.7rem;background:var(--unknown);border-radius:3px;overflow:hidden;min-width:5rem}
+.bar>i{display:block;height:100%;background:var(--moss)}
+
+/* objets induction */
+.objs{display:grid;grid-template-columns:repeat(auto-fill,minmax(8.2rem,1fr));gap:.5rem;margin:.7rem 0}
+.obj{border:1px solid var(--rule);border-radius:6px;padding:.4rem .5rem;text-align:center;background:var(--bg);cursor:pointer;font:inherit;color:var(--ink);position:relative}
+.obj .g{height:2.3rem;display:flex;align-items:center;justify-content:center;gap:.2rem}
+.obj .g span{display:inline-block;background:currentColor}
+.obj .g span.c{border-radius:50%}
+.obj .lb{font-family:var(--mono);font-weight:700;font-size:.95rem}
+.obj .ds{font-size:.7rem;color:var(--muted);line-height:1.2}
+.obj.p{border-color:var(--plus)} .obj.m{border-color:var(--minus)} .obj.q{border-style:dashed;border-width:2px;border-color:var(--warn)}
+.obj.p .lb{color:var(--plus)} .obj.m .lb{color:var(--minus)} .obj.x .lb{color:var(--muted)}
+.obj.bad{outline:2px solid var(--minus)}
+.obj.off{opacity:.55}
+.chk{display:flex;flex-wrap:wrap;gap:.4rem 1rem;font-size:.9rem;margin:.3rem 0}
+.chk label{display:flex;gap:.35rem;align-items:center;cursor:pointer}
+
+/* quiz */
+.qz{margin:.6rem 0}
+.qhead{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;justify-content:space-between;margin:.4rem 0 .8rem}
+.qscore{font-family:var(--mono);font-size:.9rem}
+.qc{border:1px solid var(--rule);border-radius:8px;background:var(--surface);padding:.8rem 1rem;margin:.6rem 0}
+.qc .qq{font-weight:600;margin:0 0 .5rem}
+.qc .qq .qn{font-family:var(--mono);color:var(--moss);margin-right:.4rem}
+.opts{display:grid;gap:.4rem}
+.opts button{text-align:left;padding:.5rem .7rem;border-color:var(--rule);color:var(--ink);background:var(--bg)}
+.opts button:hover:not(:disabled){border-color:var(--moss)}
+.opts button.right{border-color:var(--plus);background:var(--moss-soft);opacity:1}
+.opts button.wrong{border-color:var(--minus);opacity:1}
+.opts.row{display:flex;flex-wrap:wrap}
+.fb{margin:.6rem 0 0;font-size:.92rem}
+.fb:empty{display:none}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:.4rem 0}
+.chips button{border-color:var(--rule);color:var(--ink);background:var(--bg);text-align:left}
+.chips button b{font-family:var(--mono);color:var(--moss);margin-right:.35rem}
+.numin{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.numin input{width:9rem}
+
+footer{border-top:1px solid var(--rule);padding-top:1rem;color:var(--muted);font-size:.85rem}
+
+@media (max-width: 60rem){
+  .layout{grid-template-columns:1fr;gap:1rem;padding-top:1.5rem}
+  nav.toc{position:static;max-height:none;border:1px solid var(--rule);border-radius:6px;padding:.75rem;background:var(--surface)}
+  nav.toc ol{display:grid;grid-template-columns:repeat(auto-fill,minmax(12rem,1fr))}
+}
+@media (max-width: 34rem){
+  .timeline::before{left:.35rem}
+  .timeline li{grid-template-columns:1fr;gap:.1rem;padding-left:1.6rem}
+  .timeline li::after{left:0}
+  .timeline .d{text-align:left}
+  .lab{padding:1rem .85rem 1.1rem}
+}
+@media print{
+  nav.toc,.btns,.controls,.seg{display:none}
+  .layout{display:block}
+  .lab{break-inside:avoid}
+  details>*{display:block}
+}
+
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc" aria-label="Sommaire">
+  <p>Sommaire</p>
+  <ol>
+    <li><a href="#neurone">Du neurone au neurone formel</a></li>
+    <li><a href="#perceptron">Le perceptron</a></li>
+    <li><a href="#pmc">Le perceptron multi-couches</a></li>
+    <li><a href="#retro">Gradient et rétropropagation</a></li>
+    <li><a href="#surapp">Sur-apprentissage et architecture</a></li>
+    <li><a href="#sortie">Coder la sortie</a></li>
+    <li><a href="#deep">Réseaux profonds et convolution</a></li>
+    <li><a href="#reg">Peu d’étiquettes, normalisation, dropout</a></li>
+    <li><a href="#etrange">Comportements étranges, limites</a></li>
+    <li><a href="#autres">Autres architectures</a></li>
+    <li><a href="#pratique">Questions pratiques</a></li>
+    <li><a href="#preproc">Prétraitement des données</a></li>
+    <li><a href="#reduc">Réduire la dimension</a></li>
+    <li><a href="#pieges">À retenir et pièges</a></li>
+    <li><a href="#test">Auto-test</a></li>
+  </ol>
+</nav>
+
+<main>
+<header class="hero">
+  <h1>Les réseaux de neurones artificiels</h1>
+  <p>Fiche de révision du cours d’Antoine Cornuéjols (AgroParisTech, IODAA 2026–27, 182 diapositives), y compris la partie pratique sur le prétraitement. Chaque notion clé a son laboratoire : manipule, puis lis.</p>
+  <div class="focus">
+    <a href="#lab-perceptron">Perceptron</a>
+    <a href="#lab-xor">XOR</a>
+    <a href="#lab-backprop">Rétropropagation</a>
+    <a href="#lab-mlp">Terrain de jeu PMC</a>
+    <a href="#lab-conv">Convolution</a>
+    <a href="#test">Auto-test</a>
+  </div>
+</header>
+
+<div class="aside"><p><span class="tag">Plan du cours</span>1. Introduction et réseaux à une couche · 2. Perceptrons multi-couches · 3. L’apprentissage dans les réseaux · 4. Introduction aux réseaux profonds · 5. Autres architectures · puis questions pratiques (batch, pas, arrêt) et prétraitement.</p></div>
+
+<!-- 1 -->
+<section id="neurone">
+  <h2><span class="n">1</span>Du neurone biologique au neurone formel</h2>
+  <p><strong>Pourquoi s’inspirer du cerveau ?</strong> Il apprend, il est robuste et tolérant aux fautes, il s’accommode d’informations incomplètes, incertaines ou imprécises, et il est massivement parallèle. Ordres de grandeur : ≈ 10<sup>11</sup> neurones dans le cerveau humain (≈ 950 000 chez l’abeille), 10<sup>3</sup> à 10<sup>4</sup> connexions par neurone ; potentiel d’action, période réfractaire, neurotransmetteurs ; signaux excitateurs ou inhibiteurs.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Attraits des réseaux artificiels</th><th>Défauts</th></tr></thead>
+    <tbody><tr><td>Calculs parallélisables · robustes et tolérants aux fautes (distribué) · algorithmes simples · emploi très général</td><td>Opacité des raisonnements et de l’hypothèse produite</td></tr></tbody>
+  </table></div>
+  <p><strong>Neurone formel</strong> : somme pondérée des entrées, puis fonction d’activation.</p>
+  <div class="fx">y = g( Σ<sub>j</sub> w<sub>j</sub> x<sub>j</sub> )     (dendrites = entrées x<sub>j</sub>, poids = synapses w<sub>j</sub>, axone = sortie y)</div>
+  <h3>Repères historiques</h3>
+  <ul class="timeline">
+    <li><span class="d">~1870</span><div><div class="t">Mise en évidence des neurones</div><div class="b">Golgi et Ramón y Cajal ; les synapses dans les années 1930.</div></div></li>
+    <li><span class="d">1943 / 1949</span><div><div class="t">Modèles formels</div><div class="b"><strong>McCulloch et Pitts</strong> (1943) : premier neurone formel. <strong>Hebb</strong> (1949) : règle d’apprentissage par renforcement du couplage synaptique.</div></div></li>
+    <li><span class="d">1958–1969</span><div><div class="t">Premiers modèles informatiques</div><div class="b">Perceptron (Rosenblatt, 1958–1962), ADALINE (Widrow-Hoff, 1960) ; analyse par Minsky et Papert (1969).</div></div></li>
+    <li class="fail"><span class="d">après 1969</span><div><div class="t">Blocage</div><div class="b">Le perceptron ne peut pas tout représenter (le XOR, par exemple).</div></div></li>
+    <li><span class="d">1982–</span><div><div class="t">Nouveau connexionnisme</div><div class="b">Hopfield 1982 (réseau bouclé) ; <strong>perceptron multi-couches 1985</strong> ; « reservoir computing » 2003 ; réseaux profonds ; réseaux impulsionnels (<em>spiking</em>).</div></div></li>
+  </ul>
+</section>
+
+<!-- 2 -->
+<section id="perceptron">
+  <h2><span class="n">2</span>Le perceptron</h2>
+  <h3>Modèle : un discriminant linéaire</h3>
+  <p>En dimension d, l’hyperplan (de dimension d−1) a pour équation Σ w<sub>j</sub>x<sub>j</sub> + w<sub>0</sub> = 0. L’hypothèse est h(x) = Σ w<sub>j</sub>x<sub>j</sub> + w<sub>0</sub> et la classe est donnée par son signe. En ajoutant x<sub>0</sub> = 1 (coordonnées homogènes), on écrit simplement h(x) = w·x.</p>
+  <h3>Règle d’apprentissage</h3>
+  <p>Historiquement une règle ad hoc : <strong>apprendre seulement en cas d’échec</strong>. Intuition : si y = +1 et w·x &lt; 0, il faut augmenter w·x ; avec w' = w + η x on a w'·x = w·x + η x·x &gt; w·x. Symétriquement si y = −1.</p>
+  <div class="fx">si  y<sub>i</sub> · (w·x<sub>i</sub>) ≤ 0   alors   w ← w + η y<sub>i</sub> x<sub>i</sub>
+R<sub>Emp</sub>(w) = − Σ<sub>x<sub>j</sub> ∈ M</sub> wᵀx<sub>j</sub> · u<sub>j</sub>      (M = exemples mal classés, u<sub>j</sub> = ±1)</div>
+  <p>C’est une <strong>descente de gradient sur le risque empirique</strong>, en ligne (exemple par exemple). L’algorithme du cours initialise w à 0 et boucle sur les exemples jusqu’à ce qu’une passe complète ne modifie plus rien.</p>
+  <div class="key"><p><span class="tag">Propriété remarquable</span>Convergence en un nombre <em>fini</em> d’étapes, indépendamment du nombre d’exemples, de leur distribution et de la dimension de l’espace d’entrée, <strong>s’il existe au moins une séparatrice linéaire</strong>.</p></div>
+  <div class="note"><p><span class="tag">Limites</span>Ces théorèmes portent sur l’échantillon d’apprentissage : rien n’est garanti pour les exemples à venir. Le perceptron ne sépare que linéairement (pas le XOR). Minsky et Papert (1969) : ce n’est « pas tout à fait vrai » si l’on change d’espace d’entrée avec de bonnes fonctions de base (détecteurs locaux), mais ce prétraitement est difficile. D’où l’idée : apprendre aussi ces fonctions de base, dans les couches cachées.</p></div>
+
+  <div class="lab" id="lab-perceptron">
+    <h3>Perceptron pas à pas</h3>
+    <p class="lead"><b>Prédis :</b> sur des données séparables, combien de mises à jour faut-il ? Et sur le XOR, l’algorithme va-t-il s’arrêter ? Avance pas à pas puis lance l’animation.</p>
+  </div>
+</section>
+
+<!-- 3 -->
+<section id="pmc">
+  <h2><span class="n">3</span>Le perceptron multi-couches (PMC)</h2>
+  <p>Topologie typique : couche d’entrée, une ou plusieurs <strong>couches cachées</strong>, couche de sortie. Exemple historique : ALVINN, un réseau qui conduit un véhicule à 70 mph sur autoroute.</p>
+  <h3>Propagation avant</h3>
+  <div class="fx">a<sub>k</sub> = Σ<sub>j=0..d</sub> w<sub>jk</sub> z<sub>j</sub>          z<sub>k</sub> = g(a<sub>k</sub>)
+w<sub>jk</sub> : poids de la cellule j vers la cellule k · a<sub>k</sub> : activation · g : fonction d’activation · j = 0 : le biais</div>
+  <h3>Fonctions d’activation</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Fonction</th><th>Formule</th><th>Intervalle</th></tr></thead>
+    <tbody>
+      <tr><td>Heaviside / seuil</td><td>0 si x &lt; 0, 1 sinon</td><td>{0, 1}</td></tr>
+      <tr><td>Rampe</td><td>linéaire par morceaux</td><td>[0, 1]</td></tr>
+      <tr><td>Sigmoïde</td><td>g(a) = 1 / (1 + e<sup>−a</sup>), avec <strong>g′(a) = g(a)(1 − g(a))</strong></td><td>[0, 1]</td></tr>
+      <tr><td>tanh</td><td>(e<sup>x</sup> − e<sup>−x</sup>) / (e<sup>x</sup> + e<sup>−x</sup>)</td><td>[−1, 1]</td></tr>
+      <tr><td>ReLU</td><td>max(0, x)</td><td>[0, ∞[</td></tr>
+      <tr><td>Noyau gaussien (RBF)</td><td>fonction « à base radiale »</td><td>]0, 1]</td></tr>
+    </tbody>
+  </table></div>
+  <div class="scroll"><table>
+    <thead><tr><th>Tâche</th><th>Couches cachées</th><th>Couche de sortie</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Classification</strong></td><td>sigmoïde, tanh, ReLU…</td><td>sigmoïde dans [0,1] ou <strong>softmax</strong></td></tr>
+      <tr><td><strong>Régression</strong></td><td>sigmoïde, tanh, ReLU…</td><td><strong>linéaire</strong></td></tr>
+    </tbody>
+  </table></div>
+  <div class="lab" id="lab-activ">
+    <h3>Explorateur de fonctions d’activation</h3>
+    <p class="lead">Trace les fonctions et leur dérivée. <b>Déplace le point</b> pour lire g(a) et g′(a).</p>
+  </div>
+
+  <h3>Le rôle des couches cachées : changer de représentation</h3>
+  <p>Les couches cachées transforment successivement l’entrée pour <strong>rapprocher la distribution en sortie de la distribution cible</strong>. Par exemple pour séparer deux classes avec un codage « one-hot » : classe bleue → (1, 0), classe rouge → (0, 1). Ces variables intermédiaires sont des <em>variables latentes</em> apprises. Le cours montre des transformations 2D → 2D pour différentes fonctions d’activation (linéaire, ReLU, norme L2) : avec une activation non linéaire, l’espace se « plie » et les classes peuvent devenir séparables.</p>
+  <div class="aside"><p><span class="tag">Complément</span>Sans non-linéarité, empiler des couches ne sert à rien : une composition de transformations linéaires reste une transformation linéaire.</p></div>
+  <p><strong>Exemple : le XOR.</strong> Un réseau 2-2-1 avec une activation en rampe (0 pour la somme ≤ −1, 1 pour la somme ≥ 1, linéaire entre les deux) et un biais. Le cours demande de trouver les 9 poids.</p>
+  <div class="lab" id="lab-xor">
+    <h3>Trouve les poids du XOR</h3>
+    <p class="lead">Neurones cachés h<sub>1</sub> (en haut) et h<sub>2</sub> (en bas), sortie y. <b>Ajuste les 9 poids</b> jusqu’à obtenir la table du XOR, ou affiche la solution de la diapo 48.</p>
+  </div>
+  <div class="key"><p><span class="tag">Bilan du cours</span>Pourquoi les réseaux séduisent : (1) espace d’hypothèses de grande capacité (approximateurs universels « à la limite ») ; (2) paramètres appris par descente de gradient ; (3) calculs parallélisables ; (4) on peut y mettre de la structure reflétant celle du monde ; (5) ils apprennent des abstractions.</p></div>
+</section>
+
+<!-- 4 -->
+<section id="retro">
+  <h2><span class="n">4</span>Apprendre les poids : gradient et rétropropagation</h2>
+  <div class="fx">w* = argmin<sub>w</sub>  (1/m) Σ<sub>l=1..m</sub> [ y(x<sub>l</sub> ; w) − u(x<sub>l</sub>) ]²          (u = sortie désirée)
+w<sup>(t)</sup> = w<sup>(t−1)</sup> − η ∇<sub>w</sub> E</div>
+  <div class="scroll"><table>
+    <thead><tr><th>Mode</th><th>Quand on met à jour</th><th>Formule</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Hors ligne</strong> (batch, gradient total)</td><td>Après avoir vu <em>tous</em> les exemples</td><td>w<sub>ij</sub> ← w<sub>ij</sub> − η (1/m) Σ<sub>k</sub> ∂R<sub>E</sub>(x<sub>k</sub>, w)/∂w<sub>ij</sub></td></tr>
+      <tr><td><strong>En ligne</strong> (gradient stochastique)</td><td>Après <em>chaque</em> exemple</td><td>w<sub>ij</sub> ← w<sub>ij</sub> − η ∂R<sub>E</sub>(x<sub>k</sub>, w)/∂w<sub>ij</sub></td></tr>
+    </tbody>
+  </table></div>
+  <h3>Une itération, en 7 temps</h3>
+  <ol>
+    <li>Présenter un exemple (séquentiellement, au hasard, ou selon un critère).</li>
+    <li>Calculer l’état du réseau (propagation avant).</li>
+    <li>Calculer l’erreur, par ex. (y − u)².</li>
+    <li>Calculer les gradients par <strong>rétropropagation</strong>.</li>
+    <li>Modifier les poids.</li>
+    <li>Tester le critère d’arrêt (erreur, nombre de présentations…).</li>
+    <li>Retour en 1.</li>
+  </ol>
+  <h3>La rétropropagation du gradient</h3>
+  <p>Notation du cours : a<sub>i</sub> activation de la cellule i, z<sub>i</sub> sa sortie, δ<sub>i</sub> l’erreur qui lui est attachée. Idée : le gradient pour un poids w<sub>ij</sub> se calcule à partir de l’erreur <em>après</em> la cellule j.</p>
+  <div class="fx">∂E/∂w<sub>ij</sub> = (∂E/∂a<sub>j</sub>) (∂a<sub>j</sub>/∂w<sub>ij</sub>) = δ<sub>j</sub> z<sub>i</sub>
+couche de sortie :   δ<sub>k</sub> = ∂E/∂y<sub>k</sub> · g′(a<sub>k</sub>) = (y<sub>k</sub> − u<sub>k</sub>) g′(a<sub>k</sub>)
+couche cachée :      δ<sub>j</sub> = g′(a<sub>j</sub>) · Σ<sub>k</sub> w<sub>jk</sub> δ<sub>k</sub>
+mise à jour :        Δw<sub>ij</sub> = − η δ<sub>j</sub> z<sub>i</sub>        (en ligne)   ·   Δw<sub>ij</sub> = − η Σ<sub>n</sub> δ<sub>j</sub><sup>n</sup> z<sub>i</sub><sup>n</sup>   (total)</div>
+  <div class="note"><p><span class="tag">Attention au signe</span>Les diapos écrivent tantôt Δw = +η δ y (67), tantôt w − η δ a (69) : le signe dépend de la définition de δ, avec (u − y) ou (y − u). Garde la règle de fond : <strong>w ← w − η ∂E/∂w</strong>. Ici on prend δ<sub>k</sub> = (y<sub>k</sub> − u<sub>k</sub>) g′(a<sub>k</sub>), donc la mise à jour porte un signe moins.</p></div>
+  <ul>
+    <li><strong>Coût</strong> : O(w) par passe, w = nombre de poids. Il faut typiquement plusieurs centaines de passes, et recommencer plusieurs dizaines de fois avec des initialisations différentes. La reconnaissance, elle, est possible en temps réel.</li>
+    <li><strong>Optima locaux</strong> : la minimisation stochastique (en ligne) permet en partie d’y échapper.</li>
+    <li><strong>Plausibilité biologique</strong> : la rétropropagation est une règle <em>top-down</em>, peu plausible biologiquement. La règle de Hebb (« fire together, wire together ») est <em>bottom-up</em>, locale, ne minimise pas explicitement un coût mais apprend des représentations « info-max ».</li>
+  </ul>
+  <div class="lab" id="lab-backprop">
+    <h3>Rétropropagation avec des vrais nombres</h3>
+    <p class="lead">Réseau 2-2-1, sigmoïdes partout, erreur E = ½(y − u)². Modifie entrées, cible et poids : le tableau calcule la passe avant, les δ et les gradients, et <b>vérifie chaque gradient par différences finies</b>. Applique la mise à jour et regarde E baisser.</p>
+  </div>
+</section>
+
+<!-- 5 -->
+<section id="surapp">
+  <h2><span class="n">5</span>Sur-apprentissage, arrêt et architecture</h2>
+  <ul>
+    <li><strong>Sur-apprentissage</strong> : l’erreur sur l’ensemble d’apprentissage continue de baisser alors que l’erreur de validation remonte. Sur les courbes du cours (1 000 exemples), la validation atteint son minimum puis remonte. Question du cours : quelles courbes avec 2 000 exemples ? Réponse attendue : l’écart se réduit, le minimum de validation est plus bas et plus tardif.</li>
+    <li><strong>Règle d’arrêt prématuré</strong> (<em>early stopping</em>) : arrêter quand l’erreur sur l’ensemble de <em>validation</em> cesse de baisser.</li>
+    <li><strong>Architecture</strong> : elle contrôle la performance en généralisation. Trop peu de neurones : sous-apprentissage ; trop : sur-apprentissage (en régression, courbe qui oscille entre les points).</li>
+    <li><strong>Compromis biais-variance</strong> : erreur totale = erreur d’approximation (biais : la meilleure hypothèse de H est loin de la cible f) + erreur d’estimation (variance : l’hypothèse apprise est loin de la meilleure de H).</li>
+  </ul>
+  <div class="lab" id="lab-mlp">
+    <h3>Terrain de jeu : entraîne un vrai PMC</h3>
+    <p class="lead">Un vrai réseau, entraîné dans ta page (équivalent de <code>playground.tensorflow.org</code>, cité en démo dans le cours). Choisis des données, une architecture, un mode d’apprentissage. La couleur de fond est la probabilité de la classe rouge ; la courbe compare erreur d’apprentissage et de validation.</p>
+  </div>
+</section>
+
+<!-- 6 -->
+<section id="sortie">
+  <h2><span class="n">6</span>Coder la sortie</h2>
+  <h3>Un seul neurone de sortie</h3>
+  <ul>
+    <li>Sortie dans {0, 1}, ou dans [0, 1] avec l’<strong>erreur quadratique</strong>.</li>
+    <li>Sortie vue comme une <strong>probabilité</strong> dans [0, 1] : on utilise un <strong>critère entropique</strong> (entropie croisée) pour la « calibrer ».</li>
+  </ul>
+  <div class="fx">l(y<sub>i</sub>, ŷ<sub>i</sub>) = − [ y<sub>i</sub> log ŷ<sub>i</sub> + (1 − y<sub>i</sub>) log(1 − ŷ<sub>i</sub>) ]       avec  ŷ<sub>i</sub> = 1 / (1 + exp(−wᵀx<sub>i</sub>)),  y<sub>i</sub> ∈ {0,1}</div>
+  <p>Plusieurs neurones de sortie : chaque sortie est une probabilité d’appartenance à une classe (même critère entropique, sortie <strong>softmax</strong>).</p>
+  <div class="lab" id="lab-softmax">
+    <h3>Softmax et entropie croisée</h3>
+    <p class="lead">Fixe trois scores (logits) et la vraie classe. Compare la perte d’entropie croisée à la perte quadratique sur la probabilité de la vraie classe.</p>
+  </div>
+  <h3>Plusieurs classes : trois codages</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Codage</th><th>Principe</th></tr></thead>
+    <tbody>
+      <tr><td>c − 1 problèmes de discrimination</td><td>Un classifieur binaire par frontière</td></tr>
+      <tr><td>1 seul neurone</td><td>Sortie dans {0, 1, …, c} ou dans [0, 1] (fragile : impose un ordre entre classes)</td></tr>
+      <tr><td>n (≤ c) neurones</td><td>1 neurone par classe, ou <strong>code correcteur d’erreur</strong> (ECOC)</td></tr>
+    </tbody>
+  </table></div>
+  <h3>ECOC : codes correcteurs d’erreur</h3>
+  <p>Exemple du cours : distinguer 26 lettres. Cinq bits suffiraient (2<sup>5</sup> = 32), mais on en prend <strong>10</strong> : on apprend 10 classifieurs binaires h<sub>1</sub>…h<sub>10</sub>, chacun séparant les lettres en deux groupes (h<sub>5</sub>(x) = 0 si la lettre est dans {A, C, E, G, I, K, M, O, Q, S, U, W, Y}, 1 sinon). Les codes sont choisis pour <strong>maximiser le nombre de bits différents</strong> entre deux lettres. À la prédiction, on calcule h<sub>1</sub>(x)…h<sub>10</sub>(x) puis on décode par le <strong>plus proche voisin</strong> parmi les codes de A, B, C…</p>
+  <div class="lab" id="lab-ecoc">
+    <h3>Décoder un code corrigé d’erreurs</h3>
+    <p class="lead">Les trois codes de la diapo 91 (A, B, C sur 10 bits). Les 10 classifieurs rendent un mot de 10 bits : <b>inverse quelques bits</b> pour simuler des erreurs et vois si le décodage retrouve la bonne classe.</p>
+  </div>
+</section>
+
+<!-- 7 -->
+<section id="deep">
+  <h2><span class="n">7</span>Réseaux profonds et convolution</h2>
+  <h3>L’ancêtre des réseaux convolutionnels (LeCun et al., 1989)</h3>
+  <p>Codes postaux (AT&amp;T Bell Labs) : ≈ 10 000 chiffres manuscrits segmentés et redimensionnés en 16 × 16 ; technique des <strong>poids partagés</strong> (<em>weight sharing</em>) ; <em>optimal brain damage</em> (élagage) ; 99 % de reconnaissance correcte sur l’ensemble d’apprentissage et 9 % de rejet (pour une reconnaissance humaine).</p>
+  <h3>Convolution, pooling, classifieur</h3>
+  <ul>
+    <li><strong>Convolution (C)</strong> : des filtres sont <em>appris</em> ; on garde des dimensions comparables entre couches.</li>
+    <li><strong>Pooling / agrégation (S)</strong> : réduit la résolution des images filtrées, par ex. en moyennant les pixels contigus (4 pixels → 1).</li>
+    <li><strong>Classifieur (F)</strong> : dernières couches entièrement connectées (un PMC) qui prédisent la classe à partir des descripteurs générés automatiquement.</li>
+  </ul>
+  <div class="lab" id="lab-conv">
+    <h3>Convolution, pooling et taille des couches</h3>
+    <p class="lead"><b>Dessine</b> un motif 8 × 8 (clic ou glisser), choisis un filtre 3 × 3 et regarde la carte de caractéristiques puis le pooling. Le calculateur du bas reprend les chiffres d’AlexNet de la diapo 110.</p>
+  </div>
+  <h3>Quelques architectures citées</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Réseau</th><th>À retenir</th></tr></thead>
+    <tbody>
+      <tr><td><strong>LeNet-5</strong></td><td>Convolutions + agrégations + couches complètement connectées</td></tr>
+      <tr><td><strong>AlexNet</strong> (Krizhevsky, Sutskever, Hinton, 2012)</td><td>Victoire sur ImageNet. Même peu profond, beaucoup de paramètres : 1<sup>re</sup> couche = 227×227×3 en entrée, filtres 11×11, pas (<em>stride</em>) 4, donc (227 − 11)/4 + 1 = 55 fenêtres par dimension</td></tr>
+      <tr><td><strong>U-Net</strong></td><td>Segmentation d’images. Intégralement convolutif et symétrique : la 1<sup>re</sup> moitié réduit la taille et augmente le nombre de filtres, la 2<sup>e</sup> fait l’inverse jusqu’à une carte de prédictions</td></tr>
+      <tr><td><strong>GoogleNet</strong></td><td>« Un mécano de réseaux de neurones »</td></tr>
+      <tr><td>Système Google / Stanford</td><td>Reconnaissance de visages, non supervisée : 9 couches, 10<sup>9</sup> connexions, 10 millions d’images, 3 jours sur 16 000 processeurs</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><strong>ImageNet</strong> : plus de 15 millions d’images haute résolution étiquetées, ≈ 22 000 catégories, récoltées sur le Web et étiquetées via Amazon Mechanical Turk.</li>
+    <li><strong>Représentations hiérarchiques</strong> : les neurones des couches cachées apprennent des caractéristiques de plus en plus abstraites. Grâce à une symétrie de la rétropropagation entre poids et exemples, on peut aussi optimiser l’entrée pour visualiser ce qui excite un neurone (<em>feature visualization</em>).</li>
+    <li><strong>Le codage des entrées compte</strong> : un bon choix de représentation peut rendre l’apprentissage trivial… mais comment connaître la bonne ? (diapo « Learning is easy when we know what to look for »).</li>
+  </ul>
+</section>
+
+<!-- 8 -->
+<section id="reg">
+  <h2><span class="n">8</span>Peu d’étiquettes : augmentation, auto-encodage, normalisation, dropout</h2>
+  <p>Les réseaux profonds demandent <strong>énormément d’exemples étiquetés</strong>. Solutions du cours :</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Technique</th><th>Principe</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Augmentation de données</strong></td><td>Générer de nouveaux exemples à partir des exemples étiquetés : (1) transformations (bruitage, floutage, contraste, luminosité ; rotation, dilatation, translation) ; (2) réseaux <strong>GAN</strong> (attention : pas évident du tout à utiliser)</td></tr>
+      <tr><td><strong>Auto-encodage</strong></td><td>Vieille idée d’auto-association : le réseau reconstruit son entrée ; la représentation interne est l’<em>embedding</em>. Un apprentissage supervisé… sans étiquette</td></tr>
+      <tr><td><strong>Auto-apprentissage</strong> (<em>self-supervised</em>)</td><td>Non supervisé (aucune étiquette nécessaire) mais donne lieu à un apprentissage supervisé : par ex. prédire la position relative de deux sous-images ; dans des séquences, dire si une séquence est valide ou prédire la suite</td></tr>
+      <tr><td><strong>Couches de normalisation</strong></td><td>Modifient la sortie d’un neurone en fonction de l’activité des autres : BatchNorm, L2-norm, LayerNorm</td></tr>
+      <tr><td><strong>Dropout</strong></td><td>On « éteint » aléatoirement des neurones pendant l’apprentissage</td></tr>
+    </tbody>
+  </table></div>
+  <div class="fx">BatchNorm :  x<sub>out</sub>[i] = γ · (x<sub>in</sub>[i] − E[x<sub>in</sub>[i]]) / √Var[x<sub>in</sub>[i]] + β     (statistiques par <em>descripteur</em>, sur le batch)
+L2-norm :    x<sub>out</sub>[i] = x<sub>in</sub>[i] / ‖x<sub>in</sub>‖<sub>2</sub>
+LayerNorm :  x<sub>out</sub>[i] = γ · (x<sub>in</sub>[i] − μ) / σ + β,   μ = (1/n) Σ x<sub>in</sub>[i],  σ² = (1/n) Σ (x<sub>in</sub>[i] − μ)²   (par <em>exemple</em>)</div>
+  <div class="lab" id="lab-norm">
+    <h3>BatchNorm ou LayerNorm ?</h3>
+    <p class="lead">Un batch de 3 exemples (colonnes) décrits par 6 descripteurs (lignes), comme sur la diapo 131. <b>Modifie les valeurs</b>, choisis la normalisation : les cellules regroupées pour calculer moyenne et écart-type sont surlignées.</p>
+  </div>
+  <div class="lab" id="lab-dropout">
+    <h3>Dropout : un réseau différent à chaque exemple</h3>
+    <p class="lead">Tire des masques : à chaque tirage, les neurones cachés éteints (et leurs connexions) disparaissent.</p>
+  </div>
+</section>
+
+<!-- 9 -->
+<section id="etrange">
+  <h2><span class="n">9</span>Comportements étranges et limites</h2>
+  <h3>« Understanding deep learning requires rethinking generalization »</h3>
+  <p>Zhang, Bengio, Hardt, Recht, Vinyals (ICLR 2017). AlexNet (&gt; 10<sup>6</sup> paramètres) et deux autres architectures sur CIFAR-10 (60 000 images 32×32×3, 10 classes : 50 000 en apprentissage, 10 000 en test).</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Expérience</th><th>Exactitude d’apprentissage</th><th>Exactitude de test</th><th>Convergence</th></tr></thead>
+    <tbody>
+      <tr><td>1. Données originales</td><td>100 %</td><td>89 %</td><td>~ 5 000 pas</td></tr>
+      <tr><td>2. <strong>Étiquettes aléatoires</strong></td><td>100 % !</td><td>9,8 % (hasard)</td><td>~ 10 000 pas, comportement similaire</td></tr>
+      <tr><td>3. <strong>Pixels aléatoires</strong></td><td>100 % !</td><td>≈ 10 %</td><td>~ 10 000 pas</td></tr>
+    </tbody>
+  </table></div>
+  <div class="key"><p>Un réseau profond peut s’adapter à <strong>n’importe quel</strong> jeu d’entraînement : la capacité de H peut croître sans limite apparente. Alors pourquoi généralisent-ils si bien sur les images ? Question ouverte du cours. Retrouve l’effet dans le terrain de jeu : jeu « étiquettes aléatoires », beaucoup de neurones.</p></div>
+  <h3>Limites</h3>
+  <ul>
+    <li><strong>Exemples adversariaux</strong> : une perturbation imperceptible change la prédiction.</li>
+    <li><strong>Explicabilité</strong> : les cartes Grad-CAM (Selvaraju et al., 2017) montrent la difficulté à expliquer, même sur des illusions d’optique.</li>
+    <li><strong>Annotation automatique d’images</strong> : pas toujours fiable ; exemple en médecine (diapo 148).</li>
+    <li><strong>Voiture dans la piscine</strong> (Bottou, ICML 2015) : corrélations de contexte plutôt que l’objet.</li>
+  </ul>
+</section>
+
+<!-- 10 -->
+<section id="autres">
+  <h2><span class="n">10</span>Autres architectures</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Architecture</th><th>Idée</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Reservoir computing</strong> (2003)</td><td>Utiliser un <em>réseau récurrent sans l’entraîner</em> et n’entraîner que la couche de sortie. Le réservoir produit des « échos » du signal ; ré-introduit une dynamique, utile pour les séries temporelles</td></tr>
+      <tr><td><strong>Réseaux impulsionnels</strong> (<em>spiking</em>)</td><td>Chaque impulsion présynaptique crée un potentiel postsynaptique excitateur (EPSP) ou inhibiteur (IPSP) ; ils s’additionnent ; quand le potentiel u<sub>j</sub>(t) atteint le seuil, le neurone émet à son tour une impulsion</td></tr>
+    </tbody>
+  </table></div>
+  <div class="key"><p><span class="tag">À retenir (diapo 155)</span>(1) Méthode d’induction supervisée <strong>très versatile</strong>, famille de modèles souple, « certainement pas un modèle biologique ». (2) Apprentissage <strong>demandant du soin</strong> : choix de l’architecture, lenteur, minima locaux. (3) <strong>Opacité</strong> : réseaux difficiles à interpréter, difficile d’y mettre des connaissances a priori.</p></div>
+</section>
+
+<!-- 11 -->
+<section id="pratique">
+  <h2><span class="n">11</span>Questions pratiques d’entraînement</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Question</th><th>Options du cours</th></tr></thead>
+    <tbody>
+      <tr><td>« Batch » ou « en ligne » ?</td><td>Total : un pas par passe complète. En ligne : un pas par exemple, plus bruité, aide à sortir des minima locaux.</td></tr>
+      <tr><td>Réglage du pas d’apprentissage η</td><td>Fixe ; variable ; <strong>méthode du moment</strong> ; méthodes de <strong>2<sup>e</sup> ordre</strong> (calcul du Hessien…)</td></tr>
+      <tr><td>Critère d’arrêt</td><td>Nombre d’<strong>époques</strong> fixé ; arrêt de la baisse de l’erreur empirique ; <strong>arrêt prématuré</strong> (arrêt de la baisse de l’erreur de validation)</td></tr>
+      <tr><td>Calibration et codage de la sortie</td><td>Entropie croisée, softmax, ECOC (section 6)</td></tr>
+      <tr><td>Architecture</td><td>Nombre de couches et de neurones : contrôle la généralisation (section 5)</td></tr>
+    </tbody>
+  </table></div>
+  <p>Le terrain de jeu de la section 5 permet de tester ces réglages : pas trop grand (divergence), pas trop petit (lenteur), moment, mode en ligne ou par lots.</p>
+</section>
+
+<!-- 12 -->
+<section id="preproc">
+  <h2><span class="n">12</span>Prétraitement des données</h2>
+  <p>Sept points du cours : 1. types de variables · 2. bruit · 3. valeurs manquantes · 4. normalisation · 5. réduction de l’espace de description · 6. classes déséquilibrées · 7. points aberrants.</p>
+
+  <h3>1. Transformation des variables d’un type à l’autre</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Type</th><th>Exemples</th><th>Propriétés</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Nominal</strong></td><td>Sexe, profession</td><td>Nombre de valeurs dénombrable, aucun ordre, pas d’arithmétique</td></tr>
+      <tr><td><strong>Ordinal</strong></td><td>Taille (petite, moyenne, grande)</td><td>Modalités ordonnées, calculs sur des rangs</td></tr>
+      <tr><td><strong>Numérique / continu</strong></td><td>Âge, poids</td><td>Ordre, distance, écart, calculs arithmétiques</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><strong>Catégoriel → numérique</strong> : certains systèmes exigent des entrées numériques, or le type numérique induit un ordre que le catégoriel n’a pas (marque de voiture) : solution, le <strong>one-hot encoding</strong>.</li>
+    <li><strong>Numérique → discret</strong> (discrétisation) : intervalles égaux, intervalles de même fréquence…</li>
+  </ul>
+  <div class="lab" id="lab-onehot">
+    <h3>One-hot et discrétisation</h3>
+    <p class="lead">À gauche, un codage numérique impose un ordre absurde entre marques. À droite, compare deux discrétisations d’un attribut asymétrique.</p>
+  </div>
+
+  <h3>2. Bruit dans les données</h3>
+  <p>Types cités : bruit aléatoire, bruit fonction de la classe, bruit fonction de la source, données fiables ou non fiables, données censurées.</p>
+
+  <h3>3. Valeurs manquantes</h3>
+  <p>Cas : examens non réalisés, question non posée (l’âge), acheteurs qui n’achètent qu’une infime fraction des produits. Beaucoup de systèmes ne traitent pas les données incomplètes. <strong>Imputation</strong> : valeur moyenne ; valeur la plus fréquente ; valeur moyenne <em>de la classe</em> ; fonction de prédiction (suppose une interdépendance entre variables, rappelle les systèmes de recommandation et pose la question de l’utilité de la variable).</p>
+  <div class="lab" id="lab-missing">
+    <h3>Imputer les vaches</h3>
+    <p class="lead">Le tableau de la diapo 167. Choisis une stratégie et regarde ce qu’il reste de données.</p>
+  </div>
+
+  <h3>4. Normalisation</h3>
+  <p>Quand les domaines de variation sont très différents, les régularités trouvées sont faussées. Fréquemment : normalisation <strong>centrée réduite</strong> (centrée : autour de 0 ; réduite : divisée par l’écart-type). Autres choix : toutes les dimensions dans [0, 1] ; discrétisation en un même nombre de valeurs. <strong>Attention : ce n’est pas forcément une bonne idée.</strong></p>
+  <div class="lab" id="lab-scale">
+    <h3>Le plus proche voisin change avec l’échelle</h3>
+    <p class="lead">Sept personnes de la diapo 90, décrites par leur âge et leur revenu. Choisis une personne : qui est son plus proche voisin avant et après normalisation ?</p>
+  </div>
+
+  <h3>6. Classes déséquilibrées</h3>
+  <ol>
+    <li><strong>Sous-échantillonner</strong> la classe majoritaire (pas adapté si peu de données).</li>
+    <li><strong>Créer des exemples fictifs</strong> de la classe minoritaire (par ex. par bruitage des exemples existants).</li>
+    <li><strong>Modifier les coûts</strong> de mauvaise classification (le cours cite coût(faux positif) ≫ coût(faux négatif) à titre d’exemple).</li>
+  </ol>
+  <div class="lab" id="lab-imb">
+    <h3>Le piège de l’exactitude</h3>
+    <p class="lead">Un classifieur qui répond toujours « classe majoritaire » a-t-il une bonne exactitude ?</p>
+  </div>
+
+  <h3>7. Points aberrants</h3>
+  <p>Des erreurs ou des exceptions (salaire de diplômés Agro à la sortie, fraudes, attaques sur un réseau). Méthodes : expertise, contraintes d’intégrité, détection par apprentissage (one-class SVM, boosting…).</p>
+</section>
+
+<!-- 13 -->
+<section id="reduc">
+  <h2><span class="n">13</span>Réduire l’espace de description (point 5)</h2>
+  <p>Trois défauts d’attributs : redondants, non pertinents, peu informatifs. Et la <strong>malédiction de la dimensionnalité</strong> : en statistique, il faut un nombre <em>exponentiel</em> de données (en la dimension) pour approcher une distribution ; en apprentissage fondé sur les distances, les distances se <strong>concentrent</strong>.</p>
+  <div class="lab" id="lab-curse">
+    <h3>Concentration des distances</h3>
+    <p class="lead">Distribution des distances entre paires de points tirés au hasard dans le cube unité (diapo 171). <b>Prédis :</b> que devient l’histogramme quand d passe de 2 à 10 000 ?</p>
+  </div>
+  <h3>Deux grandes classes de méthodes</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Famille</th><th>Sous-types</th><th>Exemples</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="3"><strong>Sélection de variables</strong> (surtout en supervisé)</td><td><strong>Intégrées</strong> (<em>embedded</em>) : l’apprentissage sélectionne lui-même</td><td>Arbres de décision ; régularisation (Ridge, LASSO, Elastic Net)</td></tr>
+      <tr><td><strong>Symbiose</strong> (<em>wrapper</em>) : on explore des sous-ensembles en observant la performance d’un classifieur</td><td>Sélection ascendante (<em>forward</em>) ou descendante (<em>backward</em>) ; bien optimisé mais espace gigantesque, donc heuristique et coûteux</td></tr>
+      <tr><td><strong>Filtre</strong> : variables évaluées indépendamment</td><td>ANOVA (paramétrique, lois normales), RELIEF (non paramétrique)</td></tr>
+      <tr><td><strong>Changement d’espace</strong></td><td>Composantes : principales (ACP), indépendantes (ACI), non négatives (NMF), analyse sémantique latente (LSA)</td><td>Manifold learning : ISOMAP, t-SNE</td></tr>
+    </tbody>
+  </table></div>
+  <div class="fx">ANOVA :  S²<sub>int</sub> = Σ<sub>i</sub> Σ<sub>j</sub> (X<sub>ij</sub> − X̄<sub>i</sub>)² / (n − k)         S²<sub>ent</sub> = Σ<sub>i</sub> n<sub>i</sub> (X̄<sub>i</sub> − X̄)² / (k − 1)          F = S²<sub>ent</sub> / S²<sub>int</sub></div>
+  <p>Plus S<sub>ent</sub> est grand par rapport à S<sub>int</sub>, moins la variance s’explique par le seul échantillonnage et plus l’attribut est indicatif d’un effet de classe. <strong>RELIEF</strong> a un principe voisin (mesurer ce que la connaissance de l’attribut apporte sur la classe) sans hypothèse de loi.</p>
+  <div class="lab" id="lab-anova">
+    <h3>ANOVA : un attribut discrimine-t-il les classes ?</h3>
+    <p class="lead">Deux classes, un attribut. Fais varier l’écart entre les moyennes et la dispersion, et suis le rapport F.</p>
+  </div>
+  <h3>ACP, ISOMAP, t-SNE</h3>
+  <ul>
+    <li><strong>ACP</strong> : méthode <em>linéaire</em> qui identifie les axes principaux d’inertie en optimisant un critère quadratique, donc <strong>très sensible aux points aberrants</strong>. Le cours montre 60 000 images de chiffres projetées en 2D : les classes se chevauchent (limite d’une méthode linéaire).</li>
+    <li><strong>ISOMAP</strong> (non linéaire) : préserve les propriétés de la variété sous-jacente en repérant les paires de points proches et en reportant leur distance euclidienne.</li>
+    <li><strong>t-SNE</strong> (non linéaire) : à partir de probabilités conditionnelles, projette en dimension 2 ou 3 ; complexité en m² (m = nombre d’exemples), d’où des optimisations. Les chiffres 8×8 (d = 64) se séparent bien en 2D.</li>
+  </ul>
+  <div class="lab" id="lab-pca">
+    <h3>L’axe principal et le point aberrant</h3>
+    <p class="lead"><b>Tourne l’axe</b> : la variance projetée est maximale sur l’axe principal. Puis ajoute un point aberrant et regarde l’axe se déplacer.</p>
+  </div>
+</section>
+
+<!-- 14 -->
+<section id="pieges">
+  <h2><span class="n">14</span>Pièges à éviter</h2>
+  <div class="note"><ul>
+    <li><strong>La convergence du perceptron n’est garantie que si les données sont linéairement séparables</strong>. Sinon (XOR) il tourne indéfiniment.</li>
+    <li>Le signe de la mise à jour : <strong>w ← w − η ∂E/∂w</strong>. Les diapos changent de signe selon la définition de δ.</li>
+    <li>Sortie : <strong>linéaire en régression</strong>, sigmoïde ou softmax en classification. Ne pas mettre de sigmoïde sur une cible qui sort de [0, 1].</li>
+    <li>g′ pour la sigmoïde vaut g(1 − g) : c’est <em>g(a)</em>, pas a, qu’on réutilise (économie de calcul).</li>
+    <li>Sur-apprentissage : surveiller l’erreur de <em>validation</em>, pas celle d’apprentissage. Arrêt prématuré = quand la <em>validation</em> cesse de baisser.</li>
+    <li>Le réseau apprend même des <strong>étiquettes aléatoires</strong> : 100 % d’exactitude d’apprentissage ne prouve rien sur la généralisation.</li>
+    <li>BatchNorm normalise <em>par descripteur sur le batch</em> ; LayerNorm <em>par exemple sur les descripteurs</em>.</li>
+    <li>ECOC : 10 bits pour 26 lettres, c’est voulu (redondance qui corrige les erreurs), pas un gaspillage.</li>
+    <li>Normaliser n’est pas toujours bon, et ne se calcule que sur l’apprentissage. L’ACP est sensible aux aberrants.</li>
+    <li>Les diapos AlexNet donnent 105 705 600 paramètres pour une couche <em>sans partage de poids</em> ; avec partage on en aurait bien moins. Le partage est justement l’intérêt de la convolution.</li>
+  </ul></div>
+</section>
+
+<!-- 15 -->
+<section id="test">
+  <h2><span class="n">15</span>Auto-test</h2>
+  <p>QCM, vrai/faux, questions numériques et mises en ordre, avec correction immédiate. « Recommencer » mélange questions et propositions.</p>
+  <div id="qz-main"></div>
+</section>
+
+<footer>Source : transparents « Les Réseaux de Neurones Artificiels », A. Cornuéjols, AgroParisTech (IODAA 2026–27). Référence : Barra, Cornuéjols & Miclet, <em>Apprentissage artificiel</em>, Eyrolles, 2021 ; Bishop &amp; Bishop, <em>Deep Learning</em>, Springer, 2023. Les encadrés « Complément » sortent du cours.</footer>
+</main>
+</div>
+
+<script>
+'use strict';
+/* ---------- helpers ---------- */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function h(tag,attrs,...kids){
+  const e=document.createElement(tag);
+  for(const k in (attrs||{})){const v=attrs[k];
+    if(v==null||v===false)continue;
+    if(k==='class')e.className=v;
+    else if(k==='html')e.innerHTML=v;
+    else if(k.slice(0,2)==='on')e.addEventListener(k.slice(2),v);
+    else e.setAttribute(k,v===true?'':v);}
+  for(const c of kids.flat(Infinity)){if(c==null||c===false)continue;e.append(c.nodeType?c:document.createTextNode(String(c)));}
+  return e;}
+const redraws=[]; const onTheme=fn=>{redraws.push(fn);};
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>redraws.forEach(f=>f()));}catch(e){}
+new MutationObserver(()=>redraws.forEach(f=>f())).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+function mkCanvas(parent,w,hh,label){
+  const c=h('canvas',{role:'img','aria-label':label||''});
+  const d=Math.min(window.devicePixelRatio||1,2);
+  c.width=Math.round(w*d);c.height=Math.round(hh*d);
+  const g=c.getContext('2d');g.scale(d,d);parent.append(c);
+  return {c,g,w,h:hh};}
+let _id=0;
+function slider(parent,o){
+  const id='s'+(++_id);const out=h('output',{for:id});
+  const inp=h('input',{type:'range',id,min:o.min,max:o.max,step:o.step||1,value:o.value});
+  const fmt=o.fmt||(v=>v);const upd=()=>{out.textContent=fmt(+inp.value)};
+  inp.addEventListener('input',()=>{upd();o.onchange&&o.onchange(+inp.value)});upd();
+  const wrap=h('div',{class:'ctl'},h('label',{for:id},o.label,' ',out),inp);parent.append(wrap);
+  return {wrap,inp,get v(){return +inp.value},set v(x){inp.value=x;upd()}};}
+function seg(parent,label,opts,val,onchange){
+  const wrap=h('div',{class:'ctl'});const grp=h('div',{class:'seg',role:'group','aria-label':label});let cur=val;
+  const bs=opts.map(([v,t])=>{const b=h('button',{type:'button','aria-pressed':String(v===cur),onclick:()=>{cur=v;bs.forEach(x=>x.b.setAttribute('aria-pressed',String(x.v===cur)));onchange&&onchange(cur)}},t);return{v,b}});
+  grp.append(...bs.map(x=>x.b));wrap.append(h('label',{},label),grp);parent.append(wrap);
+  return {wrap,get v(){return cur},set(v){cur=v;bs.forEach(x=>x.b.setAttribute('aria-pressed',String(x.v===cur)))}};}
+const btn=(t,f,c)=>h('button',{type:'button',class:c||'',onclick:f},t);
+const controls=parent=>{const c=h('div',{class:'controls'});parent.append(c);return c;};
+const btns=parent=>{const c=h('div',{class:'btns'});parent.append(c);return c;};
+const stat=(l,v,f)=>{const e=h('div',{class:'stat'},h('div',{class:'v'},v),h('div',{class:'l'},l),f?h('div',{class:'fx2'},f):null);e.set=(x)=>{e.firstChild.textContent=x};return e;};
+
+/* ---------- maths ---------- */
+function rng(seed){let a=seed>>>0;return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function gauss(r){let u=0;while(u===0)u=r();const v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const fr=(x,d=2)=>{if(!isFinite(x))return String(x);return x.toFixed(d).replace('.',',').replace('-','\u2212')};
+const fmtBig=b=>b.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'\u202F');
+function shuffle(a,r){r=r||Math.random;a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function colorMix(c1,c2,t){ // hex or rgb() strings -> rgb string
+  const p=c=>{if(c[0]==='#'){const n=parseInt(c.slice(1),16);return [n>>16&255,n>>8&255,n&255]}const m=c.match(/[\d.]+/g);return m.slice(0,3).map(Number)};
+  const a=p(c1),b=p(c2);return `rgb(${a.map((x,i)=>Math.round(x+(b[i]-x)*t)).join(',')})`;}
+
+/* ---------- quiz ---------- */
+function Quiz(root,qs,opts){
+  opts=opts||{};let cards=[],score=0,done=0;
+  const head=h('div',{class:'qhead'});const sc=h('div',{class:'qscore','aria-live':'polite'});
+  const list=h('div',{class:'qs'});
+  const bar=h('div',{class:'btns'},btn('Recommencer (ordre mélangé)',()=>build(true)));
+  head.append(sc,bar);root.append(head,list);
+  const upd=()=>{sc.textContent=`Répondu : ${done}/${qs.length} · Score : ${score}/${qs.length}`+(done===qs.length?(score===qs.length?'  — sans faute !':'  — relis les explications des erreurs.'):'')};
+  function finish(card,ok,fbHtml){ if(card.locked)return;card.locked=true;done++;if(ok)score++;card.fb.innerHTML=(ok?'<span class="ok">Correct.</span> ':'<span class="ko">Pas tout à fait.</span> ')+fbHtml;upd();}
+  function build(shuf){
+    score=0;done=0;list.innerHTML='';cards=[];
+    const order=shuf?shuffle(qs):qs;
+    order.forEach((q,n)=>{
+      const card={locked:false,fb:h('div',{class:'fb','aria-live':'polite'})};
+      const el=h('div',{class:'qc'},h('p',{class:'qq'},h('span',{class:'qn'},String(n+1).padStart(2,'0')),h('span',{html:q.q})));
+      if(q.t==='mcq'){
+        const os=shuffle(q.o.map((t,i)=>({t,i})));
+        const box=h('div',{class:'opts'});
+        os.forEach(o=>{const b=h('button',{type:'button',onclick:()=>{
+          if(card.locked)return;
+          $$('button',box).forEach((x,k)=>{x.disabled=true;if(os[k].i===q.a)x.classList.add('right');});
+          if(o.i!==q.a)b.classList.add('wrong');
+          finish(card,o.i===q.a,q.e);}} ,h('span',{html:o.t}));box.append(b);});
+        el.append(box);
+      }else if(q.t==='tf'){
+        const box=h('div',{class:'opts row'});
+        [[true,'Vrai'],[false,'Faux']].forEach(([v,t])=>{const b=h('button',{type:'button',onclick:()=>{
+          if(card.locked)return;$$('button',box).forEach(x=>x.disabled=true);
+          b.classList.add(v===q.a?'right':'wrong');
+          if(v!==q.a)$$('button',box).forEach(x=>{if(x!==b)x.classList.add('right')});
+          finish(card,v===q.a,q.e);}},t);box.append(b);});
+        el.append(box);
+      }else if(q.t==='num'){
+        const inp=h('input',{type:'text',inputmode:'decimal','aria-label':'Ta réponse',placeholder:'ta réponse'});
+        const go=()=>{ if(card.locked)return;
+          const v=parseFloat(inp.value.replace(/[\s\u00a0\u202f]/g,'').replace(',','.'));
+          const ok=isFinite(v)&&Math.abs(v-q.a)<=(q.tol||0);
+          inp.disabled=true;b.disabled=true;
+          finish(card,ok,`Réponse : <b>${q.show||fmtBig(BigInt(Math.round(q.a)))}</b>. `+q.e);};
+        const b=btn('Valider',go);inp.addEventListener('keydown',e=>{if(e.key==='Enter')go()});
+        el.append(h('div',{class:'numin'},inp,b));
+      }else if(q.t==='order'){
+        const pool=h('div',{class:'chips'});const seq=[];
+        const line=h('p',{class:'legend'},'Clique les éléments dans l’ordre.');
+        const items=shuffle(q.items.map((t,i)=>({t,i})));
+        const bs=items.map(it=>{const b=h('button',{type:'button',onclick:()=>{
+          if(card.locked)return;seq.push(it.i);b.disabled=true;b.prepend(h('b',{},String(seq.length)));
+          if(seq.length===items.length){const ok=seq.every((v,i)=>v===i);
+            finish(card,ok,(ok?'':'Ordre attendu : <ol>'+q.items.map(x=>`<li>${x}</li>`).join('')+'</ol>')+q.e);} }},h('span',{html:it.t}));pool.append(b);return b;});
+        const reset=btn('Effacer',()=>{if(card.locked)return;seq.length=0;bs.forEach(b=>{b.disabled=false;const x=b.querySelector('b');x&&x.remove();});});
+        el.append(pool,h('div',{class:'btns'},reset),line);
+      }
+      el.append(card.fb);list.append(el);cards.push(card);
+    });
+    upd();
+  }
+  build(false);
+  return {rebuild:build};
+}
+
+/* ================= Fiche 2, partie A ================= */
+
+/* ---- Perceptron pas à pas ---- */
+(function(){
+  const root=$('#lab-perceptron');const W=640,H=400;
+  let ds='sep',eta=1,pts=[],w=[0,0,0],upd=0,ptr=0,last=-1,conv=false,seed=1,timer=null;
+  const ctl=controls(root);
+  seg(ctl,'Données',[['sep','Séparables'],['xor','XOR'],['noise','Qui se chevauchent']],'sep',v=>{ds=v;gen();reset();});
+  slider(ctl,{label:'Pas d’apprentissage η',min:0.1,max:2,step:0.1,value:1,fmt:v=>fr(v,1),onchange:v=>{eta=v;}});
+  const bt=btns(root);
+  const bStep=btn('Une mise à jour',()=>{step();draw();},'pri');
+  const bPlay=btn('Lancer',()=>{if(timer){stop();}else{timer=setInterval(()=>{if(!step())stop();draw();},110);bPlay.textContent='Pause';}});
+  bt.append(bStep,bPlay,btn('Remettre w à 0',()=>reset()),btn('Nouvelles données',()=>{seed++;gen();reset();}));
+  const cv=mkCanvas(root,W,H,'Points de deux classes et droite de séparation');
+  const stats=h('div',{class:'stats'});const sU=stat('Mises à jour effectuées','0');const sE=stat('Exemples mal classés','');const sW=stat('Vecteur w','','(w₀, w₁, w₂)');stats.append(sU,sE,sW);
+  const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(stats,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Sur des données séparables, w se stabilise vite : c’est le théorème de convergence (nombre fini de corrections). Diminue ou augmente η : ici, avec w initialisé à 0, η ne change que l’échelle de w, pas la droite finale (le signe de w·x reste le même), ce qui est une propriété particulière de l’initialisation à 0.</p><p>Sur le XOR ou des classes qui se chevauchent, aucune droite ne convient : w oscille sans fin. L’algorithme ne « sait » pas qu’il est bloqué, d’où la limite de Minsky et Papert.</p>'})));
+  function gen(){
+    const r=rng(seed*31+5);pts=[];
+    const add=(cx,cy,sd,y,n)=>{for(let i=0;i<n;i++)pts.push({x:[1,cx+gauss(r)*sd,cy+gauss(r)*sd],y});};
+    if(ds==='sep'){add(0.55,0.4,0.18,1,14);add(-0.55,-0.4,0.18,-1,14);}
+    else if(ds==='xor'){add(0.6,0.55,0.14,1,7);add(-0.6,-0.55,0.14,1,7);add(0.6,-0.55,0.14,-1,7);add(-0.6,0.55,0.14,-1,7);}
+    else{add(0.2,0.15,0.34,1,16);add(-0.2,-0.15,0.34,-1,16);}
+    pts=shuffle(pts,r);
+  }
+  const sx=x=>(x+1.6)/3.2*W, sy=y=>(1-y)/2*H;
+  const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+  const wrong=p=>p.y*dot(w,p.x)<=0;
+  function stop(){clearInterval(timer);timer=null;bPlay.textContent='Lancer';}
+  function reset(){stop();w=[0,0,0];upd=0;ptr=0;last=-1;conv=false;draw();}
+  function step(){
+    if(conv)return false;
+    if(upd>=400)return false;
+    for(let k=0;k<pts.length;k++){const i=(ptr+k)%pts.length;const p=pts[i];
+      if(wrong(p)){for(let j=0;j<3;j++)w[j]+=eta*p.y*p.x[j];upd++;last=i;ptr=i+1;return true;}}
+    conv=true;return false;
+  }
+  function draw(){
+    const g=cv.g;g.clearRect(0,0,W,H);
+    const cP=css('--c1'),cN=css('--c2');
+    // demi-plans
+    if(w[1]!==0||w[2]!==0){
+      g.save();g.beginPath();g.rect(0,0,W,H);g.clip();
+      g.fillStyle=colorMix(css('--bg'),cP,.18);
+      // remplir le côté positif par pixels grossiers
+      const cs=5;for(let X=0;X<W;X+=cs)for(let Y=0;Y<H;Y+=cs){const x=(X+cs/2)/W*3.2-1.6,y=1-(Y+cs/2)/H*2;if(w[0]+w[1]*x+w[2]*y>0)g.fillRect(X,Y,cs,cs);}
+      g.restore();
+    }
+    g.strokeStyle=css('--rule');g.lineWidth=1;g.beginPath();g.moveTo(sx(-1.6),sy(0));g.lineTo(sx(1.6),sy(0));g.moveTo(sx(0),0);g.lineTo(sx(0),H);g.stroke();
+    if(w[1]!==0||w[2]!==0){
+      g.strokeStyle=css('--ink');g.lineWidth=2.5;g.beginPath();
+      if(Math.abs(w[2])>1e-9){const y1=-(w[0]+w[1]*-1.6)/w[2],y2=-(w[0]+w[1]*1.6)/w[2];g.moveTo(sx(-1.6),sy(y1));g.lineTo(sx(1.6),sy(y2));}
+      else{const x0=-w[0]/w[1];g.moveTo(sx(x0),0);g.lineTo(sx(x0),H);}
+      g.stroke();
+    }
+    let bad=0;
+    pts.forEach((p,i)=>{const X=sx(p.x[1]),Y=sy(p.x[2]);const b=wrong(p);if(b)bad++;
+      g.fillStyle=p.y>0?cP:cN;g.beginPath();if(p.y>0)g.arc(X,Y,6,0,7);else g.rect(X-5.5,Y-5.5,11,11);g.fill();
+      if(b){g.strokeStyle=css('--minus');g.lineWidth=2;g.beginPath();g.arc(X,Y,10,0,7);g.stroke();}
+      if(i===last){g.strokeStyle=css('--ink');g.lineWidth=2.5;g.beginPath();g.arc(X,Y,14,0,7);g.stroke();}});
+    g.fillStyle=css('--muted');g.font='12px sans-serif';g.fillText('● classe +1 (bleu)   ■ classe −1 (orange)   cercle rouge = mal classé   grand cercle noir = dernier point corrigé',10,H-10);
+    sU.set(String(upd));sE.set(bad+' / '+pts.length);sW.set(w.map(v=>fr(v,2)).join(' ; '));
+    vd.innerHTML=conv?'<span class="ok">Convergence :</span> plus aucun exemple mal classé, l’algorithme s’arrête.':(upd>=400?'<span class="ko">400 mises à jour sans convergence :</span> ces données ne sont pas linéairement séparables, le perceptron ne s’arrêtera jamais.':(upd===0?'w = 0 : tous les exemples sont « mal classés » (y·w·x = 0). Clique sur « Une mise à jour ».':'Le point entouré de noir vient de modifier w.'));
+  }
+  onTheme(draw);gen();reset();
+})();
+
+/* ---- Fonctions d'activation ---- */
+(function(){
+  const root=$('#lab-activ');const W=640,H=320;
+  const sig=x=>1/(1+Math.exp(-x));
+  const F=[
+    {id:'heav',n:'Heaviside',f:x=>x<0?0:1,d:x=>0,col:'--c5'},
+    {id:'sig',n:'Sigmoïde',f:sig,d:x=>{const g=sig(x);return g*(1-g);},col:'--c1'},
+    {id:'tanh',n:'tanh',f:Math.tanh,d:x=>1-Math.tanh(x)**2,col:'--c2'},
+    {id:'relu',n:'ReLU',f:x=>Math.max(0,x),d:x=>x>0?1:0,col:'--c3'},
+    {id:'ramp',n:'Rampe (diapo 48)',f:x=>clamp((x+1)/2,0,1),d:x=>Math.abs(x)<1?0.5:0,col:'--c4'}
+  ];
+  const on=new Set(['sig','tanh','relu']);let deriv=false,a=1;
+  const chk=h('div',{class:'chk'});
+  F.forEach(fn=>{const cb=h('input',{type:'checkbox',checked:on.has(fn.id),onchange:()=>{cb.checked?on.add(fn.id):on.delete(fn.id);draw();}});chk.append(h('label',{},cb,h('span',{class:'sw',style:`background:var(${fn.col})`}),fn.n));});
+  const cbd=h('input',{type:'checkbox',onchange:()=>{deriv=cbd.checked;draw();}});chk.append(h('label',{},cbd,'afficher aussi la dérivée g′ (pointillés)'));
+  const ctl=controls(root);
+  slider(ctl,{label:'Activation a',min:-6,max:6,step:0.1,value:1,fmt:v=>fr(v,1),onchange:v=>{a=v;draw();}});
+  root.append(chk);
+  const cv=mkCanvas(root,W,H,'Courbes de fonctions d’activation');
+  const out=h('div',{class:'scroll'});root.append(out);
+  root.append(h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>La dérivée de la sigmoïde g′ = g(1−g) ne dépasse jamais 0,25 et s’écrase vers 0 quand |a| grandit : un neurone « saturé » apprend très lentement (complément : c’est l’origine du problème de gradient qui s’évanouit dans les réseaux profonds). La ReLU a une dérivée 1 pour a &gt; 0, sans saturation de ce côté.</p><p>Compare les intervalles de sortie : sigmoïde [0,1], tanh [−1,1], ReLU [0,∞[, comme dans le tableau du cours.</p>'})));
+  const X0=-6,X1=6,Y0=-1.4,Y1=1.8;const sx=x=>(x-X0)/(X1-X0)*W,sy=y=>(Y1-y)/(Y1-Y0)*H;
+  function draw(){
+    const g=cv.g;g.clearRect(0,0,W,H);
+    g.strokeStyle=css('--rule');g.lineWidth=1;g.fillStyle=css('--muted');g.font='11px sans-serif';
+    for(let x=-6;x<=6;x+=2){g.beginPath();g.moveTo(sx(x),0);g.lineTo(sx(x),H);g.stroke();g.fillText(String(x),sx(x)+3,sy(0)+12);}
+    for(const y of [-1,0,1]){g.beginPath();g.moveTo(0,sy(y));g.lineTo(W,sy(y));g.stroke();g.fillText(String(y),4,sy(y)-3);}
+    g.strokeStyle=css('--ink');g.beginPath();g.moveTo(0,sy(0));g.lineTo(W,sy(0));g.moveTo(sx(0),0);g.lineTo(sx(0),H);g.stroke();
+    F.filter(f=>on.has(f.id)).forEach(fn=>{
+      const col=css(fn.col);
+      [false,true].forEach(dv=>{if(dv&&!deriv)return;
+        g.strokeStyle=col;g.lineWidth=dv?1.6:2.6;g.setLineDash(dv?[5,4]:[]);g.beginPath();
+        let first=true;for(let i=0;i<=600;i++){const x=X0+(X1-X0)*i/600;const y=dv?fn.d(x):fn.f(x);const Y=sy(clamp(y,Y0,Y1));first?g.moveTo(sx(x),Y):g.lineTo(sx(x),Y);first=false;}g.stroke();g.setLineDash([]);});
+      g.fillStyle=col;g.beginPath();g.arc(sx(a),sy(clamp(fn.f(a),Y0,Y1)),5,0,7);g.fill();
+    });
+    g.strokeStyle=css('--moss');g.setLineDash([3,3]);g.beginPath();g.moveTo(sx(a),0);g.lineTo(sx(a),H);g.stroke();g.setLineDash([]);
+    const tb=h('tbody');F.filter(f=>on.has(f.id)).forEach(fn=>tb.append(h('tr',{},h('td',{},fn.n),h('td',{class:'num'},fr(fn.f(a),3)),h('td',{class:'num'},fr(fn.d(a),3)))));
+    out.innerHTML='';out.append(h('table',{class:'mini'},h('thead',{},h('tr',{},h('th',{},'Fonction'),h('th',{class:'num'},'g(a)'),h('th',{class:'num'},'g′(a)'))),tb));
+  }
+  onTheme(draw);draw();
+})();
+
+/* ---- XOR : trouve les poids ---- */
+(function(){
+  const root=$('#lab-xor');
+  const sol=[1,-1,-1,1,4,4,-1,-1,-1];
+  const w=sol.map(()=>0);let lin=false;
+  const ramp=s=>lin?s:clamp((s+1)/2,0,1);
+  const names=['x₁→h₁','x₁→h₂','x₂→h₁','x₂→h₂','h₁→y','h₂→y','biais→h₁','biais→h₂','biais→y'];
+  const ctl=controls(root);
+  const sl=names.map((n,i)=>slider(ctl,{label:`w${i+1} (${n})`,min:-5,max:5,step:0.5,value:0,fmt:v=>fr(v,1),onchange:v=>{w[i]=v;render();}}));
+  const bt=btns(root);
+  const setW=arr=>{arr.forEach((v,i)=>{w[i]=v;sl[i].v=v;});render();};
+  bt.append(btn('Solution de la diapo 48',()=>setW(sol),'pri'),btn('Tout à zéro',()=>setW(sol.map(()=>0))),btn('Poids aléatoires',()=>setW(sol.map(()=>Math.round((Math.random()*10-5)*2)/2))));
+  const sg=seg(bt,'Activation',[['ramp','Rampe'],['lin','Identité (linéaire)']],'ramp',v=>{lin=v==='lin';render();});
+  bt.append(sg.wrap);
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 520 225');svg.style.cssText='width:100%;max-width:32rem;height:auto';svg.setAttribute('role','img');svg.setAttribute('aria-label','Réseau 2-2-1 avec biais');
+  const N={x1:[40,80],x2:[40,200],b:[190,20],h1:[270,90],h2:[270,200],y:[440,150]};
+  const E=[['x1','h1'],['x1','h2'],['x2','h1'],['x2','h2'],['h1','y'],['h2','y'],['b','h1'],['b','h2'],['b','y']];
+  const lbls=[];
+  E.forEach(([a,b],i)=>{const l=document.createElementNS(svg.namespaceURI,'line');l.setAttribute('x1',N[a][0]);l.setAttribute('y1',N[a][1]);l.setAttribute('x2',N[b][0]);l.setAttribute('y2',N[b][1]);l.setAttribute('stroke','var(--muted)');l.setAttribute('stroke-width','1.5');svg.append(l);});
+  Object.entries(N).forEach(([k,[x,y]])=>{const c=document.createElementNS(svg.namespaceURI,'circle');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',16);c.setAttribute('fill','var(--surface)');c.setAttribute('stroke','var(--moss)');c.setAttribute('stroke-width','2');svg.append(c);
+    const t=document.createElementNS(svg.namespaceURI,'text');t.setAttribute('x',x);t.setAttribute('y',y+4);t.setAttribute('text-anchor','middle');t.setAttribute('font-size','13');t.setAttribute('fill','var(--ink)');t.textContent={x1:'x₁',x2:'x₂',b:'1',h1:'h₁',h2:'h₂',y:'y'}[k];svg.append(t);});
+  E.forEach(([a,b],i)=>{const t=document.createElementNS(svg.namespaceURI,'text');const fr_=[0.5,0.25,0.25,0.5,0.5,0.5,0.5,0.5,0.5][i];
+    let tx=N[a][0]+(N[b][0]-N[a][0])*fr_,ty=N[a][1]+(N[b][1]-N[a][1])*fr_-4;
+    t.setAttribute('x',tx);t.setAttribute('y',ty);t.setAttribute('font-size','12');t.setAttribute('fill','var(--c2)');t.setAttribute('font-family','monospace');t.setAttribute('font-weight','700');svg.append(t);lbls.push(t);});
+  const tbl=h('div',{class:'scroll'});const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(svg,tbl,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Solution du cours : h₁ = f(x₁ − x₂ − 1) ne s’allume que pour (1, 0), h₂ = f(−x₁ + x₂ − 1) que pour (0, 1), et y = f(4h₁ + 4h₂ − 1) « fait le OU » des deux. Chaque neurone caché est un séparateur linéaire, la sortie combine ces deux détecteurs : c’est le changement de représentation.</p><p>Bascule sur l’activation <b>identité</b> : quels que soient les poids, tu n’obtiens jamais les quatre lignes correctes. Sans non-linéarité, le réseau entier reste une fonction linéaire de (x₁, x₂).</p>'})));
+  function render(){
+    lbls.forEach((t,i)=>t.textContent=fr(w[i],1));
+    const rows=[[0,0,0],[0,1,1],[1,0,1],[1,1,0]];let ok=0;
+    const tb=h('tbody');
+    rows.forEach(([x1,x2,t])=>{const h1=ramp(w[0]*x1+w[2]*x2+w[6]),h2=ramp(w[1]*x1+w[3]*x2+w[7]),y=ramp(w[4]*h1+w[5]*h2+w[8]);const good=Math.abs(y-t)<0.25;if(good)ok++;
+      tb.append(h('tr',{},h('td',{class:'num'},String(x1)),h('td',{class:'num'},String(x2)),h('td',{class:'num'},fr(h1,2)),h('td',{class:'num'},fr(h2,2)),h('td',{class:'num'},fr(y,2)),h('td',{class:'num'},String(t)),h('td',{},good?h('span',{class:'ok'},'✓'):h('span',{class:'ko'},'✗'))));});
+    tbl.innerHTML='';tbl.append(h('table',{class:'mini'},h('thead',{},h('tr',{},['x₁','x₂','h₁','h₂','y','cible','ok'].map((t,i)=>h('th',{class:i<6?'num':''},t)))),tb));
+    vd.innerHTML=ok===4?'<span class="ok">Les 4 lignes du XOR sont correctes.</span>':`${ok} ligne(s) correcte(s) sur 4 (tolérance ±0,25).`;
+  }
+  render();
+})();
+
+/* ---- Rétropropagation : calcul numérique ---- */
+(function(){
+  const root=$('#lab-backprop');
+  const sig=x=>1/(1+Math.exp(-x));
+  const def={x:[1,0],u:1,eta:0.5,w:[0.1,0.4,-0.3,-0.2,0.2,0.5,0.1,0.3,-0.4]};
+  let S=JSON.parse(JSON.stringify(def));const hist=[];
+  const wn=['b₁','v₁₁','v₁₂','b₂','v₂₁','v₂₂','c₀','c₁','c₂'];
+  const fwd=(w,x)=>{const a1=w[0]+w[1]*x[0]+w[2]*x[1],a2=w[3]+w[4]*x[0]+w[5]*x[1];const z1=sig(a1),z2=sig(a2);const ao=w[6]+w[7]*z1+w[8]*z2;const y=sig(ao);return {a1,a2,z1,z2,ao,y};};
+  const Err=(w,x,u)=>0.5*(fwd(w,x).y-u)**2;
+  const inp=(val,cb,step=0.1)=>{const i=h('input',{type:'number',step,value:val});i.addEventListener('input',()=>{const v=parseFloat(i.value);if(isFinite(v)){cb(v);calc();}});return i;};
+  const top=h('div',{class:'controls'});
+  const ins={};
+  const mk=(lab,val,cb,step)=>{const i=inp(val,cb,step);ins[lab]=i;top.append(h('div',{class:'ctl'},h('label',{},lab),i));};
+  mk('x₁',S.x[0],v=>S.x[0]=v);mk('x₂',S.x[1],v=>S.x[1]=v);mk('cible u',S.u,v=>S.u=v);mk('pas η',S.eta,v=>S.eta=v,0.05);
+  const wIn=S.w.map((v,i)=>{const e=inp(v,x=>S.w[i]=x);ins['w'+i]=e;top.append(h('div',{class:'ctl'},h('label',{},wn[i]),e));return e;});
+  const bt=btns(root);
+  bt.append(btn('Appliquer une mise à jour',()=>step(1),'pri'),btn('×20 mises à jour',()=>step(20)),btn('Réinitialiser',()=>{S=JSON.parse(JSON.stringify(def));hist.length=0;sync();calc();}));
+  const info=h('div',{class:'stats'});const out=h('div',{class:'scroll'});const cv=mkCanvas(root,640,120,'Erreur E au fil des mises à jour');
+  const legend=h('p',{class:'legend'},'Réseau : a₁ = b₁ + v₁₁x₁ + v₁₂x₂, a₂ = b₂ + v₂₁x₁ + v₂₂x₂, z = σ(a), y = σ(c₀ + c₁z₁ + c₂z₂). Le gradient calculé en un passage (δ) est comparé au gradient numérique (E(w+ε) − E(w−ε))/2ε.');
+  root.append(h('p',{class:'legend'},'Entrées, cible, pas et poids modifiables :'),top,bt,info,out,legend,cv.c,
+    h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Les deux colonnes de gradient coïncident (à 10⁻⁸ près) : la rétropropagation est un calcul exact du gradient, pas une approximation. Note aussi que δ₁ et δ₂ sont proportionnels à c₁ et c₂ : l’erreur remonte à travers les poids de la couche suivante, pondérée par g′(a) = z(1 − z).</p><p>Applique « ×20 » : E diminue, y se rapproche de u. Mets η = 20 : le pas est trop grand, E peut osciller ou stagner.</p>'})));
+  function sync(){ins['x₁'].value=S.x[0];ins['x₂'].value=S.x[1];ins['cible u'].value=S.u;ins['pas η'].value=S.eta;wIn.forEach((e,i)=>e.value=S.w[i]);}
+  function grads(){
+    const f=fwd(S.w,S.x);const dO=(f.y-S.u)*f.y*(1-f.y);
+    const d1=f.z1*(1-f.z1)*S.w[7]*dO,d2=f.z2*(1-f.z2)*S.w[8]*dO;
+    const g=[d1,d1*S.x[0],d1*S.x[1],d2,d2*S.x[0],d2*S.x[1],dO,dO*f.z1,dO*f.z2];
+    return {f,dO,d1,d2,g};
+  }
+  function step(n){for(let k=0;k<n;k++){const {g}=grads();hist.push(Err(S.w,S.x,S.u));S.w=S.w.map((v,i)=>v-S.eta*g[i]);}sync();calc();}
+  function calc(){
+    const {f,dO,d1,d2,g}=grads();const E=Err(S.w,S.x,S.u);
+    info.innerHTML='';info.append(stat('a₁ ; a₂',fr(f.a1,3)+' ; '+fr(f.a2,3)),stat('z₁ ; z₂',fr(f.z1,3)+' ; '+fr(f.z2,3)),stat('sortie y',fr(f.y,4),'cible u = '+S.u),stat('erreur E',fr(E,5),'½(y − u)²'),stat('δ sortie',fr(dO,5),'(y−u)·y(1−y)'),stat('δ₁ ; δ₂',fr(d1,5)+' ; '+fr(d2,5),'z(1−z)·c·δ_sortie'));
+    const tb=h('tbody');let maxd=0;
+    S.w.forEach((v,i)=>{const e=1e-5;const wp=S.w.slice(),wm=S.w.slice();wp[i]+=e;wm[i]-=e;const gn=(Err(wp,S.x,S.u)-Err(wm,S.x,S.u))/(2*e);maxd=Math.max(maxd,Math.abs(gn-g[i]));
+      tb.append(h('tr',{},h('td',{},wn[i]),h('td',{class:'num'},fr(v,4)),h('td',{class:'num'},fr(g[i],6)),h('td',{class:'num'},fr(gn,6)),h('td',{class:'num'},fr(v-S.eta*g[i],4))));});
+    out.innerHTML='';out.append(h('table',{class:'mini'},h('thead',{},h('tr',{},['Poids','Valeur','∂E/∂w (rétroprop.)','∂E/∂w (numérique)','Nouveau w = w − η∂E/∂w'].map((t,i)=>h('th',{class:i?'num':''},t)))),tb));
+    out.append(h('p',{class:'legend',style:'padding:0 .6rem'},'Écart maximal entre les deux gradients : '+maxd.toExponential(1).replace('.',',')));
+    draw(E);
+  }
+  function draw(E){
+    const g=cv.g,W=640,H=120;g.clearRect(0,0,W,H);const d=hist.concat([E]);
+    g.fillStyle=css('--muted');g.font='11px sans-serif';g.fillText('E au fil des mises à jour ('+hist.length+' appliquées)',8,14);
+    if(d.length<2)return;const mx=Math.max(...d,1e-9);
+    g.strokeStyle=css('--c2');g.lineWidth=2;g.beginPath();d.forEach((v,i)=>{const x=10+i/(d.length-1)*(W-20),y=H-10-(v/mx)*(H-34);i?g.lineTo(x,y):g.moveTo(x,y);});g.stroke();
+  }
+  onTheme(()=>draw(Err(S.w,S.x,S.u)));calc();
+})();
+
+/* ---- Terrain de jeu PMC ---- */
+(function(){
+  const root=$('#lab-mlp');const CW=380,CH=340;
+  const st={ds:'circle',noise:0.1,ntr:80,nl:1,units:6,act:'tanh',lr:0.1,mom:0,mode:'mini',early:false};
+  let net=null,tr=[],va=[],lossTr=[],lossVa=[],accTr=0,accVa=0,epoch=0,best={v:1e9,e:0,snap:null},running=false,seed=1,msg='';
+  const ACT={tanh:{f:Math.tanh,d:z=>1-z*z},relu:{f:x=>x>0?x:0,d:z=>z>0?1:0},sigmoid:{f:x=>1/(1+Math.exp(-x)),d:z=>z*(1-z)}};
+  const sg=x=>1/(1+Math.exp(-x));
+  /* données */
+  function genData(ds,n,noise,sd){
+    const r=rng(sd);const out=[];
+    const j=()=>gauss(r)*noise*0.3;
+    for(let i=0;i<n;i++){
+      let x,y,l;
+      if(ds==='line'){l=i%2;const c=l?0.5:-0.5;x=c+gauss(r)*(0.15+noise*0.8);y=c+gauss(r)*(0.15+noise*0.8);}
+      else if(ds==='xor'){x=r()*2-1;y=r()*2-1;l=(x*y>0)?1:0;x+=j();y+=j();}
+      else if(ds==='circle'){l=i%2;const rr=l?r()*0.42:0.65+r()*0.35;const a=r()*6.283;x=rr*Math.cos(a)+j();y=rr*Math.sin(a)+j();}
+      else if(ds==='moons'){l=i%2;const t=Math.PI*r();let px=l?1-Math.cos(t):Math.cos(t),py=l?0.5-Math.sin(t):Math.sin(t);x=(px-0.5)/1.5+j();y=(py-0.25)/0.75+j();}
+      else if(ds==='spiral'){l=i%2;const t=0.25+0.75*r();const a=t*3*Math.PI+(l?Math.PI:0);x=t*0.95*Math.cos(a)+j()*0.6;y=t*0.95*Math.sin(a)+j()*0.6;}
+      else{x=r()*2-1;y=r()*2-1;l=r()<0.5?1:0;}
+      out.push([clamp(x,-1.15,1.15),clamp(y,-1.15,1.15),l]);
+    }
+    return out;
+  }
+  function gen(){tr=genData(st.ds,st.ntr,st.noise,seed*101+7);va=genData(st.ds,200,st.noise,seed*101+9);}
+  /* réseau */
+  function makeNet(){
+    const sizes=[2].concat(st.nl>=1?[st.units]:[]).concat(st.nl>=2?[st.units]:[]).concat([1]);
+    const r=rng(seed*7+epoch+13);const L=sizes.length-1;const n={sizes,L,W:[],B:[],vW:[],vB:[],gW:[],gB:[],Z:sizes.map(s=>new Float64Array(s)),D:sizes.map(s=>new Float64Array(s))};
+    for(let l=0;l<L;l++){const ni=sizes[l],no=sizes[l+1];const sc=Math.sqrt((st.act==='relu'?2:1)/ni);n.W.push(Float64Array.from({length:ni*no},()=>gauss(r)*sc));n.B.push(new Float64Array(no));n.vW.push(new Float64Array(ni*no));n.vB.push(new Float64Array(no));n.gW.push(new Float64Array(ni*no));n.gB.push(new Float64Array(no));}
+    return n;
+  }
+  function forward(n,x0,x1){
+    const Z=n.Z;Z[0][0]=x0;Z[0][1]=x1;const f=ACT[st.act].f;
+    for(let l=0;l<n.L;l++){const ni=n.sizes[l],no=n.sizes[l+1],W=n.W[l],B=n.B[l],zi=Z[l],zo=Z[l+1];
+      for(let o=0;o<no;o++){let s=B[o];const off=o*ni;for(let i=0;i<ni;i++)s+=W[off+i]*zi[i];zo[o]=(l===n.L-1)?sg(s):f(s);}}
+    return Z[n.L][0];
+  }
+  function backward(n,y){ // accumule les gradients pour l'exemple courant (forward déjà fait)
+    const d=ACT[st.act].d;const L=n.L;const D=n.D;D[L][0]=n.Z[L][0]-y;
+    for(let l=L-1;l>=0;l--){const ni=n.sizes[l],no=n.sizes[l+1],W=n.W[l],gW=n.gW[l],gB=n.gB[l],zi=n.Z[l],Do=D[l+1],Di=D[l];
+      if(l>0)Di.fill(0);
+      for(let o=0;o<no;o++){const dv=Do[o];gB[o]+=dv;const off=o*ni;for(let i=0;i<ni;i++){gW[off+i]+=dv*zi[i];if(l>0)Di[i]+=W[off+i]*dv;}}
+      if(l>0){for(let i=0;i<ni;i++)Di[i]*=d(zi[i]);}}
+  }
+  function applyGrad(n,bs){
+    const lr=st.lr,mu=st.mom;
+    for(let l=0;l<n.L;l++){const W=n.W[l],gW=n.gW[l],vW=n.vW[l],B=n.B[l],gB=n.gB[l],vB=n.vB[l];
+      for(let k=0;k<W.length;k++){vW[k]=mu*vW[k]-lr*gW[k]/bs;W[k]+=vW[k];gW[k]=0;}
+      for(let k=0;k<B.length;k++){vB[k]=mu*vB[k]-lr*gB[k]/bs;B[k]+=vB[k];gB[k]=0;}}
+  }
+  function evalSet(n,set){let L=0,c=0;set.forEach(([x,y,l])=>{const p=clamp(forward(n,x,y),1e-9,1-1e-9);L+=-(l?Math.log(p):Math.log(1-p));if((p>0.5)===(l===1))c++;});return [L/set.length,c/set.length];}
+  function snapshot(n){return {W:n.W.map(a=>Float64Array.from(a)),B:n.B.map(a=>Float64Array.from(a))};}
+  function restore(n,s){n.W=s.W.map(a=>Float64Array.from(a));n.B=s.B.map(a=>Float64Array.from(a));}
+  function trainEpoch(){
+    const idx=shuffle(tr.map((_,i)=>i));const bs=st.mode==='batch'?tr.length:st.mode==='mini'?10:1;
+    for(let s=0;s<idx.length;s+=bs){const b=idx.slice(s,s+bs);b.forEach(i=>{const p=tr[i];forward(net,p[0],p[1]);backward(net,p[2]);});applyGrad(net,b.length);}
+    epoch++;const [lt,at]=evalSet(net,tr),[lv,av]=evalSet(net,va);lossTr.push(lt);lossVa.push(lv);accTr=at;accVa=av;
+    if(lv<best.v-1e-6){best={v:lv,e:epoch,snap:snapshot(net)};}
+  }
+  /* interface */
+  const ctl=controls(root);
+  const sDs=seg(ctl,'Données',[['line','Linéaire'],['xor','XOR'],['circle','Cercle'],['moons','Lunes'],['spiral','Spirale'],['rand','Étiquettes aléatoires']],'circle',v=>{st.ds=v;newData();});
+  const sNoise=slider(ctl,{label:'Bruit sur les données',min:0,max:0.5,step:0.05,value:0.1,fmt:v=>fr(v,2),onchange:v=>{st.noise=v;newData();}});
+  const sN=slider(ctl,{label:'Exemples d’apprentissage',min:20,max:200,step:10,value:80,onchange:v=>{st.ntr=v;newData();}});
+  const sNl=seg(ctl,'Couches cachées',[[0,'0 (sortie seule)'],[1,'1'],[2,'2']],1,v=>{st.nl=v;resetNet();});
+  const sU=slider(ctl,{label:'Neurones par couche cachée',min:1,max:24,value:6,onchange:v=>{st.units=v;resetNet();}});
+  const sA=seg(ctl,'Activation cachée',[['tanh','tanh'],['relu','ReLU'],['sigmoid','sigmoïde']],'tanh',v=>{st.act=v;resetNet();});
+  const sLr=slider(ctl,{label:'Pas d’apprentissage η',min:-3,max:0.5,step:0.1,value:-1,fmt:v=>fr(Math.pow(10,v),3),onchange:v=>{st.lr=Math.pow(10,v);}});
+  const sMom=slider(ctl,{label:'Moment',min:0,max:0.95,step:0.05,value:0,fmt:v=>fr(v,2),onchange:v=>{st.mom=v;}});
+  const sMode=seg(ctl,'Mise à jour',[['batch','Lot complet'],['mini','Mini-lots de 10'],['online','En ligne (1 exemple)']],'mini',v=>{st.mode=v;});
+  const chkE=h('input',{type:'checkbox',onchange:()=>{st.early=chkE.checked;}});
+  ctl.append(h('div',{class:'ctl'},h('label',{},'Arrêt prématuré'),h('label',{style:'font-weight:400;display:flex;gap:.4rem;align-items:center'},chkE,'stopper et restaurer les poids de la meilleure validation')));
+  const bt=btns(root);
+  const bRun=btn('Entraîner',()=>{running?pause():play();},'pri');
+  bt.append(bRun,btn('1 époque',()=>{pause();trainEpoch();draw();}),btn('Réinitialiser les poids',()=>{resetNet();}),btn('Nouvelles données',()=>{seed++;newData();}));
+  const pre=btns(root);
+  pre.append(h('span',{class:'legend',style:'align-self:center'},'Expériences prêtes :'),
+    btn('Étiquettes aléatoires (Zhang et al.)',()=>preset({ds:'rand',noise:0,ntr:60,nl:2,units:16,act:'tanh',lr:-1,mom:0.9,mode:'mini'})),
+    btn('Sur-apprentissage (spirale, gros réseau)',()=>preset({ds:'spiral',noise:0.25,ntr:40,nl:2,units:24,act:'tanh',lr:-1.3,mom:0.9,mode:'mini'})),
+    btn('Sous-apprentissage (cercle, 1 neurone)',()=>preset({ds:'circle',noise:0.1,ntr:80,nl:1,units:1,act:'tanh',lr:-1,mom:0.5,mode:'mini'})));
+  const two=h('div',{class:'two'});root.append(two);
+  const cvB=mkCanvas(two,CW,CH,'Frontière de décision du réseau');const cvL=mkCanvas(two,CW,CH,'Courbes d’erreur');
+  const stats=h('div',{class:'stats'});const sE=stat('Époque','0');const sLt=stat('Perte apprentissage','');const sLv=stat('Perte validation','');const sAt=stat('Exactitude appr. ; valid.','');const sB=stat('Meilleure validation','');const sP=stat('Paramètres','');stats.append(sE,sLt,sLv,sAt,sB,sP);
+  const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(stats,vd,h('p',{class:'legend'},'Fond : probabilité de la classe rouge (bleu = classe 0). Disques pleins : exemples d’apprentissage. Petits cercles : exemples de validation (jamais utilisés pour apprendre).'),
+    h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<ul><li><b>Couches cachées :</b> avec 0 couche cachée (un seul neurone logistique), le cercle et le XOR sont inatteignables ; avec 3 à 4 neurones cachés, ils passent. C’est le changement de représentation du cours.</li><li><b>Pas d’apprentissage :</b> trop grand (η ≈ 1 en lot complet ou en ligne) : la perte oscille ; trop petit : la courbe descend à peine.</li><li><b>Moment :</b> il accélère la descente et lisse les oscillations.</li><li><b>Lot complet / en ligne :</b> le mode en ligne fait beaucoup de mises à jour par époque, plus bruitées.</li><li><b>Sur-apprentissage :</b> peu d’exemples, gros réseau, beaucoup d’époques : la perte d’apprentissage continue de baisser, celle de validation remonte. Coche l’arrêt prématuré pour restaurer la meilleure époque.</li><li><b>Étiquettes aléatoires :</b> avec assez de neurones, l’exactitude d’apprentissage tend vers 100 % alors que celle de validation reste ≈ 50 % : le réseau mémorise n’importe quoi (Zhang et al., 2017).</li></ul>'})));
+  function newData(){pause();gen();resetNet();}
+  function resetNet(){pause();net=makeNet();epoch=0;lossTr=[];lossVa=[];best={v:1e9,e:0,snap:null};msg='';const [lt,at]=evalSet(net,tr),[lv,av]=evalSet(net,va);accTr=at;accVa=av;lossTr.push(lt);lossVa.push(lv);draw();}
+  function preset(p){pause();Object.assign(st,{ds:p.ds,noise:p.noise,ntr:p.ntr,nl:p.nl,units:p.units,act:p.act,lr:Math.pow(10,p.lr),mom:p.mom,mode:p.mode});
+    sDs.set(p.ds);sNoise.v=p.noise;sN.v=p.ntr;sNl.set(p.nl);sU.v=p.units;sA.set(p.act);sLr.v=p.lr;sMom.v=p.mom;sMode.set(p.mode);gen();resetNet();play();}
+  let raf=0;
+  function play(){running=true;bRun.textContent='Pause';const loop=()=>{if(!running)return;const t0=performance.now();
+      do{trainEpoch();
+        if(st.early&&epoch>30&&epoch-best.e>60){restore(net,best.snap);const [lt,at]=evalSet(net,tr),[lv,av]=evalSet(net,va);accTr=at;accVa=av;msg=`Arrêt prématuré : la validation n’a pas progressé depuis 60 époques ; poids de l’époque ${best.e} restaurés.`;pause();break;}
+        if(epoch>=4000){msg='4000 époques atteintes.';pause();break;}
+      }while(running&&performance.now()-t0<14);
+      draw();if(running)raf=requestAnimationFrame(loop);};raf=requestAnimationFrame(loop);}
+  function pause(){running=false;cancelAnimationFrame(raf);bRun.textContent='Entraîner';}
+  const gx=x=>(x+1.2)/2.4*CW,gy=y=>(1.2-y)/2.4*CH;
+  function draw(){
+    const g=cvB.g;g.clearRect(0,0,CW,CH);
+    const c0=css('--c1'),c1=css('--minus');const N=34,cs=CW/N;
+    for(let i=0;i<N;i++)for(let j=0;j<N;j++){const x=-1.2+(i+.5)/N*2.4,y=1.2-(j+.5)/N*2.4;const p=forward(net,x,y);g.fillStyle=colorMix(css('--bg'),colorMix(c0,c1,p),0.4);g.fillRect(Math.floor(i*cs),Math.floor(j*(CH/N)),Math.ceil(cs)+1,Math.ceil(CH/N)+1);}
+    g.globalAlpha=1;
+    va.forEach(([x,y,l])=>{g.strokeStyle=l?c1:c0;g.lineWidth=1.5;g.beginPath();g.arc(gx(x),gy(y),3,0,7);g.stroke();});
+    tr.forEach(([x,y,l])=>{g.fillStyle=l?c1:c0;g.beginPath();g.arc(gx(x),gy(y),4.6,0,7);g.fill();g.strokeStyle=css('--surface');g.lineWidth=1;g.stroke();});
+    // courbes
+    const g2=cvL.g;g2.clearRect(0,0,CW,CH);
+    const n=lossTr.length;const xm=Math.max(100,n-1);const ym=Math.max(0.75,Math.min(2.2,Math.max(...lossTr,...lossVa)*1.05));
+    const ex=e=>36+e/xm*(CW-48),ey=v=>CH-28-(v/ym)*(CH-44);
+    g2.strokeStyle=css('--rule');g2.fillStyle=css('--muted');g2.font='11px sans-serif';g2.lineWidth=1;
+    for(let k=0;k<=4;k++){const v=ym*k/4;g2.beginPath();g2.moveTo(36,ey(v));g2.lineTo(CW-8,ey(v));g2.stroke();g2.fillText(fr(v,2),2,ey(v)+4);}
+    g2.fillText('époques',CW-52,CH-8);g2.fillText('perte (entropie croisée)',40,14);
+    const line=(a,col,dash)=>{g2.strokeStyle=col;g2.lineWidth=2.2;g2.setLineDash(dash||[]);g2.beginPath();a.forEach((v,i)=>{const X=ex(i),Y=ey(Math.min(v,ym));i?g2.lineTo(X,Y):g2.moveTo(X,Y);});g2.stroke();g2.setLineDash([]);};
+    line(lossTr,css('--c1'));line(lossVa,css('--c2'));
+    if(best.e>0){g2.strokeStyle=css('--moss');g2.setLineDash([3,3]);g2.beginPath();g2.moveTo(ex(best.e),20);g2.lineTo(ex(best.e),CH-28);g2.stroke();g2.setLineDash([]);g2.fillStyle=css('--moss');g2.fillText('min. validation',Math.min(ex(best.e)+3,CW-90),30);}
+    g2.fillStyle=css('--c1');g2.fillText('apprentissage',CW-190,CH-8-14);g2.fillStyle=css('--c2');g2.fillText('validation',CW-100,CH-8-14);
+    const params=net.W.reduce((s,a)=>s+a.length,0)+net.B.reduce((s,a)=>s+a.length,0);
+    sE.set(String(epoch));sLt.set(fr(lossTr[n-1],3));sLv.set(fr(lossVa[n-1],3));sAt.set(Math.round(accTr*100)+' % ; '+Math.round(accVa*100)+' %');sB.set(best.e?fr(best.v,3)+' (ép. '+best.e+')':'—');sP.set(String(params));
+    const gap=accTr-accVa;
+    vd.innerHTML=msg?msg:(epoch>20&&lossVa[n-1]>best.v*1.15&&lossTr[n-1]<lossVa[n-1]?'<span class="ko">Sur-apprentissage :</span> la perte de validation remonte au-dessus de son minimum alors que celle d’apprentissage continue de baisser.':(epoch>20&&gap>0.25?'Grand écart entre exactitude d’apprentissage et de validation : le réseau mémorise.':(epoch===0?'Clique sur « Entraîner ».':'')));
+  }
+  onTheme(draw);gen();resetNet();
+})();
+/* ================= Fiche 2, partie B ================= */
+
+/* ---- Softmax et entropie croisée ---- */
+(function(){
+  const root=$('#lab-softmax');
+  let a=[2,1,-1],t=0;
+  const ctl=controls(root);
+  const sl=[0,1,2].map(i=>slider(ctl,{label:`Score a${i+1}`,min:-5,max:5,step:0.1,value:a[i],fmt:v=>fr(v,1),onchange:v=>{a[i]=v;render();}}));
+  seg(ctl,'Vraie classe',[[0,'Classe 1'],[1,'Classe 2'],[2,'Classe 3']],0,v=>{t=v;render();});
+  const bars=h('div');const stats=h('div',{class:'stats'});
+  root.append(bars,stats,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Mets la vraie classe sur le score le plus bas : p devient minuscule. L’<b>entropie croisée</b> −ln p explose (plusieurs unités), alors que l’erreur quadratique reste bornée (≤ 2). Une prédiction confiante et fausse est donc très fortement punie, et le signal d’erreur reste grand : c’est ce qui rend la sortie « calibrée » comme une probabilité.</p><p>Complément : avec softmax et entropie croisée, le gradient par rapport aux scores est simplement p − u (u = codage one-hot de la vraie classe).</p>'})));
+  function render(){
+    const m=Math.max(...a);const e=a.map(v=>Math.exp(v-m));const s=e.reduce((x,y)=>x+y,0);const p=e.map(v=>v/s);
+    bars.innerHTML='';p.forEach((v,i)=>bars.append(h('div',{style:'display:grid;grid-template-columns:5.5rem 1fr 4rem;gap:.6rem;align-items:center;margin:.25rem 0'},h('span',{},'p'+(i+1)+(i===t?' (vraie)':'')),h('div',{class:'bar'},h('i',{style:`width:${v*100}%;background:${i===t?'var(--plus)':'var(--muted)'}`})),h('span',{class:'mono'},fr(v,3)))));
+    const ce=-Math.log(Math.max(p[t],1e-12));const se=p.reduce((x,v,i)=>x+(v-(i===t?1:0))**2,0);
+    stats.innerHTML='';stats.append(stat('Entropie croisée −ln p(vraie)',fr(ce,3)),stat('Erreur quadratique Σ(p−u)²',fr(se,3)),stat('Gradient p − u',p.map((v,i)=>fr(v-(i===t?1:0),2)).join(' ; ')));
+  }
+  render();
+})();
+
+/* ---- ECOC ---- */
+(function(){
+  const root=$('#lab-ecoc');
+  const codes={A:'0000000000',B:'0000101011',C:'0001010101'};
+  let word=codes.B.split('').map(Number),truth='B',k=1;
+  const ham=(u,v)=>u.reduce((s,x,i)=>s+(x!==v[i]?1:0),0);
+  const cd=Object.fromEntries(Object.entries(codes).map(([c,s])=>[c,s.split('').map(Number)]));
+  const ctl=controls(root);
+  seg(ctl,'Vraie lettre',[['A','A'],['B','B'],['C','C']],'B',v=>{truth=v;word=cd[v].slice();render();});
+  slider(ctl,{label:'Erreurs à injecter',min:0,max:5,value:1,onchange:v=>{k=v;}});
+  const bt=btns(root);
+  bt.append(btn('Tirer ces erreurs au hasard',()=>{word=cd[truth].slice();shuffle([...Array(10).keys()]).slice(0,k).forEach(i=>word[i]^=1);render();},'pri'),btn('Sans erreur',()=>{word=cd[truth].slice();render();}));
+  const bits=h('div',{class:'btns'});const bs=[...Array(10).keys()].map(i=>{const b=h('button',{type:'button',class:'mono',title:'Inverser le bit h'+(i+1),onclick:()=>{word[i]^=1;render();}});bits.append(b);return b;});
+  const out=h('div',{class:'scroll'});const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(h('p',{class:'legend'},'Sortie des 10 classifieurs h₁…h₁₀ (clique un bit pour l’inverser) :'),bits,out,vd,
+    h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Les trois codes sont à distance 4 (A–B), 4 (A–C) et 6 (B–C). Distance minimale d = 4 : on <b>corrige</b> ⌊(d−1)/2⌋ = 1 erreur et on en <b>détecte</b> jusqu’à 3. Avec 1 erreur, le décodage par plus proche voisin retrouve toujours la bonne lettre ; avec 2, il peut hésiter entre deux codes (distances égales) ; au-delà, il se trompe.</p><p>Complément : le code du cours pour 2 bits (00→000, 01→101, 10→110, 11→011) a une distance minimale de 2 : il détecte une erreur mais ne peut pas la corriger.</p>'})));
+  function render(){
+    bs.forEach((b,i)=>{b.textContent='h'+(i+1)+'='+word[i];b.setAttribute('aria-pressed',String(word[i]!==cd[truth][i]));});
+    const d=Object.keys(cd).map(c=>[c,ham(word,cd[c])]);const m=Math.min(...d.map(x=>x[1]));const nn=d.filter(x=>x[1]===m).map(x=>x[0]);
+    const tb=h('tbody');d.forEach(([c,v])=>tb.append(h('tr',{class:v===m?'hl':''},h('td',{},c),h('td',{class:'mono'},codes[c]),h('td',{class:'num'},String(v)))));
+    out.innerHTML='';out.append(h('table',{class:'mini'},h('thead',{},h('tr',{},h('th',{},'Lettre'),h('th',{},'Code'),h('th',{class:'num'},'Distance de Hamming au mot reçu'))),tb));
+    const errs=ham(word,cd[truth]);
+    vd.innerHTML=nn.length>1?`<span class="ko">Ambigu :</span> ${nn.join(' et ')} sont à égale distance (${m}). Erreurs injectées : ${errs}.`:(nn[0]===truth?`<span class="ok">Décodé : ${nn[0]}</span> (bonne lettre) avec ${errs} bit(s) erroné(s).`:`<span class="ko">Décodé : ${nn[0]}</span> au lieu de ${truth} : ${errs} erreurs, au-delà de la capacité de correction.`);
+  }
+  render();
+})();
+
+/* ---- Convolution ---- */
+(function(){
+  const root=$('#lab-conv');const N=8,CS=30;
+  const img=Array.from({length:N},()=>new Array(N).fill(0));
+  const K={vert:{n:'Contour vertical',k:[[-1,0,1],[-1,0,1],[-1,0,1]]},horiz:{n:'Contour horizontal',k:[[-1,-1,-1],[0,0,0],[1,1,1]]},blur:{n:'Moyenne (flou)',k:[[1,1,1],[1,1,1],[1,1,1]].map(r=>r.map(v=>v/9))},id:{n:'Identité',k:[[0,0,0],[0,1,0],[0,0,0]]}};
+  let kn='vert',pool='max';
+  const setImg=f=>{for(let i=0;i<N;i++)for(let j=0;j<N;j++)img[i][j]=f(i,j)?1:0;render();};
+  const ctl=controls(root);
+  seg(ctl,'Filtre 3×3',Object.entries(K).map(([k,v])=>[k,v.n]),'vert',v=>{kn=v;render();});
+  seg(ctl,'Pooling 2×2',[['max','Maximum'],['mean','Moyenne']],'max',v=>{pool=v;render();});
+  const bt=btns(root);
+  bt.append(btn('Carré',()=>setImg((i,j)=>i>=2&&i<=5&&j>=2&&j<=5&&(i===2||i===5||j===2||j===5))),btn('Barre verticale',()=>setImg((i,j)=>j===3||j===4)),btn('Diagonale',()=>setImg((i,j)=>i===j||i===j+1)),btn('Lettre L',()=>setImg((i,j)=>(j===2&&i>=1&&i<=6)||(i===6&&j>=2&&j<=5))),btn('Effacer',()=>setImg(()=>0)));
+  const three=h('div',{class:'two'});root.append(three);
+  const c1=mkCanvas(three,N*CS,N*CS,'Image 8 par 8 à dessiner');const c2=mkCanvas(three,6*40,6*40,'Carte de caractéristiques 6 par 6');const c3=mkCanvas(three,3*80,3*80,'Sortie du pooling 3 par 3');
+  root.append(h('p',{class:'legend'},'Gauche : image (clic ou glisser pour dessiner). Milieu : convolution (6×6, pas 1, sans marge) ; orange = valeurs positives, bleu = négatives. Droite : pooling 2×2.'));
+  let paint=null;
+  const pos=(e)=>{const r=c1.c.getBoundingClientRect();return [Math.floor((e.clientY-r.top)/r.height*N),Math.floor((e.clientX-r.left)/r.width*N)];};
+  c1.c.addEventListener('pointerdown',e=>{const [i,j]=pos(e);if(i<0||i>=N||j<0||j>=N)return;paint=1-img[i][j];img[i][j]=paint;c1.c.setPointerCapture(e.pointerId);render();});
+  c1.c.addEventListener('pointermove',e=>{if(paint===null)return;const [i,j]=pos(e);if(i<0||i>=N||j<0||j>=N)return;if(img[i][j]!==paint){img[i][j]=paint;render();}});
+  const up=()=>{paint=null;};c1.c.addEventListener('pointerup',up);c1.c.addEventListener('pointercancel',up);
+  c1.c.style.touchAction='none';
+  // calculateur
+  const calc=h('div',{class:'lab',style:'margin:1.2rem 0 0;background:var(--bg)'});root.append(calc);
+  calc.append(h('h3',{style:'font-size:1.05rem'},'Taille de la sortie et nombre de paramètres'));
+  const P={W:227,k:11,s:4,p:0,F:96,C:3};
+  const cc=h('div',{class:'controls'});calc.append(cc);
+  const inputs={};
+  [['W','Taille de l’entrée W'],['k','Noyau k'],['s','Pas (stride) s'],['p','Marge (padding) p'],['F','Nombre de filtres'],['C','Canaux d’entrée']].forEach(([key,lab])=>{const i=h('input',{type:'number',min:0,value:P[key],'aria-label':lab});i.addEventListener('input',()=>{const v=parseInt(i.value);if(isFinite(v)){P[key]=v;showCalc();}});inputs[key]=i;cc.append(h('div',{class:'ctl'},h('label',{},lab),i));});
+  const cb=btns(calc);cb.append(btn('AlexNet, 1re couche (diapo 110)',()=>{Object.assign(P,{W:227,k:11,s:4,p:0,F:96,C:3});Object.keys(inputs).forEach(k=>inputs[k].value=P[k]);showCalc();}),btn('Petit exemple : 8, noyau 3',()=>{Object.assign(P,{W:8,k:3,s:1,p:0,F:1,C:1});Object.keys(inputs).forEach(k=>inputs[k].value=P[k]);showCalc();}));
+  const cst=h('div',{class:'stats'});calc.append(cst,h('p',{class:'legend'},'Sortie = ⌊(W − k + 2p)/s⌋ + 1 par dimension. Complément : avec le partage des poids, un même filtre est réutilisé partout, donc on n’a que F × (k²·C + 1) paramètres. La diapo compte, elle, chaque neurone séparément.'));
+  function showCalc(){
+    const o=Math.floor((P.W-P.k+2*P.p)/P.s)+1;cst.innerHTML='';
+    if(!(o>0)){cst.append(stat('Sortie','impossible','le noyau dépasse l’entrée'));return;}
+    const neurons=o*o*P.F,w1=P.k*P.k*P.C+1;
+    cst.append(stat('Taille de la sortie',`${o} × ${o} × ${P.F}`,'(W−k+2p)/s + 1 = '+o),stat('Neurones de sortie',fmtBig(BigInt(neurons))),stat('Poids par neurone (biais inclus)',String(w1),'k²·C + 1'),stat('Paramètres sans partage',fmtBig(BigInt(neurons)*BigInt(w1)),'comme sur la diapo'),stat('Paramètres avec partage',fmtBig(BigInt(P.F)*BigInt(w1)),'F × (k²·C + 1)'));
+  }
+  function render(){
+    const k=K[kn].k;const out=[];for(let i=0;i<6;i++){out.push([]);for(let j=0;j<6;j++){let s=0;for(let a=0;a<3;a++)for(let b=0;b<3;b++)s+=img[i+a][j+b]*k[a][b];out[i].push(s);}}
+    const pl=[];for(let i=0;i<3;i++){pl.push([]);for(let j=0;j<3;j++){const v=[out[2*i][2*j],out[2*i][2*j+1],out[2*i+1][2*j],out[2*i+1][2*j+1]];pl[i].push(pool==='max'?Math.max(...v):v.reduce((x,y)=>x+y,0)/4);}}
+    let g=c1.g;g.clearRect(0,0,N*CS,N*CS);
+    for(let i=0;i<N;i++)for(let j=0;j<N;j++){g.fillStyle=img[i][j]?css('--ink'):css('--surface');g.fillRect(j*CS,i*CS,CS,CS);g.strokeStyle=css('--rule');g.strokeRect(j*CS+.5,i*CS+.5,CS,CS);}
+    const heat=(cv,m,cs)=>{const g=cv.g;g.clearRect(0,0,m.length*cs,m.length*cs);const mx=Math.max(0.001,...m.flat().map(Math.abs));
+      m.forEach((r,i)=>r.forEach((v,j)=>{g.fillStyle=colorMix(css('--surface'),v>=0?css('--c2'):css('--c1'),Math.min(1,Math.abs(v)/mx));g.fillRect(j*cs,i*cs,cs,cs);g.strokeStyle=css('--rule');g.strokeRect(j*cs+.5,i*cs+.5,cs,cs);g.fillStyle=css('--ink');g.font=(cs>50?'14':'11')+'px sans-serif';g.textAlign='center';g.fillText(fr(v,Number.isInteger(v)?0:1).replace('\u2212','-'),j*cs+cs/2,i*cs+cs/2+4);g.textAlign='left';}));};
+    heat(c2,out,40);heat(c3,pl,80);
+  }
+  onTheme(render);setImg((i,j)=>i>=2&&i<=5&&j>=2&&j<=5&&(i===2||i===5||j===2||j===5));
+  showCalc();
+  root.append(h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Avec « contour vertical », le carré s’allume sur son bord gauche (orange, valeurs positives) et sur son bord droit (bleu, valeurs négatives) : le filtre détecte un type de contour. Avec « contour horizontal », ce sont les bords haut et bas. Un réseau convolutionnel <b>apprend</b> ces filtres au lieu de les choisir à la main. Le pooling réduit la résolution (6×6 → 3×3) en gardant l’essentiel.</p><p>Calculateur : retrouve 55 = (227 − 11)/4 + 1 puis 55 × 55 × 96 = 290 400 neurones, chacun avec 11×11×3 + 1 = 364 poids : 105 705 600 paramètres si on ne partage rien.</p>'})));
+})();
+
+/* ---- BatchNorm / LayerNorm ---- */
+(function(){
+  const root=$('#lab-norm');
+  const M=[[1,3,6],[2,2,2],[0,1,5],[4,6,1],[5,2,3],[1,0,1]];let mode='bn';
+  const ctl=controls(root);
+  seg(ctl,'Normalisation',[['bn','BatchNorm (par descripteur)'],['ln','LayerNorm (par exemple)'],['l2','L2-norm (par exemple)']],'bn',v=>{mode=v;render();});
+  const two=h('div',{class:'two'});root.append(two);const A=h('div',{class:'scroll'}),B=h('div',{class:'scroll'});two.append(A,B);
+  const vd=h('p',{class:'verdict'});root.append(vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>BatchNorm : chaque <b>ligne</b> (un descripteur, sur les 3 exemples du batch) est centrée et réduite ; la ligne (2, 2, 2) donne 0 car son écart-type est nul (on ajoute un ε = 10⁻⁵ en pratique). LayerNorm : chaque <b>colonne</b> (un exemple, sur ses 6 descripteurs) est normalisée indépendamment des autres exemples. L2-norm : chaque colonne est divisée par sa norme, donc de norme 1. Avec γ = 1 et β = 0 (paramètres appris dans le réseau).</p>'})));
+  const inputs=M.map((r,i)=>r.map((v,j)=>{const e=h('input',{type:'number',step:1,value:v,'aria-label':`descripteur ${i+1}, exemple ${j+1}`});e.addEventListener('input',()=>{const x=parseFloat(e.value);if(isFinite(x)){M[i][j]=x;render();}});e.addEventListener('mouseenter',()=>hl(i,j));e.addEventListener('focus',()=>hl(i,j));return e;}));
+  const tI=h('table',{class:'mini'});const tbI=h('tbody');tI.append(h('thead',{},h('tr',{},h('th',{},'Entrée'),['ex. 1','ex. 2','ex. 3'].map(t=>h('th',{},t)))),tbI);
+  const cellsI=M.map((r,i)=>{const tr=h('tr',{},h('th',{},'d'+(i+1)),r.map((v,j)=>h('td',{},inputs[i][j])));tbI.append(tr);return [...tr.children].slice(1);});
+  A.append(tI);
+  function hl(i,j){cellsI.flat().forEach(c=>c.classList.remove('hl'));if(mode==='bn')cellsI[i].forEach(c=>c.classList.add('hl'));else cellsI.forEach(r=>r[j].classList.add('hl'));}
+  function render(){
+    const O=M.map(r=>r.slice());const eps=1e-5;let info='';
+    if(mode==='bn'){M.forEach((r,i)=>{const m=r.reduce((a,b)=>a+b,0)/3,v=r.reduce((a,b)=>a+(b-m)**2,0)/3;r.forEach((x,j)=>O[i][j]=(x-m)/Math.sqrt(v+eps));});info='Chaque ligne a maintenant une moyenne 0 et une variance ≈ 1 (sur le batch).';}
+    else{for(let j=0;j<3;j++){const col=M.map(r=>r[j]);if(mode==='ln'){const m=col.reduce((a,b)=>a+b,0)/6,v=col.reduce((a,b)=>a+(b-m)**2,0)/6;col.forEach((x,i)=>O[i][j]=(x-m)/Math.sqrt(v+eps));}else{const n=Math.sqrt(col.reduce((a,b)=>a+b*b,0))||1;col.forEach((x,i)=>O[i][j]=x/n);}}info=mode==='ln'?'Chaque colonne a maintenant une moyenne 0 et une variance ≈ 1 (sur ses 6 descripteurs).':'Chaque colonne est de norme euclidienne 1.';}
+    const tb=h('tbody');O.forEach((r,i)=>tb.append(h('tr',{},h('th',{},'d'+(i+1)),r.map(v=>h('td',{class:'num'},fr(v,2))))));
+    B.innerHTML='';B.append(h('table',{class:'mini'},h('thead',{},h('tr',{},h('th',{},'Sortie'),['ex. 1','ex. 2','ex. 3'].map(t=>h('th',{class:'num'},t)))),tb));
+    vd.textContent=info+' Survole ou sélectionne une cellule d’entrée : les cellules normalisées ensemble sont surlignées.';
+  }
+  render();hl(0,0);
+})();
+
+/* ---- Dropout ---- */
+(function(){
+  const root=$('#lab-dropout');const layers=[4,6,6,2];let p=0.5,mode='train',mask=[];
+  const ctl=controls(root);
+  slider(ctl,{label:'Probabilité d’extinction p',min:0,max:0.9,step:0.1,value:0.5,fmt:v=>fr(v,1),onchange:v=>{p=v;draw(true);}});
+  seg(ctl,'Phase',[['train','Apprentissage'],['test','Test']],'train',v=>{mode=v;draw();});
+  const bt=btns(root);bt.append(btn('Tirer un nouveau masque',()=>draw(true),'pri'));
+  const NS='http://www.w3.org/2000/svg';const svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox','0 0 640 250');svg.style.cssText='width:100%;height:auto';svg.setAttribute('role','img');svg.setAttribute('aria-label','Réseau avec neurones cachés éteints');
+  const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(svg,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>À chaque exemple présenté pendant l’apprentissage, un sous-réseau différent est entraîné : les neurones ne peuvent plus compter sur la présence d’un voisin précis, ce qui limite les co-adaptations et le sur-apprentissage. Au test, on utilise tous les neurones. Complément : on compense en pratique l’extinction (poids multipliés par 1 − p au test, ou activations divisées par 1 − p à l’apprentissage).</p>'})));
+  const pos=(l,i)=>[70+l*167,layers[l]===1?125:(125+(i-(layers[l]-1)/2)*(190/Math.max(layers[l]-1,5)*1.0)*(layers[l]>5?0.98:1.15))];
+  function draw(redraw){
+    if(redraw||!mask.length)mask=layers.map((n,l)=>Array.from({length:n},()=>l>0&&l<layers.length-1&&Math.random()<p));
+    svg.innerHTML='';const active=(l,i)=>mode==='test'||!mask[l][i];
+    for(let l=0;l<layers.length-1;l++)for(let i=0;i<layers[l];i++)for(let j=0;j<layers[l+1];j++){const [x1,y1]=pos(l,i),[x2,y2]=pos(l+1,j);const on=active(l,i)&&active(l+1,j);
+      const ln=document.createElementNS(NS,'line');ln.setAttribute('x1',x1);ln.setAttribute('y1',y1);ln.setAttribute('x2',x2);ln.setAttribute('y2',y2);ln.setAttribute('stroke','var(--muted)');ln.setAttribute('stroke-width',on?'1':'0.6');ln.setAttribute('opacity',on?'0.55':'0.06');svg.append(ln);}
+    let off=0,tot=0;
+    layers.forEach((n,l)=>{for(let i=0;i<n;i++){const [x,y]=pos(l,i);const on=active(l,i);const hid=l>0&&l<layers.length-1;if(hid){tot++;if(!on)off++;}
+      const c=document.createElementNS(NS,'circle');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',13);c.setAttribute('fill',on?'var(--moss-soft)':'var(--surface)');c.setAttribute('stroke',on?'var(--moss)':'var(--minus)');c.setAttribute('stroke-width','2');c.setAttribute('stroke-dasharray',on?'':'3 3');svg.append(c);
+      if(!on){const t=document.createElementNS(NS,'text');t.setAttribute('x',x);t.setAttribute('y',y+5);t.setAttribute('text-anchor','middle');t.setAttribute('fill','var(--minus)');t.setAttribute('font-size','16');t.textContent='×';svg.append(t);}}});
+    vd.textContent=mode==='test'?'Phase de test : tous les neurones cachés sont actifs.':`Neurones cachés éteints : ${off} sur ${tot}. Cliquez sur « Tirer un nouveau masque » pour un autre sous-réseau.`.replace('Cliquez','Clique');
+  }
+  onTheme(()=>draw());draw(true);
+})();
+
+/* ---- One-hot et discrétisation ---- */
+(function(){
+  const root=$('#lab-onehot');
+  const g=h('div',{class:'two'});root.append(g);
+  const L=h('div');const R=h('div');g.append(L,R);
+  // gauche
+  const brands=['Renault','Peugeot','Fiat'];
+  L.append(h('p',{class:'legend'},'Codage de la marque de voiture :'));
+  L.append(h('div',{class:'scroll'},h('table',{class:'mini'},h('thead',{},h('tr',{},['Marque','Numérique','One-hot'].map(t=>h('th',{},t)))),h('tbody',{},brands.map((b,i)=>h('tr',{},h('td',{},b),h('td',{class:'mono'},String(i+1)),h('td',{class:'mono'},'('+brands.map((_,k)=>k===i?1:0).join(', ')+')')))))));
+  L.append(h('p',{class:'verdict'},h('span',{html:'Codage numérique : distance(Renault, Fiat) = 2 = <b>2×</b> distance(Renault, Peugeot) = 1. Un ordre et une proximité qui n’existent pas. <b>One-hot</b> : toutes les paires sont à distance √2 ≈ 1,41 : aucune marque n’est « plus proche » d’une autre.'})));
+  // droite
+  const ages=[18,19,19,20,21,21,22,23,24,25,26,27,29,31,34,38,45,52,58,63,70,78,85,92];let meth='width',nb=4;
+  const c2=controls(R);
+  seg(c2,'Discrétisation de l’âge',[['width','Intervalles égaux'],['freq','Même fréquence']],'width',v=>{meth=v;draw();});
+  slider(c2,{label:'Nombre d’intervalles',min:2,max:6,value:4,onchange:v=>{nb=v;draw();}});
+  const out=h('div');R.append(out);
+  function draw(){
+    const mn=Math.min(...ages),mx=Math.max(...ages);let bins=Array.from({length:nb},()=>[]);
+    if(meth==='width'){const w=(mx-mn)/nb;ages.forEach(a=>bins[Math.min(Math.floor((a-mn)/w),nb-1)].push(a));}
+    else{const s=ages.slice().sort((a,b)=>a-b);s.forEach((a,i)=>bins[Math.min(Math.floor(i*nb/s.length),nb-1)].push(a));}
+    const maxc=Math.max(...bins.map(b=>b.length));out.innerHTML='';
+    bins.forEach(b=>out.append(h('div',{style:'display:grid;grid-template-columns:6.2rem 1fr 2rem;gap:.5rem;align-items:center;margin:.25rem 0;font-size:.85rem'},h('span',{class:'mono'},b.length?`${b[0]}–${b[b.length-1]} ans`:'vide'),h('div',{class:'bar'},h('i',{style:`width:${b.length/maxc*100}%`})),h('span',{class:'mono'},String(b.length)))));
+    out.append(h('p',{class:'legend'},meth==='width'?'Intervalles de même largeur : les tranches d’âge élevées sont presque vides, la première est surchargée.':'Intervalles de même fréquence : effectifs équilibrés, largeurs très inégales.'));
+  }
+  draw();
+})();
+
+/* ---- Valeurs manquantes ---- */
+(function(){
+  const root=$('#lab-missing');
+  const cols=['Vache','Sexe','Âge','Conso. 1er jour (kg)','Conso. 2e jour (kg)','Poids (kg)'];
+  const D=[['Bérénice','F',3,3.56,3.87,630],['Marguerite',null,5,4.78,null,null],['Blanchette','F',null,null,5.72,435],['Furie','M',6,6.02,null,875]];
+  let meth='none';
+  const ctl=controls(root);
+  seg(ctl,'Stratégie',[['none','Données brutes'],['mean','Valeur moyenne'],['mode','Valeur la plus fréquente'],['drop','Supprimer les lignes incomplètes']],'none',v=>{meth=v;render();});
+  const out=h('div',{class:'scroll'});const vd=h('p',{class:'verdict'});
+  root.append(out,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Supprimer les lignes incomplètes ne laisse qu’<b>une</b> vache sur quatre : on jette 75 % des données pour 6 cellules manquantes sur 20. Imputer par la moyenne conserve les lignes mais fabrique des valeurs « moyennes » qui ne portent aucune information sur la vache (par exemple un poids de 646,7 kg pour Marguerite, quel que soit son âge). La valeur la plus fréquente n’a de sens que pour une variable catégorielle : ici, tous les nombres sont distincts, le « mode » est arbitraire.</p><p>Le cours cite aussi l’imputation <b>par la moyenne de la classe</b> et par une <b>fonction de prédiction</b> (poids prédit d’après l’âge et la consommation) : elle suppose que les variables sont liées entre elles et pose la question de l’utilité de la variable imputée.</p>'})));
+  function render(){
+    const num=[2,3,4,5];const stat_={};
+    num.forEach(c=>{const v=D.map(r=>r[c]).filter(x=>x!==null);stat_[c]={mean:v.reduce((a,b)=>a+b,0)/v.length,mode:(()=>{const cnt={};v.forEach(x=>cnt[x]=(cnt[x]||0)+1);return +Object.entries(cnt).sort((a,b)=>b[1]-a[1]||a[0]-b[0])[0][0];})()};});
+    const sexes=D.map(r=>r[1]).filter(Boolean);const cs={};sexes.forEach(s=>cs[s]=(cs[s]||0)+1);const modeS=Object.entries(cs).sort((a,b)=>b[1]-a[1])[0][0];
+    let rows=D.map(r=>r.slice());const filled=D.map(r=>r.map(()=>false));
+    let miss=0;D.forEach(r=>r.forEach(v=>{if(v===null)miss++;}));
+    if(meth==='mean'||meth==='mode'){rows=rows.map((r,i)=>r.map((v,c)=>{if(v!==null)return v;filled[i][c]=true;if(c===1)return modeS;return meth==='mean'?stat_[c].mean:stat_[c].mode;}));}
+    if(meth==='drop'){rows=rows.filter(r=>r.every(v=>v!==null));}
+    const tb=h('tbody');
+    rows.forEach(r=>{const oi=D.findIndex(d=>d[0]===r[0]);tb.append(h('tr',{},r.map((v,c)=>h('td',{class:c>1?'num':'',style:v===null?'color:var(--minus);font-weight:700':(oi>=0&&filled[oi][c]?'background:var(--moss-soft);font-weight:700':'')},v===null?'?':typeof v==='number'?(Number.isInteger(v)?String(v):fr(v,2)):v))));});
+    out.innerHTML='';out.append(h('table',{class:'mini'},h('thead',{},h('tr',{},cols.map((c,i)=>h('th',{class:i>1?'num':''},c)))),tb));
+    vd.innerHTML=meth==='none'?`Cellules manquantes : <b>${miss} sur 20</b> ; une seule ligne complète sur 4.`:meth==='drop'?`Lignes conservées : <b>${rows.length} sur 4</b>. Le prix de la suppression : presque toutes les données.`:'Cellules surlignées : valeurs imputées. Le sexe (variable catégorielle) est toujours imputé par sa valeur la plus fréquente.';
+  }
+  render();
+})();
+
+/* ---- Normalisation et plus proche voisin ---- */
+(function(){
+  const root=$('#lab-scale');
+  const P=[['I_21',43,55000],['I_34',25,21000],['I_38',34,35000],['I_39',67,20000],['I_58',56,27000],['I_73',40,31000],['I_81',51,75000]];
+  let q=1,norm='raw';
+  const ctl=controls(root);
+  const sel=h('select',{'aria-label':'Personne de référence',onchange:()=>{q=+sel.value;render();}},P.map((p,i)=>h('option',{value:i},p[0]+' : '+p[1]+' ans, '+p[2].toLocaleString('fr-FR')+' €')));
+  sel.value='1';ctl.append(h('div',{class:'ctl'},h('label',{},'Personne de référence'),sel));
+  seg(ctl,'Échelle',[['raw','Valeurs brutes'],['std','Centrées réduites']],'raw',v=>{norm=v;render();});
+  const out=h('div',{class:'scroll'});const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(out,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>En valeurs brutes, l’écart de revenu (des milliers d’euros) écrase l’écart d’âge (quelques années) : le plus proche voisin ne dépend pratiquement que du revenu. Après normalisation centrée réduite (x − moyenne)/écart-type, les deux descripteurs pèsent de façon comparable. Le cours prévient cependant : normaliser n’est pas <em>forcément</em> une bonne idée (si l’échelle porte de l’information, on la détruit).</p>'})));
+  const stats=k=>{const v=P.map(p=>p[k]);const m=v.reduce((a,b)=>a+b,0)/v.length;const s=Math.sqrt(v.reduce((a,b)=>a+(b-m)**2,0)/v.length);return [m,s];};
+  const [ma,sa]=stats(1),[mr,sr]=stats(2);
+  const dist=(i,j,n)=>{const a=n==='std'?[(P[i][1]-ma)/sa,(P[i][2]-mr)/sr]:[P[i][1],P[i][2]];const b=n==='std'?[(P[j][1]-ma)/sa,(P[j][2]-mr)/sr]:[P[j][1],P[j][2]];return [Math.abs(a[0]-b[0]),Math.abs(a[1]-b[1]),Math.hypot(a[0]-b[0],a[1]-b[1])];};
+  function render(){
+    const rows=P.map((p,j)=>j).filter(j=>j!==q).map(j=>({j,d:dist(q,j,norm)})).sort((a,b)=>a.d[2]-b.d[2]);
+    const nn=(n)=>P.map((p,j)=>j).filter(j=>j!==q).map(j=>({j,d:dist(q,j,n)[2]})).sort((a,b)=>a.d-b.d)[0].j;
+    const tb=h('tbody');rows.forEach((r,i)=>tb.append(h('tr',{class:i===0?'hl':''},h('td',{},P[r.j][0]),h('td',{class:'num'},fr(r.d[0],norm==='std'?2:0)),h('td',{class:'num'},fr(r.d[1],norm==='std'?2:0)),h('td',{class:'num'},fr(r.d[2],norm==='std'?2:0)))));
+    out.innerHTML='';out.append(h('table',{class:'mini'},h('thead',{},h('tr',{},h('th',{},'Autre personne'),h('th',{class:'num'},'écart d’âge'),h('th',{class:'num'},'écart de revenu'),h('th',{class:'num'},'distance'))),tb));
+    const a=nn('raw'),b=nn('std');
+    vd.innerHTML=`Plus proche voisin de ${P[q][0]} : <b>${P[a][0]}</b> en valeurs brutes, <b>${P[b][0]}</b> après normalisation`+(a===b?' (le même ici).':' <span class="ko">(ce n’est pas le même !)</span>');
+  }
+  render();
+})();
+
+/* ---- Classes déséquilibrées ---- */
+(function(){
+  const root=$('#lab-imb');let p=0.05;
+  const ctl=controls(root);
+  slider(ctl,{label:'Part de la classe minoritaire',min:1,max:50,value:5,fmt:v=>v+' %',onchange:v=>{p=v/100;render();}});
+  const stats=h('div',{class:'stats'});const vd=h('p',{class:'verdict'});
+  root.append(stats,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>À 5 % de minoritaires, le classifieur « toujours majoritaire » affiche 95 % d’exactitude et ne repère <b>aucun</b> cas rare (fraude, maladie, attaque). Un détecteur réel, qui trouve 80 % des cas rares au prix de 10 % de fausses alertes, paraît « moins bon » (≈ 89,5 %) alors qu’il est le seul utile. Les remèdes du cours : sous-échantillonner la classe majoritaire, fabriquer des exemples fictifs de la classe minoritaire, ou changer les coûts d’erreur.</p>'})));
+  function render(){
+    const triv=1-p,det=1-(0.2*p+0.1*(1-p));
+    stats.innerHTML='';stats.append(stat('Exactitude « toujours majoritaire »',fr(triv*100,1)+' %'),stat('Rappel de la classe rare (trivial)','0 %'),stat('Exactitude du détecteur (rappel 80 %, 10 % de fausses alertes)',fr(det*100,1)+' %'),stat('Rappel de la classe rare (détecteur)','80 %'));
+    vd.innerHTML=triv>det?'<span class="ko">L’exactitude préfère le classifieur inutile.</span>':'Ici l’exactitude classe correctement les deux ; baisse la part minoritaire pour voir le piège.';
+  }
+  render();
+})();
+
+/* ---- Malédiction de la dimension ---- */
+(function(){
+  const root=$('#lab-curse');const W=640,H=250;const DS=[2,3,10,100,1000,10000];let di=0,seed=1;
+  const ctl=controls(root);
+  const sd=slider(ctl,{label:'Dimension d',min:0,max:5,value:0,fmt:v=>String(DS[v]),onchange:v=>{di=v;draw();}});
+  const bt=btns(root);bt.append(btn('Nouveau tirage',()=>{seed++;draw();}));
+  const cv=mkCanvas(root,W,H,'Histogramme des distances entre paires de points');
+  const stats=h('div',{class:'stats'});root.append(stats,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>L’axe horizontal est la distance divisée par √d, pour comparer les dimensions. La moyenne reste autour de 0,41 mais l’histogramme se resserre : en grande dimension, <b>tous les points sont à peu près à la même distance les uns des autres</b>. Un algorithme fondé sur les distances (plus proches voisins, clustering) perd alors son pouvoir discriminant : « le plus proche » n’est presque pas plus proche que « le plus lointain ».</p>'})));
+  function draw(){
+    const d=DS[di],r=rng(seed*13+d),pairs=d>=1000?500:1500;const v=[];
+    for(let i=0;i<pairs;i++){let s=0;for(let k=0;k<d;k++){const a=r()-r();s+=a*a;}v.push(Math.sqrt(s));}
+    const z=v.map(x=>x/Math.sqrt(d));const m=z.reduce((a,b)=>a+b,0)/z.length;const sdv=Math.sqrt(z.reduce((a,b)=>a+(b-m)**2,0)/z.length);const mn=Math.min(...v),mx=Math.max(...v);
+    const nb=50;const hist=new Array(nb).fill(0);z.forEach(x=>{const b=Math.min(nb-1,Math.floor(x/1.0*nb));hist[b]++;});const hm=Math.max(...hist);
+    const g=cv.g;g.clearRect(0,0,W,H);const bw=(W-40)/nb;
+    g.fillStyle=css('--c1');hist.forEach((c,i)=>{const hh=c/hm*(H-50);g.globalAlpha=.85;g.fillRect(30+i*bw,H-28-hh,bw-1,hh);});g.globalAlpha=1;
+    g.fillStyle=css('--muted');g.font='11px sans-serif';g.strokeStyle=css('--rule');
+    for(let t=0;t<=10;t+=2){const x=30+t/10*(W-40);g.fillText(fr(t/10,1),x-8,H-12);g.beginPath();g.moveTo(x,H-28);g.lineTo(x,H-24);g.stroke();}
+    g.fillText('distance / √d',W-90,H-2);g.fillText('d = '+d,36,16);
+    stats.innerHTML='';stats.append(stat('Distance moyenne / √d',fr(m,3)),stat('Écart-type / moyenne',fr(sdv/m,3),'dispersion relative'),stat('Contraste (dmax − dmin)/dmin',fr((mx-mn)/mn,2)));
+  }
+  onTheme(draw);draw();
+})();
+
+/* ---- ANOVA ---- */
+(function(){
+  const root=$('#lab-anova');const W=640,H=180;let dlt=2,sg=1,seed=1;let z1=[],z2=[];
+  const ctl=controls(root);
+  slider(ctl,{label:'Écart entre les moyennes',min:0,max:4,step:0.1,value:2,fmt:v=>fr(v,1),onchange:v=>{dlt=v;draw();}});
+  slider(ctl,{label:'Dispersion dans chaque classe σ',min:0.3,max:2,step:0.1,value:1,fmt:v=>fr(v,1),onchange:v=>{sg=v;draw();}});
+  const bt=btns(root);bt.append(btn('Nouvel échantillon',()=>{seed++;gen();draw();}));
+  const cv=mkCanvas(root,W,H,'Valeurs de l’attribut pour deux classes');
+  const stats=h('div',{class:'stats'});const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(stats,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>F = S²<sub>ent</sub>/S²<sub>int</sub> compare la variabilité <b>entre</b> classes (les moyennes s’écartent-elles ?) à la variabilité <b>dans</b> les classes. Écarte les moyennes : F augmente. Augmente σ : F baisse, car le bruit masque l’écart. Complément : pour 2 classes de 12 exemples (1 et 22 degrés de liberté), on rejette « pas d’effet de classe » à 5 % quand F dépasse environ 4,3. L’ANOVA suppose des lois normales : c’est une méthode paramétrique, contrairement à RELIEF.</p>'})));
+  function gen(){const r=rng(seed*17+3);z1=Array.from({length:12},()=>gauss(r));z2=Array.from({length:12},()=>gauss(r));}
+  function draw(){
+    const a=z1.map(z=>sg*z),b=z2.map(z=>dlt+sg*z);const n=24,k=2;
+    const m1=a.reduce((x,y)=>x+y,0)/12,m2=b.reduce((x,y)=>x+y,0)/12,m=(m1+m2)/2;
+    const sint=(a.reduce((s,x)=>s+(x-m1)**2,0)+b.reduce((s,x)=>s+(x-m2)**2,0))/(n-k);const sent=12*((m1-m)**2+(m2-m)**2)/(k-1);const F=sent/sint;
+    const g=cv.g;g.clearRect(0,0,W,H);const sx=x=>(x+3)/10*(W-40)+20;
+    g.strokeStyle=css('--rule');g.fillStyle=css('--muted');g.font='11px sans-serif';for(let t=-3;t<=7;t++){g.beginPath();g.moveTo(sx(t),H-24);g.lineTo(sx(t),H-20);g.stroke();g.fillText(String(t),sx(t)-3,H-8);}
+    [[a,m1,45,'--c1','classe 1'],[b,m2,105,'--c2','classe 2']].forEach(([arr,mm,y,col,name])=>{g.fillStyle=css(col);arr.forEach((x,i)=>{g.globalAlpha=.85;g.beginPath();g.arc(sx(x),y+((i%3)-1)*9,5,0,7);g.fill();});g.globalAlpha=1;g.strokeStyle=css(col);g.lineWidth=2.5;g.beginPath();g.moveTo(sx(mm),y-24);g.lineTo(sx(mm),y+24);g.stroke();g.lineWidth=1;g.fillStyle=css(col);g.fillText(name,6,y-26);});
+    stats.innerHTML='';stats.append(stat('S²int (dans les classes)',fr(sint,2)),stat('S²ent (entre les classes)',fr(sent,2)),stat('F = S²ent / S²int',fr(F,2)));
+    vd.innerHTML=F>4.3?'<span class="ok">F élevé :</span> l’attribut est très indicatif de la classe, on le garde.':'<span class="ko">F faible :</span> la variabilité entre classes n’est pas plus grande que ce que le hasard de l’échantillonnage explique : attribut peu utile.';
+  }
+  onTheme(draw);gen();draw();
+})();
+
+/* ---- ACP et point aberrant ---- */
+(function(){
+  const root=$('#lab-pca');const W=640,H=400,S=80;let ang=0,out=false,base=[];
+  const ctl=controls(root);
+  const sa=slider(ctl,{label:'Angle de l’axe de projection',min:0,max:180,step:1,value:0,fmt:v=>v+'°',onchange:v=>{ang=v;draw();}});
+  const bt=btns(root);
+  const bPrinc=btn('Placer sur l’axe principal',()=>{const t=princ();ang=Math.round(((t*180/Math.PI)%180+180)%180);sa.v=ang;draw();},'pri');
+  const bOut=btn('Ajouter un point aberrant',()=>{out=!out;bOut.textContent=out?'Retirer le point aberrant':'Ajouter un point aberrant';draw();});
+  bt.append(bPrinc,bOut);
+  const cv=mkCanvas(root,W,H,'Nuage de points et axe de projection');
+  const stats=h('div',{class:'stats'});const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(stats,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Un axe d’inertie maximale est un axe où les points projetés sont le plus dispersés (variance maximale), ce qui revient à minimiser la somme des carrés des distances aux axes (critère quadratique). Ajoute le point aberrant : à lui seul il fait pivoter l’axe principal, parce que sa distance est <b>élevée au carré</b>. D’où « l’ACP est très sensible aux points aberrants ».</p><p>Limite du cours : l’ACP est linéaire. Pour des données sur une variété courbe, ISOMAP ou t-SNE peuvent mieux déplier.</p>'})));
+  (function gen(){const r=rng(21);for(let i=0;i<60;i++){const x=gauss(r)*1.5,y=0.45*x+gauss(r)*0.45;const t=0.4;base.push([x*Math.cos(t)-y*Math.sin(t)*0.3,y+x*Math.sin(t)*0.3]);}})();
+  const data=()=>out?base.concat([[3.3,-2.0]]):base;
+  const moments=(d)=>{const n=d.length;const mx=d.reduce((s,p)=>s+p[0],0)/n,my=d.reduce((s,p)=>s+p[1],0)/n;let sxx=0,syy=0,sxy=0;d.forEach(p=>{sxx+=(p[0]-mx)**2;syy+=(p[1]-my)**2;sxy+=(p[0]-mx)*(p[1]-my);});return {n,mx,my,sxx:sxx/n,syy:syy/n,sxy:sxy/n};};
+  const princ=(d)=>{const m=moments(d||data());return 0.5*Math.atan2(2*m.sxy,m.sxx-m.syy);};
+  const sx=x=>W/2+x*S,sy=y=>H/2-y*S;
+  function draw(){
+    const d=data(),m=moments(d);const t=ang*Math.PI/180,u=[Math.cos(t),Math.sin(t)];const tp=princ(d);
+    const g=cv.g;g.clearRect(0,0,W,H);
+    const line=(th,col,dash,wd)=>{g.strokeStyle=col;g.lineWidth=wd;g.setLineDash(dash);g.beginPath();g.moveTo(sx(m.mx-6*Math.cos(th)),sy(m.my-6*Math.sin(th)));g.lineTo(sx(m.mx+6*Math.cos(th)),sy(m.my+6*Math.sin(th)));g.stroke();g.setLineDash([]);};
+    line(tp,css('--c2'),[6,5],1.8);line(t,css('--moss'),[],2.6);
+    let vp=0;
+    d.forEach((p,i)=>{const dx=p[0]-m.mx,dy=p[1]-m.my;const s=dx*u[0]+dy*u[1];vp+=s*s;const px=m.mx+s*u[0],py=m.my+s*u[1];
+      g.strokeStyle=css('--rule');g.lineWidth=1;g.beginPath();g.moveTo(sx(p[0]),sy(p[1]));g.lineTo(sx(px),sy(py));g.stroke();
+      g.fillStyle=css('--moss');g.beginPath();g.arc(sx(px),sy(py),2.6,0,7);g.fill();
+      const isOut=out&&i===d.length-1;g.fillStyle=isOut?css('--minus'):css('--c1');g.beginPath();g.arc(sx(p[0]),sy(p[1]),isOut?7:4,0,7);g.fill();});
+    vp/=d.length;const tot=m.sxx+m.syy;
+    g.fillStyle=css('--muted');g.font='12px sans-serif';g.fillText('trait vert : axe choisi   pointillés orange : axe principal (ACP)',10,H-10);
+    stats.innerHTML='';stats.append(stat('Variance projetée (inertie)',fr(vp,2)),stat('Part de la variance totale',fr(vp/tot*100,1)+' %'),stat('Variance perdue',fr(tot-vp,2)),stat('Angle de l’axe principal',fr(((tp*180/Math.PI)%180+180)%180,0)+'°'));
+    const base0=((princ(base)*180/Math.PI)%180+180)%180,now=((tp*180/Math.PI)%180+180)%180;
+    vd.innerHTML=out?`Avec le point aberrant, l’axe principal est à <b>${fr(now,0)}°</b> au lieu de <b>${fr(base0,0)}°</b> sans lui.`:'Tourne l’axe : la part de variance conservée est maximale à l’angle de l’axe principal.';
+  }
+  onTheme(draw);draw();
+})();
+
+/* ---- Quiz final ---- */
+Quiz($('#qz-main'),[
+  {t:'tf',q:'Le perceptron converge toujours en un nombre fini d’étapes, quelles que soient les données.',a:false,e:'Seulement s’il existe au moins une séparatrice linéaire. Sur le XOR il ne s’arrête jamais.'},
+  {t:'mcq',q:'Quelle est la règle du perceptron pour un exemple (x<sub>i</sub>, y<sub>i</sub>) avec y<sub>i</sub> = ±1 ?',o:['Si y<sub>i</sub>·(w·x<sub>i</sub>) ≤ 0 : w ← w + η y<sub>i</sub> x<sub>i</sub>','Toujours w ← w + η x<sub>i</sub>','Si y<sub>i</sub>·(w·x<sub>i</sub>) &gt; 0 : w ← w − η x<sub>i</sub>','w ← w − η (w·x<sub>i</sub>)'],a:0,e:'On n’apprend qu’en cas d’échec, et on rapproche w·x<sub>i</sub> du bon signe.'},
+  {t:'mcq',q:'Que vaut la dérivée de la sigmoïde g ?',o:['g′(a) = g(a)(1 − g(a))','g′(a) = 1 − g(a)²','g′(a) = 1 si a &gt; 0, 0 sinon','g′(a) = g(a)'],a:0,e:'C’est pourquoi on peut la calculer à partir de la sortie déjà connue. L’option 2 est celle de tanh.'},
+  {t:'mcq',q:'Quelle fonction pour la couche de sortie d’un réseau de <b>régression</b> ?',o:['Linéaire (identité)','Sigmoïde','Softmax','Heaviside'],a:0,e:'Classification : sigmoïde ou softmax. Régression : sortie linéaire, pour couvrir tout ℝ.'},
+  {t:'tf',q:'Sans fonction d’activation non linéaire, un PMC à plusieurs couches n’est pas plus expressif qu’un perceptron.',a:true,e:'Une composition de transformations linéaires est linéaire : les couches cachées n’apportent un changement de représentation utile que grâce à la non-linéarité (raisonnement de fond, cf. XOR).'},
+  {t:'order',q:'Remets dans l’ordre une itération de l’apprentissage d’un PMC.',items:['Présenter un exemple','Calculer l’état du réseau (propagation avant)','Calculer l’erreur (y − u)²','Rétropropager le gradient (δ de la sortie vers les couches cachées)','Modifier les poids','Tester le critère d’arrêt'],e:''},
+  {t:'mcq',q:'Quelle est l’erreur δ<sub>j</sub> d’un neurone <b>caché</b> j ?',o:['δ<sub>j</sub> = g′(a<sub>j</sub>) · Σ<sub>k</sub> w<sub>jk</sub> δ<sub>k</sub>','δ<sub>j</sub> = (y<sub>j</sub> − u<sub>j</sub>) g′(a<sub>j</sub>)','δ<sub>j</sub> = Σ<sub>k</sub> δ<sub>k</sub>','δ<sub>j</sub> = z<sub>j</sub> · η'],a:0,e:'L’erreur des cellules suivantes remonte pondérée par les poids w<sub>jk</sub> puis par g′(a<sub>j</sub>). L’option 2 est la formule de la couche de sortie.'},
+  {t:'tf',q:'Une passe de rétropropagation coûte O(w), où w est le nombre de poids du réseau.',a:true,e:'Le coût du gradient est du même ordre que celui de la propagation avant.'},
+  {t:'mcq',q:'Sur quoi repose la règle d’arrêt prématuré (<em>early stopping</em>) ?',o:['L’erreur sur un ensemble de validation cesse de baisser','L’erreur d’apprentissage atteint 0','Le nombre d’époques atteint 100','Les poids cessent de varier'],a:0,e:'L’erreur d’apprentissage, elle, continue de baisser pendant le sur-apprentissage.'},
+  {t:'mcq',q:'Quel est l’intérêt du mode « en ligne » (gradient stochastique) face au mode « lot complet » ?',o:['Plus de mises à jour, plus bruitées : il aide en partie à échapper aux minima locaux','Il garantit d’atteindre le minimum global','Il n’a pas besoin de pas d’apprentissage','Il évite le sur-apprentissage'],a:0,e:'Aucun des deux ne garantit l’optimum global.'},
+  {t:'mcq',q:'Pourquoi utiliser l’entropie croisée en sortie d’un classifieur ?',o:['Pour que la sortie soit calibrée comme une probabilité d’appartenance à la classe','Pour avoir une sortie linéaire','Pour éviter d’avoir une couche cachée','Pour accélérer la propagation avant'],a:0,e:'ŷ ∈ [0,1] est interprété comme P(classe C | x).'},
+  {t:'mcq',q:'Pourquoi coder 26 lettres sur 10 bits (ECOC) plutôt que 5 ?',o:['La redondance permet de corriger des erreurs de classifieurs binaires','5 bits ne suffisent pas à coder 26 valeurs','Les réseaux ne savent traiter que 10 sorties','Pour réduire le nombre de classifieurs'],a:0,e:'2⁵ = 32 ≥ 26 suffirait pour coder, mais on veut des codes éloignés en distance de Hamming.'},
+  {t:'num',q:'Distance de Hamming entre les codes de A (0000000000) et B (0000101011) ?',a:4,e:'B a quatre bits à 1 (positions 5, 7, 9, 10).'},
+  {t:'num',q:'AlexNet, 1<sup>re</sup> couche : entrée 227, filtres 11×11, pas 4. Taille de sortie par dimension ?',a:55,e:'(227 − 11)/4 + 1 = 55.'},
+  {t:'num',q:'Combien de neurones dans la sortie 55 × 55 × 96 de cette couche ?',a:290400,e:'55 × 55 = 3 025 ; × 96 = 290 400.'},
+  {t:'mcq',q:'Expériences de Zhang et al. (2017) : avec des étiquettes aléatoires, que constate-t-on ?',o:['100 % d’exactitude d’apprentissage mais ≈ 10 % en test : le réseau peut mémoriser n’importe quel jeu de données','Le réseau n’arrive pas à apprendre','L’exactitude de test augmente','La convergence est beaucoup plus rapide'],a:0,e:'La capacité de H n’est pas limitée : l’exactitude d’apprentissage ne dit rien sur la généralisation.'},
+  {t:'mcq',q:'BatchNorm et LayerNorm se distinguent par…',o:['BatchNorm : statistiques par descripteur sur le batch ; LayerNorm : par exemple sur ses descripteurs','BatchNorm : par exemple ; LayerNorm : par descripteur','BatchNorm divise par la norme L2, LayerNorm non','Aucune différence'],a:0,e:'Voir le tableau 6 × 3 de la diapo 131 : lignes pour le batch, colonnes pour la couche.'},
+  {t:'tf',q:'Le dropout éteint aléatoirement des neurones aussi bien à l’apprentissage qu’au test.',a:false,e:'Il n’est appliqué qu’à l’apprentissage ; au test on utilise tous les neurones.'},
+  {t:'mcq',q:'Que fait le « reservoir computing » ?',o:['Utilise un réseau récurrent non entraîné et n’entraîne que la couche de sortie','Entraîne uniquement les premières couches','Supprime la couche de sortie','Remplace la rétropropagation par la règle de Hebb'],a:0,e:'Il réintroduit une dynamique, utile pour les séries temporelles.'},
+  {t:'mcq',q:'Lequel est une méthode de <b>filtre</b> pour la sélection de variables ?',o:['ANOVA ou RELIEF','Les arbres de décision','La sélection ascendante (<em>forward</em>) avec un classifieur','Le LASSO'],a:0,e:'Arbres et LASSO : méthodes intégrées. Forward/backward : symbiose (<em>wrapper</em>).'},
+  {t:'mcq',q:'Pourquoi l’ACP est-elle très sensible aux points aberrants ?',o:['Elle optimise un critère quadratique : un point lointain pèse par le carré de sa distance','Elle est non linéaire','Elle ignore les valeurs extrêmes','Elle travaille sur les rangs'],a:0,e:'Un seul point aberrant peut faire pivoter l’axe principal.'},
+  {t:'mcq',q:'Un jeu de données compte 99 % d’exemples de la classe A. Quel remède figure au cours ?',o:['Sous-échantillonner la classe majoritaire, fabriquer des exemples fictifs de la minoritaire, ou modifier les coûts d’erreur','Supprimer la classe minoritaire','Normaliser les données','Augmenter le pas d’apprentissage'],a:0,e:'Le sous-échantillonnage n’est pas adapté quand il y a peu de données.'},
+  {t:'mcq',q:'Que provoque la malédiction de la dimensionnalité sur les méthodes fondées sur les distances ?',o:['Les distances entre paires de points se concentrent : tout le monde est à peu près à la même distance','Les distances deviennent nulles','Les distances deviennent toutes très différentes','Rien, elles sont invariantes'],a:0,e:'C’est le phénomène de concentration illustré par les histogrammes de la diapo 171.'}
+]);
+
+</script>
+</body>
+</html>

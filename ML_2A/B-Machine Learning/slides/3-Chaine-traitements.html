@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Fiche de révision interactive : chaîne de traitements en machine learning (V. Guigue, AgroParisTech)">
+<title>Fiche · Chaîne de traitements</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650&family=Public+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F8F7; --surface:#FFFFFF; --ink:#1C2B36; --muted:#5A6B78;
+  --moss:#3F6B4A; --moss-soft:#E3EFE6; --rule:#D3DCDF;
+  --plus:#2F7A4E; --minus:#B0413E; --unknown:#C9D3D8; --warn:#8A5A00; --warn-bg:#FBF1DC;
+  --blue:#2B6CB0; --blue-soft:#E4EEF8;
+  --c1:#2B6CB0; --c2:#C2571A; --c3:#2F7A4E; --c4:#8B3FA8; --c5:#B08A00; --c6:#0E8A8A;
+  --serif:"Newsreader", Georgia, "Times New Roman", serif;
+  --sans:"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11181C; --surface:#18222A; --ink:#E3EBEE; --muted:#9AAAB4;
+    --moss:#8DC29A; --moss-soft:#1F3327; --rule:#2C3A43;
+    --plus:#6FC08F; --minus:#E07A76; --unknown:#34434C; --warn:#E8B75A; --warn-bg:#2E2615;
+    --blue:#7FB2E5; --blue-soft:#1B2B3B;
+    --c1:#7FB2E5; --c2:#F0A06A; --c3:#6FC08F; --c4:#C79AE0; --c5:#E8C95A; --c6:#5FCFCF;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11181C; --surface:#18222A; --ink:#E3EBEE; --muted:#9AAAB4;
+  --moss:#8DC29A; --moss-soft:#1F3327; --rule:#2C3A43;
+  --plus:#6FC08F; --minus:#E07A76; --unknown:#34434C; --warn:#E8B75A; --warn-bg:#2E2615;
+  --blue:#7FB2E5; --blue-soft:#1B2B3B;
+  --c1:#7FB2E5; --c2:#F0A06A; --c3:#6FC08F; --c4:#C79AE0; --c5:#E8C95A; --c6:#5FCFCF;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:1rem;line-height:1.6}
+img,svg{max-width:100%}
+a{color:var(--moss)}
+:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
+
+.layout{display:grid;grid-template-columns:15rem minmax(0,1fr);gap:3rem;max-width:74rem;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+nav.toc{position:sticky;top:calc(1.5rem + env(safe-area-inset-top,0px));align-self:start;font-size:.9rem;max-height:calc(100vh - 3rem);overflow:auto}
+nav.toc p{margin:0 0 .6rem;color:var(--muted);font-weight:600}
+nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:t}
+nav.toc li{counter-increment:t;margin:.1rem 0}
+nav.toc a{display:flex;gap:.6rem;padding:.28rem .5rem;border-radius:4px;color:var(--ink);text-decoration:none}
+nav.toc a::before{content:counter(t);font-family:var(--mono);color:var(--moss);min-width:1.1rem}
+nav.toc a:hover{background:var(--moss-soft)}
+main{max-width:50rem;min-width:0}
+
+header.hero{border-bottom:1px solid var(--rule);padding-bottom:1.75rem;margin-bottom:2rem}
+header.hero h1{font-family:var(--serif);font-weight:650;font-size:clamp(2rem,4.5vw,3rem);line-height:1.1;margin:0 0 .75rem;letter-spacing:-.01em}
+header.hero p{margin:0;color:var(--muted);max-width:42rem}
+.focus{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.1rem}
+.focus a{font-size:.85rem;padding:.3rem .7rem;border:1px solid var(--moss);border-radius:999px;text-decoration:none}
+.focus a:hover{background:var(--moss-soft)}
+
+section{padding-top:1.5rem;margin-bottom:2.5rem;scroll-margin-top:1rem}
+h2{font-family:var(--serif);font-weight:650;font-size:1.75rem;line-height:1.2;margin:0 0 1rem;display:flex;gap:.75rem;align-items:baseline}
+h2 .n{font-family:var(--mono);font-size:1rem;color:var(--moss);font-weight:600}
+h3{font-size:1.05rem;margin:1.75rem 0 .5rem}
+p{margin:.5rem 0 .9rem}
+ul,ol{padding-left:1.25rem;margin:.4rem 0 1rem}
+li{margin:.2rem 0}
+strong{font-weight:700}
+code,.f{font-family:var(--mono);font-size:.9em;overflow-wrap:anywhere}
+.fx{font-family:var(--mono);font-size:.95em;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:.55rem .8rem;margin:.6rem 0;overflow-x:auto;white-space:pre;line-height:1.7}
+sub,sup{line-height:0}
+
+.scroll{overflow-x:auto;margin:1rem 0 1.25rem;border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.92rem;min-width:34rem}
+th,td{text-align:left;vertical-align:top;padding:.6rem .8rem;border-bottom:1px solid var(--rule)}
+th{background:var(--moss-soft);font-weight:700}
+tr:last-child td{border-bottom:0}
+td.sub{color:var(--muted);font-style:italic}
+
+.note{border-left:3px solid var(--warn);background:var(--warn-bg);padding:.7rem 1rem;border-radius:0 6px 6px 0;margin:1rem 0;font-size:.93rem}
+.key{border-left:3px solid var(--moss);background:var(--moss-soft);padding:.8rem 1rem;border-radius:0 6px 6px 0;margin:1rem 0}
+.key p,.note p,.aside p{margin:.2rem 0}
+.aside{border-left:3px solid var(--blue);background:var(--blue-soft);padding:.7rem 1rem;border-radius:0 6px 6px 0;margin:1rem 0;font-size:.93rem}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--warn);margin-right:.4rem}
+.aside .tag{color:var(--blue)} .key .tag{color:var(--moss)}
+
+/* Timeline */
+.timeline{list-style:none;padding:0;margin:1rem 0;position:relative}
+.timeline::before{content:"";position:absolute;left:6.4rem;top:.4rem;bottom:.4rem;width:2px;background:var(--rule)}
+.timeline li{display:grid;grid-template-columns:5.6rem 1fr;gap:1.6rem;margin:0 0 1.1rem;position:relative}
+.timeline li::after{content:"";position:absolute;left:6.05rem;top:.45rem;width:.8rem;height:.8rem;border-radius:50%;background:var(--surface);border:2px solid var(--moss)}
+.timeline li.fail::after{border-color:var(--minus)}
+.timeline .d{font-family:var(--mono);font-size:.82rem;color:var(--muted);text-align:right;padding-top:.15rem}
+.timeline .t{font-weight:700}
+.timeline .b{font-size:.93rem}
+.timeline li.fail .t{color:var(--minus)}
+.hopes{counter-reset:h;list-style:none;padding:0;display:grid;gap:.5rem}
+.hopes li{counter-increment:h;display:flex;gap:.75rem;align-items:baseline}
+.hopes li::before{content:counter(h);font-family:var(--mono);color:var(--moss);font-weight:600}
+
+/* Labs */
+.lab{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:1.25rem 1.25rem 1.4rem;margin:1.5rem 0}
+.lab>h3{margin:0 0 .25rem;font-family:var(--serif);font-size:1.3rem;font-weight:650}
+.lab .lead{margin:.1rem 0 .9rem;color:var(--muted);font-size:.93rem}
+.lab .lead b{color:var(--ink)}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.8rem 1.5rem;margin:.6rem 0 .9rem}
+.ctl label{display:block;font-size:.88rem;font-weight:600;margin-bottom:.25rem}
+.ctl output{font-family:var(--mono);color:var(--moss);margin-left:.2rem;font-weight:600}
+input[type=range]{width:100%;accent-color:var(--moss)}
+input[type=number],input[type=text],select{font:inherit;font-size:.9rem;padding:.25rem .4rem;border:1px solid var(--rule);border-radius:4px;background:var(--bg);color:var(--ink);max-width:100%}
+input[type=number]{width:4.6rem;font-family:var(--mono)}
+.btns{display:flex;flex-wrap:wrap;gap:.5rem;margin:.6rem 0}
+button{font:inherit;font-size:.85rem;padding:.38rem .8rem;border-radius:4px;border:1px solid var(--moss);background:transparent;color:var(--moss);cursor:pointer}
+button:hover{background:var(--moss-soft)}
+button.pri{background:var(--moss);color:var(--surface)} button.pri:hover{opacity:.9;background:var(--moss)}
+button:disabled{opacity:.45;cursor:default}
+.seg{display:inline-flex;flex-wrap:wrap;gap:0;border:1px solid var(--moss);border-radius:5px;overflow:hidden}
+.seg button{border:0;border-radius:0;border-right:1px solid var(--moss)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"],.btns button[aria-pressed="true"]{background:var(--moss);color:var(--surface)}
+canvas{display:block;width:100%;height:auto;border:1px solid var(--rule);border-radius:6px;background:var(--bg);touch-action:manipulation}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:.9rem;align-items:start}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:.6rem;margin:.8rem 0}
+.stat{border:1px solid var(--rule);border-radius:6px;padding:.5rem .7rem;background:var(--bg)}
+.stat .v{font-family:var(--mono);font-size:1.02rem;font-weight:600;word-break:break-all}
+.stat .l{font-size:.78rem;color:var(--muted)}
+.stat .fx2{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+.verdict{margin:.7rem 0 0;font-size:.93rem}
+.ok{color:var(--plus);font-weight:700} .ko{color:var(--minus);font-weight:700}
+.legend{font-size:.83rem;color:var(--muted);margin:.4rem 0 0}
+.sw{display:inline-block;width:.75rem;height:.75rem;border-radius:2px;vertical-align:-1px;margin-right:.25rem}
+details.obs{margin:.8rem 0 0;font-size:.9rem}
+details.obs summary{cursor:pointer;color:var(--moss);font-weight:600}
+details.obs>div{margin-top:.4rem;padding:.4rem .8rem;border-left:2px solid var(--rule)}
+table.mini{min-width:0;font-size:.85rem}
+table.mini td,table.mini th{padding:.35rem .55rem}
+td.num,th.num{text-align:right;font-family:var(--mono)}
+td.hl,th.hl{background:var(--moss-soft)}
+tr.hl td{background:var(--moss-soft)}
+.mono{font-family:var(--mono)}
+.bar{height:.7rem;background:var(--unknown);border-radius:3px;overflow:hidden;min-width:5rem}
+.bar>i{display:block;height:100%;background:var(--moss)}
+
+/* objets induction */
+.objs{display:grid;grid-template-columns:repeat(auto-fill,minmax(8.2rem,1fr));gap:.5rem;margin:.7rem 0}
+.obj{border:1px solid var(--rule);border-radius:6px;padding:.4rem .5rem;text-align:center;background:var(--bg);cursor:pointer;font:inherit;color:var(--ink);position:relative}
+.obj .g{height:2.3rem;display:flex;align-items:center;justify-content:center;gap:.2rem}
+.obj .g span{display:inline-block;background:currentColor}
+.obj .g span.c{border-radius:50%}
+.obj .lb{font-family:var(--mono);font-weight:700;font-size:.95rem}
+.obj .ds{font-size:.7rem;color:var(--muted);line-height:1.2}
+.obj.p{border-color:var(--plus)} .obj.m{border-color:var(--minus)} .obj.q{border-style:dashed;border-width:2px;border-color:var(--warn)}
+.obj.p .lb{color:var(--plus)} .obj.m .lb{color:var(--minus)} .obj.x .lb{color:var(--muted)}
+.obj.bad{outline:2px solid var(--minus)}
+.obj.off{opacity:.55}
+.chk{display:flex;flex-wrap:wrap;gap:.4rem 1rem;font-size:.9rem;margin:.3rem 0}
+.chk label{display:flex;gap:.35rem;align-items:center;cursor:pointer}
+
+/* quiz */
+.qz{margin:.6rem 0}
+.qhead{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;justify-content:space-between;margin:.4rem 0 .8rem}
+.qscore{font-family:var(--mono);font-size:.9rem}
+.qc{border:1px solid var(--rule);border-radius:8px;background:var(--surface);padding:.8rem 1rem;margin:.6rem 0}
+.qc .qq{font-weight:600;margin:0 0 .5rem}
+.qc .qq .qn{font-family:var(--mono);color:var(--moss);margin-right:.4rem}
+.opts{display:grid;gap:.4rem}
+.opts button{text-align:left;padding:.5rem .7rem;border-color:var(--rule);color:var(--ink);background:var(--bg)}
+.opts button:hover:not(:disabled){border-color:var(--moss)}
+.opts button.right{border-color:var(--plus);background:var(--moss-soft);opacity:1}
+.opts button.wrong{border-color:var(--minus);opacity:1}
+.opts.row{display:flex;flex-wrap:wrap}
+.fb{margin:.6rem 0 0;font-size:.92rem}
+.fb:empty{display:none}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:.4rem 0}
+.chips button{border-color:var(--rule);color:var(--ink);background:var(--bg);text-align:left}
+.chips button b{font-family:var(--mono);color:var(--moss);margin-right:.35rem}
+.numin{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.numin input{width:9rem}
+
+footer{border-top:1px solid var(--rule);padding-top:1rem;color:var(--muted);font-size:.85rem}
+
+@media (max-width: 60rem){
+  .layout{grid-template-columns:1fr;gap:1rem;padding-top:1.5rem}
+  nav.toc{position:static;max-height:none;border:1px solid var(--rule);border-radius:6px;padding:.75rem;background:var(--surface)}
+  nav.toc ol{display:grid;grid-template-columns:repeat(auto-fill,minmax(12rem,1fr))}
+}
+@media (max-width: 34rem){
+  .timeline::before{left:.35rem}
+  .timeline li{grid-template-columns:1fr;gap:.1rem;padding-left:1.6rem}
+  .timeline li::after{left:0}
+  .timeline .d{text-align:left}
+  .lab{padding:1rem .85rem 1.1rem}
+}
+@media print{
+  nav.toc,.btns,.controls,.seg{display:none}
+  .layout{display:block}
+  .lab{break-inside:avoid}
+  details>*{display:block}
+}
+
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc" aria-label="Sommaire">
+  <p>Sommaire</p>
+  <ol>
+    <li><a href="#chaine">Chaîne de traitements</a></li>
+    <li><a href="#missing">Valeurs manquantes</a></li>
+    <li><a href="#discretes">Variables discrètes</a></li>
+    <li><a href="#deep">Ouverture : deep learning</a></li>
+    <li><a href="#simplif">Simplification des données</a></li>
+    <li><a href="#metier">Transformations métiers</a></li>
+    <li><a href="#target">Target encoding</a></li>
+    <li><a href="#norm">Normalisation</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+    <li><a href="#pieges">Pièges à éviter</a></li>
+    <li><a href="#test">Auto-test</a></li>
+  </ol>
+</nav>
+
+<main>
+<header class="hero">
+  <h1>La chaîne de traitements</h1>
+  <p>Fiche de révision du cours 3 de Vincent Guigue (AgroParisTech, 16 diapositives), complétée par tes notes. Les encadrés bleus « Tes notes » reprennent ce que tu avais écrit, avec quelques précisions.</p>
+  <div class="focus">
+    <a href="#lab-missing">Valeurs manquantes</a>
+    <a href="#lab-checkers">Exemple checkers</a>
+    <a href="#lab-target">Target encoding</a>
+    <a href="#lab-norm1">Normalisation</a>
+    <a href="#lab-sig">Signaux</a>
+    <a href="#test">Auto-test</a>
+  </div>
+</header>
+
+<!-- 1 -->
+<section id="chaine">
+  <h2><span class="n">1</span>Chaîne de traitements</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Levier</th><th>Contenu</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Intégration des connaissances expert / métier</strong></td><td>Construction de caractéristiques · sélection de caractéristiques · choix des métriques</td></tr>
+      <tr><td><strong>Stabilisation numérique</strong></td><td>Normalisation</td></tr>
+      <tr><td><strong>Intégration de nos outils dans scikit-learn</strong></td><td>Objectifs : comprendre les principaux leviers de performances en machine learning (« encore ! »), et savoir les mettre en œuvre dans scikit-learn</td></tr>
+    </tbody>
+  </table></div>
+  <p>Plan du cours : valeurs manquantes → caractéristiques (variables discrètes, simplification, transformations métiers, target encoding) → normalisation → conclusion.</p>
+</section>
+
+<!-- 2 -->
+<section id="missing">
+  <h2><span class="n">2</span>Valeurs manquantes</h2>
+  <h3>Variables continues</h3>
+  <p>Les manques sont souvent localisés sur une (ou quelques) colonne(s). Options :</p>
+  <ul>
+    <li><strong>EM</strong> : estimation des données manquantes.</li>
+    <li><strong>Estimer simplement</strong> les données (interpolation).</li>
+    <li><strong>Supprimer les lignes</strong> affectées.</li>
+    <li><strong>Affecter une valeur arbitraire</strong> : moyenne / médiane ; plus proche voisin.</li>
+  </ul>
+  <h3>Variables discrètes</h3>
+  <ul>
+    <li>La <strong>valeur la plus fréquente</strong> ; un <strong>échantillonnage</strong> (multinomial) ; le <strong>plus proche voisin</strong> (sur les autres caractéristiques) ; <strong>construire un prédicteur</strong>.</li>
+  </ul>
+  <div class="lab" id="lab-missing">
+    <h3>Imputer la puissance de la voiture 32</h3>
+    <p class="lead">Les lignes 30 à 40 du jeu auto-mpg de la diapo 4 : la puissance (<em>horsepower</em>) de la voiture 32 est manquante (« ? »). <b>Prédis :</b> la moyenne des autres voitures est-elle une bonne estimation pour une 4 cylindres de 98 pouces cubes ?</p>
+  </div>
+  <div class="aside"><p><span class="tag">Tes notes</span>(1) « Attention aux types : "?" = valeur manquante peut conduire à un type str » : oui, une seule chaîne « ? » dans une colonne fait de toute la colonne un texte ; il faut déclarer « ? » comme valeur manquante à la lecture (<code>na_values="?"</code> dans <code>pandas.read_csv</code>, complément). (2) Trois options : <em>virer la ligne</em>, <em>virer la colonne</em> si trop de manquants, <em>estimer</em> : moyenne, puis médiane (qui écarte l’influence des valeurs aberrantes), voire un modèle qui prédit la valeur : c’est exactement la liste du cours (plus proche voisin, EM, prédicteur).</p></div>
+</section>
+
+<!-- 3 -->
+<section id="discretes">
+  <h2><span class="n">3</span>Variables discrètes</h2>
+  <p>Cas <strong>binaire</strong> / cas <strong>n-aire</strong>. Une couleur (Red, Red, Yellow, Green, Yellow) devient <strong>trois colonnes</strong> (Red, Yellow, Green) valant 0 ou 1 : c’est l’encodage <strong>one-hot</strong>. Option intéressante : <strong>grouper les catégories peu fréquentes</strong> : <code>OneHotEncoder(min_frequency=6, sparse=False)</code>. Pour aller plus loin : <strong>ECoC</strong> (codes correcteurs d’erreur) et <strong>embedding</strong>.</p>
+  <div class="lab" id="lab-discret">
+    <h3>One-hot avec regroupement des catégories rares</h3>
+    <p class="lead">20 voitures de 5 couleurs, dont certaines très rares. <b>Monte</b> le seuil <code>min_frequency</code> : combien de colonnes restent ?</p>
+  </div>
+  <div class="aside"><p><span class="tag">Tes notes</span>« On veut virer les variables discrètes » : plus exactement, on veut les <strong>transformer en variables numériques</strong> (pas les supprimer). « Homme | Femme » se code 0 | 1 (cas binaire). « RGB : 0 | 1 impossible » : avec trois couleurs, un codage 0/1/2 inventerait un ordre (le vert « serait plus grand » que le rouge) ; le one-hot crée 3 colonnes Oui/Non. Complément : dans scikit-learn récent, le paramètre <code>sparse</code> a été renommé <code>sparse_output</code> ; la diapo utilise l’ancien nom.</p></div>
+</section>
+
+<!-- 4 -->
+<section id="deep">
+  <h2><span class="n">4</span>Ouverture vers le deep learning</h2>
+  <p>« C’est quoi le deep learning ? » (réponse assez ouverte) : <strong>apprendre la meilleure représentation</strong>.</p>
+  <ul>
+    <li>Apprendre des représentations (et des distances) entre éléments <strong>discrets</strong> : distance sémantique et/ou grammaticale entre les mots ; distance entre profils d’utilisateurs dans les systèmes de recommandation ; distance entre des graphes ou des nœuds de graphe.</li>
+    <li>Apprendre des représentations d’<strong>objets complexes</strong> : en vision, projeter les données dans un espace de faible dimension sémantique.</li>
+    <li>Des architectures <strong>génératives</strong> (GPT, Dall-e…) transférables d’une application à l’autre.</li>
+    <li>Architectures complexes : différents objectifs et modalités de données ; modélisation directe des contraintes métiers.</li>
+  </ul>
+  <p>Conférence de référence : ICLR (<em>International Conference on Representation Learning</em>, d’après la diapo).</p>
+</section>
+
+<!-- 5 -->
+<section id="simplif">
+  <h2><span class="n">5</span>Simplification des données</h2>
+  <ul>
+    <li><strong>Binarisation</strong> : par exemple les pixels d’une image USPS, dont les histogrammes sont presque bimodaux (fond ou trait).</li>
+    <li><strong>Discrétisation</strong> : par <strong>quantiles</strong> (même nombre d’exemples par intervalle) ou <strong>linéaire</strong> (même largeur), par exemple sur les colonnes d’auto-mpg.</li>
+  </ul>
+  <div class="lab" id="lab-binar">
+    <h3>Binariser et discrétiser</h3>
+    <p class="lead">À gauche : un « pixel » presque toujours 0 ou grand ; choisis le seuil de binarisation. À droite : un attribut asymétrique ; compare des intervalles linéaires et des quantiles.</p>
+  </div>
+  <div class="aside"><p><span class="tag">Tes notes</span>« Visualiser les données avant de travailler pour comprendre. » C’est indispensable pour choisir un seuil de binarisation ou un nombre d’intervalles. « Cela permet d’introduire de nouveaux hyperparamètres (qu’on n’optimisera pas car trop lourd en calcul) : se fier à son instinct sur ce qui marche le mieux. » Oui : seuil de binarisation, nombre de quantiles sont des hyperparamètres de plus, et on les fixe souvent d’après l’histogramme plutôt que par grille de recherche.</p></div>
+</section>
+
+<!-- 6 -->
+<section id="metier">
+  <h2><span class="n">6</span>Transformations arbitraires / métiers</h2>
+  <p>La diapo montre le jeu auto-mpg complet (mpg, cylinders, displacement, horsepower, weight, acceleration, model year, origin, car name) et pose : « Comment gérer la dernière colonne ? » (le nom de la voiture).</p>
+  <div class="aside"><p><span class="tag">Complément</span>La colonne « car name » est du texte à très grande cardinalité (presque une valeur par ligne) : inutilisable telle quelle. Pistes : en extraire une caractéristique métier (la <em>marque</em>, premier mot du nom) puis la traiter comme une variable discrète (one-hot en regroupant les marques rares), ou l’ignorer.</p></div>
+  <div class="aside"><p><span class="tag">Tes notes</span>« Ramener les données à la mesure (log, exp…) peut aider le modèle. Rajouter des colonnes : combinaison de 2 colonnes (largeur × longueur = surface) si la surface est importante dans mon problème. » Oui : c’est l’intégration de la connaissance métier dans les caractéristiques. L’exemple qui suit le montre.</p></div>
+  <h3>Exemple « checkers »</h3>
+  <p>Des points d’un damier sur une grille de 5 × 5 cases. Avec un <strong>classifieur linéaire par défaut</strong>, les scores de validation croisée sont catastrophiques (≈ 0,5, 0,5, 0,3, 0,5, 0,4 : au niveau du hasard). En <strong>ajoutant des colonnes</strong> (intervalles binaires pair/impair sur les deux dimensions), les scores montent à ≈ 0,75–0,9 (d’après la diapo).</p>
+  <div class="lab" id="lab-checkers">
+    <h3>Le damier et les colonnes ajoutées</h3>
+    <p class="lead">Un classifieur linéaire (régression logistique) sur différents jeux de colonnes, avec validation croisée à 5 plis. <b>Prédis :</b> les colonnes « pair/impair » suffisent-elles à séparer un damier ? De quelle colonne a-t-on encore besoin ?</p>
+  </div>
+</section>
+
+<!-- 7 -->
+<section id="target">
+  <h2><span class="n">7</span>Target encoding</h2>
+  <p>« Intéressant… mais dangereux : gros risque de fuite. » On remplace chaque catégorie par la <strong>moyenne de la cible</strong> y sur les exemples de cette catégorie.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>workclass</th><th>target</th><th></th><th>target mean</th><th></th><th>workclass encodée</th></tr></thead>
+    <tbody>
+      <tr><td>State-gov</td><td>0</td><td>→</td><td>0</td><td>→</td><td class="num">0</td></tr>
+      <tr><td>Self-emp-not-inc</td><td>1</td><td>→</td><td>1</td><td>→</td><td class="num">1</td></tr>
+      <tr><td>Private</td><td>0</td><td>→</td><td rowspan="3">1/3</td><td>→</td><td class="num">1/3</td></tr>
+      <tr><td>Private</td><td>0</td><td>→</td><td>→</td><td class="num">1/3</td></tr>
+      <tr><td>Private</td><td>1</td><td>→</td><td>→</td><td class="num">1/3</td></tr>
+    </tbody>
+  </table></div>
+  <div class="lab" id="lab-target">
+    <h3>La fuite du target encoding</h3>
+    <p class="lead">Les étiquettes sont ici <b>tirées au hasard, sans aucun lien</b> avec la catégorie. Un bon modèle ne peut pas dépasser 50 % en test. <b>Prédis :</b> que va afficher le modèle en apprentissage quand chaque catégorie contient peu d’exemples ?</p>
+  </div>
+  <div class="aside"><p><span class="tag">Tes notes</span>« On encode la cible (y) dans chacune des variables prédictives : source de nombreux problèmes (fuite de données). » Oui : la variable explicative <em>contient</em> l’étiquette de l’exemple, surtout quand une catégorie n’a que quelques lignes. Complément (remède) : calculer l’encodage <strong>hors pli</strong> (pour chaque ligne, avec la moyenne des <em>autres</em> plis), ou lisser vers la moyenne globale.</p></div>
+</section>
+
+<!-- 8 -->
+<section id="norm">
+  <h2><span class="n">8</span>Normalisation</h2>
+  <h3>Pourquoi normaliser ? (par ordre d’usage)</h3>
+  <ol>
+    <li><strong>Améliorer les performances</strong> : tirer parti d’informations à différentes échelles.</li>
+    <li><strong>Faciliter le réglage des hyperparamètres</strong> : mêmes ordres de grandeur ⇒ mêmes réglages.</li>
+    <li><strong>Respecter les propriétés du modèle</strong> : par ex. hypothèse multinomiale ; modèles sans biais (normalisation des y).</li>
+  </ol>
+  <h3>Normalisation gaussienne (par variable)</h3>
+  <div class="fx">Z<sub>j</sub> = (X<sub>j</sub> − μ<sub>j</sub>) / σ<sub>j</sub>        (centrer-réduire chaque colonne = « normalisation standard » de scikit-learn)</div>
+  <p>Un test à faire <strong>systématiquement</strong> (la fonction est implémentée dans tous les systèmes).</p>
+  <div class="lab" id="lab-norm1">
+    <h3>Qui souffre d’une échelle démesurée ?</h3>
+    <p class="lead">Deux variables utiles (échelle 1) et une variable inutile d’échelle s. Trois modèles, avec et sans normalisation. <b>Prédis :</b> quel modèle ne s’en aperçoit pas du tout ?</p>
+  </div>
+  <h3>La normalisation par individu (par ligne)</h3>
+  <div class="note"><p><span class="tag">Attention</span>Elle est <strong>liée à la nature des données</strong> (texte, signaux…).</p></div>
+  <div class="fx">min-max :        x̃<sub>i</sub> = (x<sub>i</sub> − min(x<sub>i</sub>)) / (max(x<sub>i</sub>) − min(x<sub>i</sub>)) ∈ [0, 1]
+multinomiale :  x̃<sub>i</sub> = x<sub>i</sub> / Σ<sub>j</sub> x<sub>ij</sub> ∈ [0, 1],       Σ<sub>j</sub> x̃<sub>ij</sub> = 1
+produits scalaires (matrices de Gram) :  x̃<sub>i</sub> = x<sub>i</sub> / √(Σ<sub>j</sub> x<sub>ij</sub>²),       ‖x̃<sub>i</sub>‖ = 1</div>
+  <h3>Exemple : classification de signaux</h3>
+  <ul>
+    <li><strong>Détection de motifs indépendamment de l’échelle</strong> : normalisation par individu (min-max), somme à 1 (signaux positifs), somme des carrés à 1, somme à 0…</li>
+    <li><strong>Invariance en translation</strong> (ou pas, selon la nature des informations discriminantes) : calcul des moyennes, écarts-types ; FFT, PSD.</li>
+  </ul>
+  <div class="lab" id="lab-sig">
+    <h3>Normaliser chaque signal</h3>
+    <p class="lead">Deux formes de signaux (une bosse / deux bosses), avec des amplitudes et des niveaux de base très différents. Un plus proche voisin peut-il retrouver la forme ? <b>Prédis :</b> quelles normalisations suppriment le niveau de base et l’amplitude ?</p>
+  </div>
+  <div class="aside"><p><span class="tag">Tes notes</span>« Pour : obligatoire pour les entrées de réseaux de neurones. Contre : sert à rien pour les arbres et le gradient boosting ; perd une part d’information directe. » Précisions : pour les réseaux de neurones c’est très fortement recommandé (descente de gradient sensible aux échelles) plutôt qu’« obligatoire » ; les <strong>arbres</strong> ne comparent que l’ordre des valeurs d’une colonne, donc une transformation croissante de chaque colonne ne change rien (voir laboratoire) ; on « perd » l’échelle absolue (une valeur de 500 € ou de 5 000 € n’est plus visible). « Normaliser les lignes : texte, séries temporelles » : c’est la normalisation par individu ci-dessus.</p></div>
+</section>
+
+<!-- 9 -->
+<section id="conclusion">
+  <h2><span class="n">9</span>Conclusion : approche standard en ML</h2>
+  <ol>
+    <li><strong>Traitements</strong> = interprétation des informations métier / expert.</li>
+    <li><strong>Batteries de tests classiques</strong> pour estimer les performances attendues : normalisation standard ; modèles linéaires + forêts ; validation croisée ou autre selon les cas.</li>
+    <li><strong>Optimisation</strong> (idéalement automatisée ou semi-automatisée) : feature engineering, grid-search, ensembling.</li>
+  </ol>
+  <p>Beaucoup d’outils existent en scikit-learn ⇒ maîtrise + documentation. Lorsqu’il manque un outil ⇒ <strong>penser intégration</strong> (l’insérer dans le cadre de scikit-learn).</p>
+  <div class="aside"><p><span class="tag">Complément : à quoi ressemble une chaîne</span></p>
+<pre class="fx" style="margin:.4rem 0 0">from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import cross_val_score
+
+num = Pipeline([("imp", SimpleImputer(strategy="median")), ("norm", StandardScaler())])
+cat = OneHotEncoder(min_frequency=6, handle_unknown="infrequent_if_exist")
+pre = ColumnTransformer([("num", num, cols_num), ("cat", cat, cols_cat)])
+model = Pipeline([("pre", pre), ("clf", RandomForestClassifier())])
+scores = cross_val_score(model, X, y, cv=5)     # les statistiques sont recalculées dans chaque pli</pre>
+  <p style="margin-top:.5rem">L’intérêt du <em>pipeline</em> : moyennes, médianes, écarts-types et catégories sont calculés sur l’apprentissage de chaque pli seulement, jamais sur les données de test (évite la fuite).</p></div>
+</section>
+
+<!-- 10 -->
+<section id="pieges">
+  <h2><span class="n">10</span>Pièges à éviter</h2>
+  <div class="note"><ul>
+    <li>Une chaîne « ? » dans une colonne numérique la transforme en texte : déclarer les valeurs manquantes à la lecture.</li>
+    <li>La moyenne est tirée par les valeurs aberrantes et par les sous-populations ; la médiane est plus robuste ; le plus proche voisin utilise les autres colonnes.</li>
+    <li>Supprimer les lignes incomplètes peut retirer une grande part des données.</li>
+    <li>Coder une variable catégorielle par 0/1/2 crée un ordre inexistant : utiliser le one-hot.</li>
+    <li>Target encoding sans précaution : fuite de la cible dans les variables explicatives.</li>
+    <li>Calculer moyenne, écart-type, catégories… sur <em>toutes</em> les données avant la validation croisée : fuite ; les calculer dans chaque pli (pipeline).</li>
+    <li>Normaliser ne sert à rien pour les arbres et le gradient boosting ; c’est important pour les modèles à distances (plus proches voisins, SVM à noyau) et à gradient (réseaux).</li>
+    <li>La normalisation par individu (ligne) dépend de la nature des données ; vérifier qu’elle ne supprime pas l’information discriminante (un niveau moyen peut être discriminant).</li>
+    <li>Un classifieur linéaire ne peut pas apprendre un damier sans colonnes ajoutées adaptées (interactions).</li>
+  </ul></div>
+</section>
+
+<!-- 11 -->
+<section id="test">
+  <h2><span class="n">11</span>Auto-test</h2>
+  <p>QCM, vrai/faux, questions numériques et mises en ordre, avec correction immédiate. « Recommencer » mélange questions et propositions.</p>
+  <div id="qz-main"></div>
+</section>
+
+<footer>Source : diapositives « Machine-learning (3) : chaîne de traitements », V. Guigue, AgroParisTech. Tes notes personnelles sont signalées par les encadrés bleus « Tes notes ». Les encadrés « Complément » sortent du cours.</footer>
+</main>
+</div>
+
+<script>
+'use strict';
+/* ---------- helpers ---------- */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function h(tag,attrs,...kids){
+  const e=document.createElement(tag);
+  for(const k in (attrs||{})){const v=attrs[k];
+    if(v==null||v===false)continue;
+    if(k==='class')e.className=v;
+    else if(k==='html')e.innerHTML=v;
+    else if(k.slice(0,2)==='on')e.addEventListener(k.slice(2),v);
+    else e.setAttribute(k,v===true?'':v);}
+  for(const c of kids.flat(Infinity)){if(c==null||c===false)continue;e.append(c.nodeType?c:document.createTextNode(String(c)));}
+  return e;}
+const redraws=[]; const onTheme=fn=>{redraws.push(fn);};
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>redraws.forEach(f=>f()));}catch(e){}
+new MutationObserver(()=>redraws.forEach(f=>f())).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+function mkCanvas(parent,w,hh,label){
+  const c=h('canvas',{role:'img','aria-label':label||''});
+  const d=Math.min(window.devicePixelRatio||1,2);
+  c.width=Math.round(w*d);c.height=Math.round(hh*d);
+  const g=c.getContext('2d');g.scale(d,d);parent.append(c);
+  return {c,g,w,h:hh};}
+let _id=0;
+function slider(parent,o){
+  const id='s'+(++_id);const out=h('output',{for:id});
+  const inp=h('input',{type:'range',id,min:o.min,max:o.max,step:o.step||1,value:o.value});
+  const fmt=o.fmt||(v=>v);const upd=()=>{out.textContent=fmt(+inp.value)};
+  inp.addEventListener('input',()=>{upd();o.onchange&&o.onchange(+inp.value)});upd();
+  const wrap=h('div',{class:'ctl'},h('label',{for:id},o.label,' ',out),inp);parent.append(wrap);
+  return {wrap,inp,get v(){return +inp.value},set v(x){inp.value=x;upd()}};}
+function seg(parent,label,opts,val,onchange){
+  const wrap=h('div',{class:'ctl'});const grp=h('div',{class:'seg',role:'group','aria-label':label});let cur=val;
+  const bs=opts.map(([v,t])=>{const b=h('button',{type:'button','aria-pressed':String(v===cur),onclick:()=>{cur=v;bs.forEach(x=>x.b.setAttribute('aria-pressed',String(x.v===cur)));onchange&&onchange(cur)}},t);return{v,b}});
+  grp.append(...bs.map(x=>x.b));wrap.append(h('label',{},label),grp);parent.append(wrap);
+  return {wrap,get v(){return cur},set(v){cur=v;bs.forEach(x=>x.b.setAttribute('aria-pressed',String(x.v===cur)))}};}
+const btn=(t,f,c)=>h('button',{type:'button',class:c||'',onclick:f},t);
+const controls=parent=>{const c=h('div',{class:'controls'});parent.append(c);return c;};
+const btns=parent=>{const c=h('div',{class:'btns'});parent.append(c);return c;};
+const stat=(l,v,f)=>{const e=h('div',{class:'stat'},h('div',{class:'v'},v),h('div',{class:'l'},l),f?h('div',{class:'fx2'},f):null);e.set=(x)=>{e.firstChild.textContent=x};return e;};
+
+/* ---------- maths ---------- */
+function rng(seed){let a=seed>>>0;return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function gauss(r){let u=0;while(u===0)u=r();const v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const fr=(x,d=2)=>{if(!isFinite(x))return String(x);return x.toFixed(d).replace('.',',').replace('-','\u2212')};
+const fmtBig=b=>b.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'\u202F');
+function shuffle(a,r){r=r||Math.random;a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function colorMix(c1,c2,t){ // hex or rgb() strings -> rgb string
+  const p=c=>{if(c[0]==='#'){const n=parseInt(c.slice(1),16);return [n>>16&255,n>>8&255,n&255]}const m=c.match(/[\d.]+/g);return m.slice(0,3).map(Number)};
+  const a=p(c1),b=p(c2);return `rgb(${a.map((x,i)=>Math.round(x+(b[i]-x)*t)).join(',')})`;}
+
+/* ---------- quiz ---------- */
+function Quiz(root,qs,opts){
+  opts=opts||{};let cards=[],score=0,done=0;
+  const head=h('div',{class:'qhead'});const sc=h('div',{class:'qscore','aria-live':'polite'});
+  const list=h('div',{class:'qs'});
+  const bar=h('div',{class:'btns'},btn('Recommencer (ordre mélangé)',()=>build(true)));
+  head.append(sc,bar);root.append(head,list);
+  const upd=()=>{sc.textContent=`Répondu : ${done}/${qs.length} · Score : ${score}/${qs.length}`+(done===qs.length?(score===qs.length?'  — sans faute !':'  — relis les explications des erreurs.'):'')};
+  function finish(card,ok,fbHtml){ if(card.locked)return;card.locked=true;done++;if(ok)score++;card.fb.innerHTML=(ok?'<span class="ok">Correct.</span> ':'<span class="ko">Pas tout à fait.</span> ')+fbHtml;upd();}
+  function build(shuf){
+    score=0;done=0;list.innerHTML='';cards=[];
+    const order=shuf?shuffle(qs):qs;
+    order.forEach((q,n)=>{
+      const card={locked:false,fb:h('div',{class:'fb','aria-live':'polite'})};
+      const el=h('div',{class:'qc'},h('p',{class:'qq'},h('span',{class:'qn'},String(n+1).padStart(2,'0')),h('span',{html:q.q})));
+      if(q.t==='mcq'){
+        const os=shuffle(q.o.map((t,i)=>({t,i})));
+        const box=h('div',{class:'opts'});
+        os.forEach(o=>{const b=h('button',{type:'button',onclick:()=>{
+          if(card.locked)return;
+          $$('button',box).forEach((x,k)=>{x.disabled=true;if(os[k].i===q.a)x.classList.add('right');});
+          if(o.i!==q.a)b.classList.add('wrong');
+          finish(card,o.i===q.a,q.e);}} ,h('span',{html:o.t}));box.append(b);});
+        el.append(box);
+      }else if(q.t==='tf'){
+        const box=h('div',{class:'opts row'});
+        [[true,'Vrai'],[false,'Faux']].forEach(([v,t])=>{const b=h('button',{type:'button',onclick:()=>{
+          if(card.locked)return;$$('button',box).forEach(x=>x.disabled=true);
+          b.classList.add(v===q.a?'right':'wrong');
+          if(v!==q.a)$$('button',box).forEach(x=>{if(x!==b)x.classList.add('right')});
+          finish(card,v===q.a,q.e);}},t);box.append(b);});
+        el.append(box);
+      }else if(q.t==='num'){
+        const inp=h('input',{type:'text',inputmode:'decimal','aria-label':'Ta réponse',placeholder:'ta réponse'});
+        const go=()=>{ if(card.locked)return;
+          const v=parseFloat(inp.value.replace(/[\s\u00a0\u202f]/g,'').replace(',','.'));
+          const ok=isFinite(v)&&Math.abs(v-q.a)<=(q.tol||0);
+          inp.disabled=true;b.disabled=true;
+          finish(card,ok,`Réponse : <b>${q.show||fmtBig(BigInt(Math.round(q.a)))}</b>. `+q.e);};
+        const b=btn('Valider',go);inp.addEventListener('keydown',e=>{if(e.key==='Enter')go()});
+        el.append(h('div',{class:'numin'},inp,b));
+      }else if(q.t==='order'){
+        const pool=h('div',{class:'chips'});const seq=[];
+        const line=h('p',{class:'legend'},'Clique les éléments dans l’ordre.');
+        const items=shuffle(q.items.map((t,i)=>({t,i})));
+        const bs=items.map(it=>{const b=h('button',{type:'button',onclick:()=>{
+          if(card.locked)return;seq.push(it.i);b.disabled=true;b.prepend(h('b',{},String(seq.length)));
+          if(seq.length===items.length){const ok=seq.every((v,i)=>v===i);
+            finish(card,ok,(ok?'':'Ordre attendu : <ol>'+q.items.map(x=>`<li>${x}</li>`).join('')+'</ol>')+q.e);} }},h('span',{html:it.t}));pool.append(b);return b;});
+        const reset=btn('Effacer',()=>{if(card.locked)return;seq.length=0;bs.forEach(b=>{b.disabled=false;const x=b.querySelector('b');x&&x.remove();});});
+        el.append(pool,h('div',{class:'btns'},reset),line);
+      }
+      el.append(card.fb);list.append(el);cards.push(card);
+    });
+    upd();
+  }
+  build(false);
+  return {rebuild:build};
+}
+
+/* ================= ml.js : primitives d'apprentissage (sans DOM) ================= */
+const sum=a=>{let s=0;for(let i=0;i<a.length;i++)s+=a[i];return s;};
+const mean=a=>sum(a)/a.length;
+const stdev=(a,pop=true)=>{const m=mean(a);let s=0;for(const x of a)s+=(x-m)*(x-m);return Math.sqrt(s/(a.length-(pop?0:1)));};
+const H2=p=>(p<=0||p>=1)?0:-(p*Math.log2(p)+(1-p)*Math.log2(1-p));
+const sigm=x=>1/(1+Math.exp(-x));
+
+/* ---- jeux de données ---- */
+function genSet(kind,n,noise,seed){
+  const r=rng(seed);const X=[],y=[];
+  for(let i=0;i<n;i++){
+    let x1,x2,l;
+    if(kind==='blobs'){l=i%2;const c=l?0.42:-0.42;x1=c+gauss(r)*(0.2+noise*0.5);x2=c*0.7+gauss(r)*(0.2+noise*0.5);}
+    else if(kind==='xor'){x1=r()*2-1;x2=r()*2-1;l=(x1*x2>0)?1:0;x1+=gauss(r)*noise*0.3;x2+=gauss(r)*noise*0.3;}
+    else if(kind==='circle'){l=i%2;const rr=l?r()*0.45:0.65+r()*0.35;const a=r()*6.283;x1=rr*Math.cos(a)+gauss(r)*noise*0.3;x2=rr*Math.sin(a)+gauss(r)*noise*0.3;}
+    else{ /* moons */ l=i%2;const t=Math.PI*r();const px=l?1-Math.cos(t):Math.cos(t),py=l?0.5-Math.sin(t):Math.sin(t);x1=(px-0.5)/1.5+gauss(r)*noise*0.3;x2=(py-0.25)/0.75+gauss(r)*noise*0.3;}
+    X.push([x1,x2]);y.push(l);
+  }
+  return {X,y};
+}
+/* jeu de la diapo 11 : domaine [0,10]^2, classe 1 si X2>6 ou X1<=3 */
+function genSlide(n,flip,seed){
+  const r=rng(seed);const X=[],y=[];
+  for(let i=0;i<n;i++){const a=r()*10,b=r()*10;let l=(b>6||a<=3)?1:0;if(r()<flip)l=1-l;X.push([a,b]);y.push(l);}
+  return {X,y};
+}
+
+/* ---- arbre de décision (d variables, poids d'exemples optionnels) ---- */
+function buildTree(X,y,o){
+  o=Object.assign({maxDepth:99,minLeaf:1,maxFeat:0,crit:'entropy',rng:Math.random,w:null},o||{});
+  const w=o.w||new Array(X.length).fill(1);const d=X[0].length;
+  const imp=(pw,tw)=>{if(tw<=0)return 0;const p=pw/tw;return o.crit==='gini'?2*p*(1-p):H2(p);};
+  function build(idx,depth){
+    let tw=0,pw=0;idx.forEach(i=>{tw+=w[i];pw+=w[i]*y[i];});
+    const node={n:idx.length,p:tw>0?pw/tw:0.5,imp:imp(pw,tw)};
+    if(depth>=o.maxDepth||idx.length<2*o.minLeaf||pw<=1e-12||tw-pw<=1e-12){node.leaf=true;return node;}
+    let feats=[...Array(d).keys()];
+    if(o.maxFeat&&o.maxFeat<d)feats=shuffle(feats,o.rng).slice(0,o.maxFeat);
+    let best=null;
+    feats.forEach(f=>{
+      const s=idx.slice().sort((a,b)=>X[a][f]-X[b][f]);let lw=0,lp=0;
+      for(let k=0;k<s.length-1;k++){const i=s[k];lw+=w[i];lp+=w[i]*y[i];
+        if(X[s[k]][f]===X[s[k+1]][f])continue;
+        const nl=k+1,nr=s.length-nl;if(nl<o.minLeaf||nr<o.minLeaf)continue;
+        const score=(lw*imp(lp,lw)+(tw-lw)*imp(pw-lp,tw-lw))/tw;
+        if(!best||score<best.score-1e-12)best={score,f,t:(X[s[k]][f]+X[s[k+1]][f])/2};}
+    });
+    if(!best){node.leaf=true;return node;}
+    const L=[],R=[];idx.forEach(i=>(X[i][best.f]<=best.t?L:R).push(i));
+    node.f=best.f;node.t=best.t;node.gain=node.imp-best.score;node.l=build(L,depth+1);node.r=build(R,depth+1);
+    return node;
+  }
+  return build([...Array(X.length).keys()],0);
+}
+function treeProba(n,x){while(!n.leaf)n=x[n.f]<=n.t?n.l:n.r;return n.p;}
+function treeDepth(n){return n.leaf?0:1+Math.max(treeDepth(n.l),treeDepth(n.r));}
+function treeLeaves(n){return n.leaf?1:treeLeaves(n.l)+treeLeaves(n.r);}
+const acc=(pred,y)=>{let c=0;for(let i=0;i<y.length;i++)if(pred[i]===y[i])c++;return c/y.length;};
+
+/* ---- validation croisée ---- */
+function kfold(n,K,r,groups){
+  const F=Array.from({length:K},()=>[]);
+  if(groups){const gs=shuffle([...new Set(groups)],r);const m=new Map();gs.forEach((g,i)=>m.set(g,i%K));groups.forEach((g,i)=>F[m.get(g)].push(i));return F;}
+  shuffle([...Array(n).keys()],r).forEach((i,k)=>F[k%K].push(i));return F;
+}
+const sub=(A,idx)=>idx.map(i=>A[i]);
+const compl=(n,idx)=>{const s=new Set(idx);const o=[];for(let i=0;i<n;i++)if(!s.has(i))o.push(i);return o;};
+
+/* ---- régression logistique (descente de gradient) ---- */
+function fitLogistic(P,y,o){
+  o=Object.assign({lr:0.8,iters:400,l2:1e-3},o||{});const n=P.length,d=P[0].length;const w=new Array(d+1).fill(0);
+  for(let it=0;it<o.iters;it++){const g=new Array(d+1).fill(0);
+    for(let i=0;i<n;i++){let z=w[0];const p=P[i];for(let j=0;j<d;j++)z+=w[j+1]*p[j];const e=sigm(z)-y[i];g[0]+=e;for(let j=0;j<d;j++)g[j+1]+=e*p[j];}
+    w[0]-=o.lr*g[0]/n;for(let j=0;j<d;j++)w[j+1]-=o.lr*(g[j+1]/n+o.l2*w[j+1]);}
+  return w;
+}
+const logitScore=(w,p)=>{let z=w[0];for(let j=0;j<p.length;j++)z+=w[j+1]*p[j];return z;};
+
+/* ---- plus proches voisins ---- */
+function knnProba(Xtr,ytr,x,k){
+  const d=Xtr.map((p,i)=>{let s=0;for(let j=0;j<p.length;j++){const a=p[j]-x[j];s+=a*a;}return [s,i];});
+  d.sort((a,b)=>a[0]-b[0]);let c=0;for(let i=0;i<k;i++)c+=ytr[d[i][1]];return c/k;
+}
+
+/* ---- algèbre linéaire ---- */
+function solveLin(A0,b0){
+  const n=b0.length;const A=A0.map((r,i)=>r.concat([b0[i]]));
+  for(let c=0;c<n;c++){let p=c;for(let r=c+1;r<n;r++)if(Math.abs(A[r][c])>Math.abs(A[p][c]))p=r;[A[c],A[p]]=[A[p],A[c]];
+    const piv=A[c][c]||1e-12;for(let r=c+1;r<n;r++){const q=A[r][c]/piv;if(q!==0)for(let j=c;j<=n;j++)A[r][j]-=q*A[c][j];}}
+  const x=new Array(n).fill(0);for(let i=n-1;i>=0;i--){let s=A[i][n];for(let j=i+1;j<n;j++)s-=A[i][j]*x[j];x[i]=s/(A[i][i]||1e-12);}
+  return x;
+}
+/* moindres carrés avec intercept non pénalisé et ridge léger : retourne [b0,w1..wd] */
+function lstsq(X,y,lam){
+  lam=lam||1e-8;const n=X.length,d=X[0].length;const m=d+1;
+  const A=Array.from({length:m},()=>new Array(m).fill(0)),b=new Array(m).fill(0);
+  for(let i=0;i<n;i++){const v=[1].concat(X[i]);for(let a=0;a<m;a++){b[a]+=v[a]*y[i];for(let c=0;c<m;c++)A[a][c]+=v[a]*v[c];}}
+  for(let a=1;a<m;a++)A[a][a]+=lam*n;
+  return solveLin(A,b);
+}
+const lsPredict=(w,x)=>{let z=w[0];for(let j=0;j<x.length;j++)z+=w[j+1]*x[j];return z;};
+function standardize(X,ref){
+  const d=X[0].length;const R=ref||X;const mu=[],sd=[];
+  for(let j=0;j<d;j++){const c=R.map(r=>r[j]);mu.push(mean(c));sd.push(stdev(c)||1);}
+  return {Z:X.map(r=>r.map((v,j)=>(v-mu[j])/sd[j])),mu,sd};
+}
+/* Elastic net par descente de coordonnées : (1/n)||y-Xw||² + C1|w|₁ + C2||w||² ; X standardisé, y centré */
+function elasticNet(X,y,C1,C2,iters){
+  const n=X.length,d=X[0].length;const w=new Array(d).fill(0);const r=y.slice();
+  const z=[];for(let j=0;j<d;j++){let s=0;for(let i=0;i<n;i++)s+=X[i][j]*X[i][j];z.push(s/n);}
+  for(let it=0;it<(iters||200);it++){
+    for(let j=0;j<d;j++){let rho=0;for(let i=0;i<n;i++)rho+=X[i][j]*r[i];rho=rho/n+z[j]*w[j];
+      const t=C1/2;const s=rho>t?rho-t:(rho<-t?rho+t:0);const wn=s/(z[j]+C2);
+      const dl=wn-w[j];if(dl!==0){for(let i=0;i<n;i++)r[i]-=X[i][j]*dl;w[j]=wn;}}
+  }
+  return w;
+}
+function ridgeCF(X,y,C2){
+  const n=X.length,d=X[0].length;const A=Array.from({length:d},()=>new Array(d).fill(0)),b=new Array(d).fill(0);
+  for(let i=0;i<n;i++)for(let a=0;a<d;a++){b[a]+=X[i][a]*y[i]/n;for(let c=0;c<d;c++)A[a][c]+=X[i][a]*X[i][c]/n;}
+  for(let a=0;a<d;a++)A[a][a]+=C2;return solveLin(A,b);
+}
+/* valeurs/vecteurs propres d'une matrice symétrique (Jacobi cyclique) */
+function eigSym(M){
+  const n=M.length;const A=M.map(r=>r.slice());const V=Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0));
+  for(let sw=0;sw<80;sw++){let off=0;for(let p=0;p<n;p++)for(let q=p+1;q<n;q++)off+=A[p][q]*A[p][q];if(off<1e-20)break;
+    for(let p=0;p<n;p++)for(let q=p+1;q<n;q++){if(Math.abs(A[p][q])<1e-14)continue;
+      const th=(A[q][q]-A[p][p])/(2*A[p][q]);const t=Math.sign(th||1)/(Math.abs(th)+Math.sqrt(th*th+1));const c=1/Math.sqrt(t*t+1),s=t*c;
+      for(let k=0;k<n;k++){const akp=A[k][p],akq=A[k][q];A[k][p]=c*akp-s*akq;A[k][q]=s*akp+c*akq;}
+      for(let k=0;k<n;k++){const apk=A[p][k],aqk=A[q][k];A[p][k]=c*apk-s*aqk;A[q][k]=s*apk+c*aqk;}
+      for(let k=0;k<n;k++){const vkp=V[k][p],vkq=V[k][q];V[k][p]=c*vkp-s*vkq;V[k][q]=s*vkp+c*vkq;}}}
+  const ord=[...Array(n).keys()].sort((a,b)=>A[b][b]-A[a][a]);
+  return {vals:ord.map(i=>A[i][i]),vecs:ord.map(i=>V.map(r=>r[i]))};
+}
+function covMat(X){
+  const n=X.length,d=X[0].length;const mu=[];for(let j=0;j<d;j++)mu.push(mean(X.map(r=>r[j])));
+  const C=Array.from({length:d},()=>new Array(d).fill(0));
+  for(let i=0;i<n;i++)for(let a=0;a<d;a++)for(let b=a;b<d;b++)C[a][b]+=(X[i][a]-mu[a])*(X[i][b]-mu[b])/n;
+  for(let a=0;a<d;a++)for(let b=0;b<a;b++)C[a][b]=C[b][a];
+  return {C,mu};
+}
+
+/* ---- métriques ---- */
+function confusion(pred,y){let tp=0,fp=0,fn=0,tn=0;for(let i=0;i<y.length;i++){if(y[i]===1){pred[i]===1?tp++:fn++;}else{pred[i]===1?fp++:tn++;}}return {tp,fp,fn,tn};}
+function rocCurve(s,y){
+  const idx=s.map((_,i)=>i).sort((a,b)=>s[b]-s[a]);let P=0,N=0;y.forEach(v=>v?P++:N++);
+  let tp=0,fp=0;const pts=[[0,0]];let auc=0,px=0,py=0;
+  for(let k=0;k<idx.length;k++){const i=idx[k];y[i]?tp++:fp++;
+    if(k===idx.length-1||s[idx[k+1]]!==s[i]){const x=fp/N,yy=tp/P;auc+=(x-px)*(yy+py)/2;pts.push([x,yy]);px=x;py=yy;}}
+  return {pts,auc};
+}
+
+/* ---- loi de Student (test t apparié) ---- */
+function lgam(x){const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5];let y=x,t=x+5.5;t-=(x+0.5)*Math.log(t);let s=1.000000000190015;for(let j=0;j<6;j++)s+=c[j]/++y;return -t+Math.log(2.5066282746310005*s/x);}
+function betacf(a,b,x){let qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap;if(Math.abs(d)<1e-30)d=1e-30;d=1/d;let h=d;
+  for(let m=1;m<=200;m++){const m2=2*m;let aa=m*(b-m)*x/((qam+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<1e-30)d=1e-30;c=1+aa/c;if(Math.abs(c)<1e-30)c=1e-30;d=1/d;h*=d*c;
+    aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));d=1+aa*d;if(Math.abs(d)<1e-30)d=1e-30;c=1+aa/c;if(Math.abs(c)<1e-30)c=1e-30;d=1/d;const del=d*c;h*=del;if(Math.abs(del-1)<3e-12)break;}return h;}
+function betai(a,b,x){if(x<=0)return 0;if(x>=1)return 1;const bt=Math.exp(lgam(a+b)-lgam(a)-lgam(b)+a*Math.log(x)+b*Math.log(1-x));
+  return x<(a+1)/(a+b+2)?bt*betacf(a,b,x)/a:1-bt*betacf(b,a,1-x)/b;}
+const pTwoSided=(t,df)=>betai(df/2,0.5,df/(df+t*t));
+function pairedT(a,b){const d=a.map((v,i)=>v-b[i]);const n=d.length;const m=mean(d);const s=stdev(d,false);
+  if(s===0)return {t:m===0?0:Infinity,p:m===0?1:0,m,s,n};const t=m/(s/Math.sqrt(n));return {t,p:pTwoSided(t,n-1),m,s,n};}
+
+/* ---- SVM : perte charnière + C||w||² sur la forme f(x)=Σ w_j k(x,x_j), descente Adam ---- */
+function kernelFn(kind,sig){
+  if(kind==='lin')return (a,b)=>a[0]*b[0]+a[1]*b[1]+1;
+  const s2=2*sig*sig;return (a,b)=>Math.exp(-((a[0]-b[0])**2+(a[1]-b[1])**2)/s2);
+}
+function trainSVM(X,y,k,C,iters){
+  const n=X.length;const K=X.map(a=>X.map(b=>k(a,b)));const w=new Array(n).fill(0),m=new Array(n).fill(0),v=new Array(n).fill(0);
+  const b1=0.9,b2=0.999;const T=(iters||800);
+  for(let it=1;it<=T;it++){const lr=0.06*Math.pow(0.03,it/T);
+    const f=K.map(r=>{let s=0;for(let j=0;j<n;j++)s+=r[j]*w[j];return s;});
+    const g=new Array(n).fill(0);
+    for(let i=0;i<n;i++)if(y[i]*f[i]<1){for(let j=0;j<n;j++)g[j]-=y[i]*K[i][j];}
+    for(let j=0;j<n;j++){g[j]+=2*C*w[j];m[j]=b1*m[j]+(1-b1)*g[j];v[j]=b2*v[j]+(1-b2)*g[j]*g[j];
+      w[j]-=lr*(m[j]/(1-Math.pow(b1,it)))/(Math.sqrt(v[j]/(1-Math.pow(b2,it)))+1e-8);}
+  }
+  const f=K.map(r=>{let s=0;for(let j=0;j<n;j++)s+=r[j]*w[j];return s;});
+  return {w,f,X,k};
+}
+const svmF=(mod,x)=>{let s=0;for(let j=0;j<mod.w.length;j++)if(mod.w[j]!==0)s+=mod.w[j]*mod.k(x,mod.X[j]);return s;};
+
+/* ---- jeu « n exemples, d variables dont 2 informatives » (diapos 32-59) ---- */
+function genFeat(n,seed,o){
+  o=Object.assign({d:22,sep:0.9,scales:false,copy:false},o||{});const r=rng(seed);const X=[],y=[];
+  const SC=[0.1,3,0.3,5,1,0.2,4,0.5,2,0.1,6,0.4];
+  for(let i=0;i<n;i++){
+    const l=i%2;let row=[(l?1:-1)*o.sep+gauss(r),(l?1:-1)*o.sep+gauss(r)];
+    if(o.copy)row.push(row[0]+0.1*gauss(r));
+    while(row.length<o.d+(o.copy?1:0))row.push(gauss(r));
+    if(o.scales)row=row.map((v,j)=>v*(j===0?20:j===1?1:SC[(j-2)%SC.length]));
+    X.push(row);y.push(l);
+  }
+  const info=[];for(let j=0;j<X[0].length;j++)info.push(j<2||(o.copy&&j===2));
+  return {X,y,info};
+}
+const cvAcc=(Z,y,K,seed,lam)=>{const n=Z.length;const F=kfold(n,K,rng(seed));let s=0;
+  F.forEach(te=>{const tr=compl(n,te);const w=lstsq(sub(Z,tr),sub(y,tr).map(v=>v?1:-1),lam||1e-3);
+    let c=0;te.forEach(i=>{if((lsPredict(w,Z[i])>0?1:0)===y[i])c++;});s+=c/te.length;});return s/K;};
+
+/* ================= Fiche « Chaîne de traitements » ================= */
+
+/* ---- Valeurs manquantes (auto-mpg) ---- */
+(function(){
+  const root=$('#lab-missing');
+  const cols=['n°','mpg','cylinders','displacement','horsepower','weight','acceleration'];
+  const base=[[30,28.0,4,140,90,2264,15.5],[31,25.0,4,113,95,2228,14.0],[32,25.0,4,98,null,2046,19.0],[33,19.0,6,232,100,2634,13.0],[34,16.0,6,225,105,3439,15.5],[35,17.0,6,250,100,3329,15.5],[36,19.0,6,250,88,3302,15.5],[37,18.0,6,232,100,3288,15.5],[38,14.0,8,350,165,4209,12.0],[39,14.0,8,400,175,4464,11.5],[40,14.0,8,351,153,4154,13.5]];
+  let meth='none',outl=false;
+  const ctl=controls(root);
+  seg(ctl,'Stratégie',[['none','Données brutes'],['drop','Supprimer la ligne'],['mean','Moyenne'],['median','Médiane'],['knn','Plus proche voisin (autres colonnes)'],['zero','Valeur arbitraire : 0']],'none',v=>{meth=v;render();});
+  const cb=h('input',{type:'checkbox',onchange:()=>{outl=cb.checked;render();}});
+  ctl.append(h('div',{class:'ctl'},h('label',{},'Valeur aberrante'),h('label',{style:'font-weight:400;display:flex;gap:.4rem;align-items:center'},cb,'ajouter une voiture à 400 ch (n° 41)')));
+  const out=h('div',{class:'scroll'});const stats=h('div',{class:'stats'});const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(out,stats,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>La voiture 32 est une 4 cylindres de 98 pouces cubes et 2 046 livres, comme les voitures 30 et 31 (90 et 95 ch). La <b>moyenne</b> de la colonne (≈ 117 ch) est tirée par les 6 et 8 cylindres : elle ne correspond à aucune voiture ressemblante. La <b>médiane</b> (100 ch) est déjà plus raisonnable ; le <b>plus proche voisin</b> sur les autres colonnes (standardisées) retrouve la voiture 30, une 4 cylindres voisine (90 ch). Ajoute la voiture à 400 ch : la moyenne bondit, la médiane bouge à peine (elle « écarte les valeurs aberrantes »). Une valeur arbitraire comme 0 est pire que tout : une voiture à 0 ch n’existe pas.</p>'})));
+  function render(){
+    let rows=base.map(r=>r.slice());if(outl)rows.push([41,10.0,8,455,400,4500,9.0]);
+    const known=rows.filter(r=>r[4]!==null);const hp=known.map(r=>r[4]);
+    const mu=mean(hp),med=(()=>{const s=hp.slice().sort((a,b)=>a-b);const m=s.length;return m%2?s[(m-1)/2]:(s[m/2-1]+s[m/2])/2;})();
+    // plus proche voisin sur colonnes 1,2,3,5,6 standardisées
+    const idx=[1,2,3,5,6];const st=idx.map(c=>{const v=known.map(r=>r[c]);return [mean(v),stdev(v)||1];});
+    const target=rows.find(r=>r[4]===null);const z=(r)=>idx.map((c,k)=>(r[c]-st[k][0])/st[k][1]);
+    let nn=null;if(target){const zt=z(target);known.forEach(r=>{const zr=z(r);const d=Math.hypot(...zr.map((v,k)=>v-zt[k]));if(!nn||d<nn.d)nn={d,r};});}
+    let imputed=null,label='';
+    if(meth==='mean'){imputed=mu;}else if(meth==='median'){imputed=med;}else if(meth==='knn'){imputed=nn.r[4];label=' (voiture '+nn.r[0]+')';}else if(meth==='zero'){imputed=0;}
+    if(meth==='drop')rows=rows.filter(r=>r[4]!==null);
+    const tb=h('tbody');rows.forEach(r=>tb.append(h('tr',{class:r[0]===32?'hl':''},r.map((v,c)=>{let txt=v===null?'?':(Number.isInteger(v)?String(v):fr(v,1));let st_='';
+      if(v===null&&imputed!==null){txt=fr(imputed,1);st_='background:var(--moss-soft);font-weight:700';}else if(v===null){st_='color:var(--minus);font-weight:700';}
+      return h('td',{class:c?'num':'',style:st_},txt);}))));
+    out.innerHTML='';out.append(h('table',{class:'mini'},h('thead',{},h('tr',{},cols.map((c,i)=>h('th',{class:i?'num':''},c)))),tb));
+    stats.innerHTML='';stats.append(stat('Moyenne de horsepower',fr(mu,1)),stat('Médiane',fr(med,1)),stat('Plus proche voisin',nn?nn.r[4]+' ch (voiture '+nn.r[0]+')':'—'),stat('Lignes restantes',String(rows.length)+' / '+(outl?12:11)));
+    vd.innerHTML=meth==='none'?'Valeur manquante : « ? » (rouge). Choisis une stratégie.':meth==='drop'?'La ligne 32 est supprimée : on perd toutes ses autres colonnes (mpg, poids…).':`Valeur imputée pour la voiture 32 : <b>${fr(imputed,1)} ch</b>${label}.`+(meth==='zero'?' <span class="ko">Valeur arbitraire irréaliste.</span>':'');
+  }
+  render();
+})();
+
+/* ---- One-hot avec min_frequency ---- */
+(function(){
+  const root=$('#lab-discret');
+  const items=['Red','Yellow','Red','Green','Blue','Red','Yellow','Green','Red','Pink','Yellow','Red','Green','Yellow','Blue','Red','Green','Red','Yellow','Red'];
+  let mf=1;const cnt={};items.forEach(c=>cnt[c]=(cnt[c]||0)+1);
+  const ctl=controls(root);
+  slider(ctl,{label:'min_frequency',min:1,max:9,value:1,onchange:v=>{mf=v;render();}});
+  const info=h('div',{class:'stats'});const out=h('div',{class:'scroll'});const vd=h('p',{class:'verdict'});
+  root.append(info,out,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Avec <code>min_frequency=1</code>, chaque catégorie a sa colonne (5 colonnes). Quand le seuil monte, les catégories qui apparaissent moins de <code>min_frequency</code> fois sont <b>regroupées</b> dans une colonne « infrequent » : moins de colonnes, moins de risque de sur-apprentissage sur des catégories quasi absentes, mais on perd la distinction entre les catégories rares.</p>'})));
+  function render(){
+    const freq=Object.keys(cnt).filter(c=>cnt[c]>=mf).sort((a,b)=>cnt[b]-cnt[a]);const rare=Object.keys(cnt).filter(c=>cnt[c]<mf);
+    const colsN=freq.concat(rare.length?['infrequent']:[]);
+    info.innerHTML='';info.append(...Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]).map(c=>stat(c,cnt[c]+' exemple'+(cnt[c]>1?'s':''),cnt[c]>=mf?'colonne propre':'regroupée')),stat('Colonnes obtenues',String(colsN.length)));
+    const tb=h('tbody');items.slice(0,10).forEach(c=>{const key=cnt[c]>=mf?c:'infrequent';tb.append(h('tr',{},h('td',{},c),colsN.map(k=>h('td',{class:'num',style:k===key?'background:var(--moss-soft);font-weight:700':''},k===key?'1':'0'))));});
+    out.innerHTML='';out.append(h('table',{class:'mini'},h('thead',{},h('tr',{},h('th',{},'Valeur (10 premières lignes)'),colsN.map(k=>h('th',{class:'num'},k)))),tb));
+    vd.innerHTML=rare.length?`Catégories regroupées : <b>${rare.join(', ')}</b>.`:'Aucun regroupement.';
+  }
+  render();
+})();
+
+/* ---- Binarisation et discrétisation ---- */
+(function(){
+  const root=$('#lab-binar');const W=300,H=200;
+  let thr=8,meth='lin',nb=4;
+  const r=rng(12);const pix=Array.from({length:2000},()=>r()<0.72?Math.max(0,gauss(r)*0.4):Math.max(0,Math.min(16,14+gauss(r)*2.5)));
+  const skew=Array.from({length:120},()=>Math.exp(gauss(r)*0.6+3.2));
+  const ctl=controls(root);
+  slider(ctl,{label:'Seuil de binarisation du pixel',min:0,max:16,step:0.5,value:8,fmt:v=>fr(v,1),onchange:v=>{thr=v;draw();}});
+  seg(ctl,'Discrétisation',[['lin','Intervalles linéaires'],['quant','Quantiles']],'lin',v=>{meth=v;draw();});
+  slider(ctl,{label:'Nombre d’intervalles',min:2,max:8,value:4,onchange:v=>{nb=v;draw();}});
+  const two=h('div',{class:'two'});root.append(two);const c1=mkCanvas(two,W,H,'Histogramme d’un pixel');const right=h('div');two.append(right);
+  const vd=h('p',{class:'verdict'});root.append(vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Le pixel est presque bimodal : le seuil peut se placer n’importe où dans la zone vide entre les deux paquets, la binarisation donne à peu près le même résultat (≈ 28 % de « 1 »). Pour l’attribut asymétrique, des intervalles <b>linéaires</b> mettent presque tous les exemples dans les deux premières tranches ; les <b>quantiles</b> équilibrent les effectifs (les dernières tranches sont larges).</p>'})));
+  function draw(){
+    let g=c1.g;g.clearRect(0,0,W,H);const nbin=32,h_=new Array(nbin).fill(0);pix.forEach(v=>h_[Math.min(nbin-1,Math.floor(v/16*nbin))]++);const mx=Math.max(...h_);
+    h_.forEach((c,i)=>{g.fillStyle=(i+0.5)/nbin*16>thr?css('--minus'):css('--c1');g.globalAlpha=.85;const hh=Math.sqrt(c/mx)*(H-40);g.fillRect(14+i*(W-24)/nbin,H-24-hh,(W-24)/nbin-1,hh);});g.globalAlpha=1;
+    g.strokeStyle=css('--ink');g.lineWidth=2;g.beginPath();g.moveTo(14+thr/16*(W-24),10);g.lineTo(14+thr/16*(W-24),H-24);g.stroke();g.fillStyle=css('--muted');g.font='11px sans-serif';g.fillText('valeur du pixel (0 à 16, échelle racine)',14,H-8);
+    const ones=pix.filter(v=>v>thr).length/pix.length;
+    // intervalles
+    const s=skew.slice().sort((a,b)=>a-b);const mn=s[0],mxv=s[s.length-1];let edges=[];
+    if(meth==='lin'){for(let k=0;k<=nb;k++)edges.push(mn+(mxv-mn)*k/nb);}else{for(let k=0;k<=nb;k++)edges.push(k===0?mn:k===nb?mxv:s[Math.floor(k*s.length/nb)]);}
+    const cnts=new Array(nb).fill(0);skew.forEach(v=>{let b=0;while(b<nb-1&&v>=edges[b+1])b++;cnts[b]++;});const m2=Math.max(...cnts);
+    right.innerHTML='';right.append(h('p',{class:'legend'},'Attribut asymétrique (120 valeurs) :'));
+    cnts.forEach((c,b)=>right.append(h('div',{style:'display:grid;grid-template-columns:6.5rem 1fr 2rem;gap:.5rem;align-items:center;margin:.25rem 0;font-size:.82rem'},h('span',{class:'mono'},`${fr(edges[b],0)}–${fr(edges[b+1],0)}`),h('div',{class:'bar'},h('i',{style:`width:${c/m2*100}%`})),h('span',{class:'mono'},String(c)))));
+    vd.innerHTML=`Binarisation : <b>${fr(ones*100,1)} %</b> de « 1 » avec le seuil ${fr(thr,1)}. Discrétisation : effectifs de ${Math.min(...cnts)} à ${Math.max(...cnts)} par intervalle.`;
+  }
+  onTheme(draw);draw();
+})();
+
+/* ---- Damier (checkers) ---- */
+(function(){
+  const root=$('#lab-checkers');const W=420,H=420;
+  let set='raw',seed=1;
+  const SETS={raw:['Brutes (x, y)',p=>[p[0],p[1]]],
+    par:['Pair/impair de chaque intervalle (2 colonnes)',p=>[Math.floor(p[0])%2,Math.floor(p[1])%2]],
+    bins:['Intervalles binaires (10 colonnes)',p=>{const v=new Array(10).fill(0);v[Math.min(4,Math.floor(p[0]))]=1;v[5+Math.min(4,Math.floor(p[1]))]=1;return v;}],
+    inter:['Parités + leur produit (interaction)',p=>{const a=Math.floor(p[0])%2,b=Math.floor(p[1])%2;return [a,b,a*b];}]};
+  const ctl=controls(root);
+  seg(ctl,'Colonnes utilisées',Object.entries(SETS).map(([k,v])=>[k,v[0]]),'raw',v=>{set=v;draw();});
+  const bt=btns(root);bt.append(btn('Nouveau tirage',()=>{seed++;gen();}));
+  const cv=mkCanvas(root,W,H,'Décision du classifieur linéaire sur le damier');const out=h('div');const vd=h('p',{class:'verdict'});
+  root.append(out,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Sur les coordonnées brutes, une droite ne peut pas séparer un damier : ≈ 50 %. Avec la parité de chaque intervalle, ou avec les intervalles binaires, le modèle reste <b>additif</b> (une contribution de x plus une contribution de y) : il ne peut pas représenter un « ou exclusif », le score plafonne entre 50 et 75 % (la diapo affiche 0,75 à 0,9 avec ses colonnes ajoutées). Il faut une colonne qui combine les deux dimensions (le produit des parités) pour retrouver ≈ 100 % : c’est la même idée que « largeur × longueur = surface » dans tes notes.</p>'})));
+  let D,scores={};
+  function gen(){const r=rng(seed*17+5);const X=[],y=[];for(let i=0;i<150;i++){const a=r()*5,b=r()*5;let l=(Math.floor(a)+Math.floor(b))%2;if(r()<0.03)l=1-l;X.push([a,b]);y.push(l);}D={X,y};scores={};Object.keys(SETS).forEach(k=>{const P=X.map(SETS[k][1]);const S=standardize(P);const F=kfold(150,5,rng(3));let s=0;F.forEach(te=>{const tr=compl(150,te);const w=fitLogistic(sub(S.Z,tr),sub(y,tr),{lr:1,iters:500,l2:1e-3});s+=acc(te.map(i=>logitScore(w,S.Z[i])>0?1:0),sub(y,te));});scores[k]=s/5;});draw();}
+  function draw(){
+    const P=D.X.map(SETS[set][1]);const S=standardize(P);const w=fitLogistic(S.Z,D.y,{lr:1,iters:500,l2:1e-3});
+    const g=cv.g;g.clearRect(0,0,W,H);const N=50;
+    for(let i=0;i<N;i++)for(let j=0;j<N;j++){const x=(i+.5)/N*5,y=(j+.5)/N*5;const p=SETS[set][1]([x,y]).map((v,q)=>(v-S.mu[q])/S.sd[q]);const z=logitScore(w,p);g.fillStyle=colorMix(css('--bg'),z>0?css('--minus'):css('--c1'),0.3);g.fillRect(i*W/N,H-(j+1)*H/N,W/N+1,H/N+1);}
+    g.strokeStyle=css('--rule');for(let k=0;k<=5;k++){g.beginPath();g.moveTo(k*W/5,0);g.lineTo(k*W/5,H);g.moveTo(0,k*H/5);g.lineTo(W,k*H/5);g.stroke();}
+    D.X.forEach((p,i)=>{g.fillStyle=D.y[i]?css('--minus'):css('--c1');g.beginPath();g.arc(p[0]/5*W,H-p[1]/5*H,4,0,7);g.fill();g.strokeStyle=css('--surface');g.lineWidth=1;g.stroke();});
+    out.innerHTML='';Object.entries(SETS).forEach(([k,v])=>out.append(h('div',{style:`display:grid;grid-template-columns:minmax(0,16rem) minmax(2rem,1fr) auto;gap:.6rem;align-items:center;margin:.3rem 0;font-size:.88rem;${k===set?'font-weight:700':''}`},h('span',{},v[0]),h('div',{class:'bar'},h('i',{style:`width:${scores[k]*100}%;background:${k===set?'var(--moss)':'var(--muted)'}`})),h('span',{class:'mono'},fr(scores[k]*100,0)+' %'))));
+    vd.innerHTML=`Score de validation croisée (5 plis) avec « ${SETS[set][0]} » : <b>${fr(scores[set]*100,0)} %</b>.`;
+  }
+  onTheme(draw);gen();
+})();
+
+/* ---- Target encoding : la fuite ---- */
+(function(){
+  const root=$('#lab-target');
+  let L=80,mode='naive',seed=1;
+  const ctl=controls(root);
+  slider(ctl,{label:'Nombre de catégories (200 exemples)',min:2,max:100,value:80,onchange:v=>{L=v;run();}});
+  seg(ctl,'Encodage de la catégorie',[['naive','Naïf : moyenne de y sur tout l’apprentissage'],['oof','Hors pli (5 plis)']],'naive',v=>{mode=v;run();});
+  const bt=btns(root);bt.append(btn('Nouveau tirage',()=>{seed++;run();}));
+  const out=h('div');const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(out,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Les étiquettes sont indépendantes des catégories : la vraie performance est de 50 %. Avec l’encodage <b>naïf</b>, la variable encodée contient la moyenne des y <em>de l’exemple lui-même</em> : plus les catégories sont petites (peu d’exemples chacune), plus la fuite est forte : avec 100 catégories (2 exemples chacune) une simple règle à un seuil atteint environ 70 % en apprentissage ; en test elle reste à 50 %. C’est une fuite. Avec l’encodage <b>hors pli</b>, chaque ligne est encodée avec les autres lignes seulement : l’apprentissage retombe vers 50–55 %, proche de la vérité (un petit écart résiduel peut subsister avec de très petites catégories).</p>'})));
+  function run(){
+    const r=rng(seed*23+1);const n=200;const mk=()=>{const c=[],y=[];for(let i=0;i<n;i++){c.push(Math.floor(r()*L));y.push(r()<0.5?1:0);}return {c,y};};
+    const A=mk(),T=mk();
+    const means=(c,y,idx)=>{const s=new Array(L).fill(0),k=new Array(L).fill(0);idx.forEach(i=>{s[c[i]]+=y[i];k[c[i]]++;});return s.map((v,j)=>k[j]?v/k[j]:0.5);};
+    const all=[...Array(n).keys()];const mAll=means(A.c,A.y,all);let encA;
+    if(mode==='naive')encA=A.c.map(c=>[mAll[c]]);
+    else{encA=new Array(n);kfold(n,5,rng(seed+7)).forEach(te=>{const m=means(A.c,A.y,compl(n,te));te.forEach(i=>{encA[i]=[m[A.c[i]]];});});}
+    const encT=T.c.map(c=>[mAll[c]]);
+    const tree=buildTree(encA,A.y,{maxDepth:1});const f=x=>treeProba(tree,x)>=0.5?1:0;
+    const a1=acc(encA.map(f),A.y),a2=acc(encT.map(f),T.y);
+    out.innerHTML='';const stats=h('div',{class:'stats'});stats.append(stat('Exactitude d’apprentissage',fr(a1*100,1)+' %'),stat('Exactitude de test',fr(a2*100,1)+' %'),stat('Exemples par catégorie',fr(n/L,1)),stat('Vérité',' 50 %','étiquettes aléatoires'));out.append(stats);
+    vd.innerHTML=a1-a2>0.1?'<span class="ko">Fuite de la cible :</span> le modèle « apprend » en apprentissage un lien qui n’existe pas.':(mode==='oof'?'<span class="ok">Hors pli :</span> apprentissage et test tous deux proches du hasard, comme il se doit.':'Peu de fuite visible avec si peu de catégories ; augmente leur nombre.');
+  }
+  run();
+})();
+
+/* ---- Normalisation : qui souffre des échelles ---- */
+(function(){
+  const root=$('#lab-norm1');
+  let sl=1000,seed=1;
+  const ctl=controls(root);
+  slider(ctl,{label:'Échelle s de la variable inutile',min:0,max:4,step:0.25,value:3,fmt:v=>fr(Math.pow(10,v),0),onchange:v=>{sl=Math.pow(10,v);run();}});
+  const bt=btns(root);bt.append(btn('Nouveau tirage',()=>{seed++;run();}));
+  const out=h('div',{class:'scroll'});const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(out,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p><b>Plus proche voisin</b> : la distance est dominée par la variable d’échelle énorme (inutile) : exactitude proche du hasard ; standardisée, il retrouve les lunes. <b>Régression logistique par descente de gradient</b> : les échelles disparates compliquent l’optimisation (pas d’apprentissage adapté à une variable, trop grand pour l’autre) ; c’est l’argument « faciliter le réglage des hyperparamètres ». <b>Arbre</b> : identique avant et après, il ne compare que l’ordre des valeurs de chaque colonne : la normalisation ne sert à rien pour les arbres (et donc pour les forêts et le gradient boosting).</p>'})));
+  function run(){
+    const tr=genSet('moons',150,0.9,seed*5+1),te=genSet('moons',300,0.9,seed*5+2);const r=rng(seed*5+3);
+    const aug=(D)=>D.X.map(x=>x.concat([gauss(r)*sl]));const Xa=aug(tr),Xt=aug(te);
+    const S=standardize(Xa);const Zt=standardize(Xt,Xa).Z;
+    const evalSet=(A,B,name)=>{
+      let res=[];
+      const f1=x=>knnProba(A,tr.y,x,5)>=0.5?1:0;res.push(acc(B.map(f1),te.y));
+      const t=buildTree(A,tr.y,{maxDepth:5});res.push(acc(B.map(x=>treeProba(t,x)>=0.5?1:0),te.y));
+      const w=fitLogistic(A,tr.y,{lr:0.3,iters:300,l2:1e-3});res.push(acc(B.map(x=>{const z=logitScore(w,x);return isFinite(z)&&z>0?1:0;}),te.y));return res;};
+    const raw=evalSet(Xa,Xt),std=evalSet(S.Z,Zt);const names=['Plus proches voisins (k = 5)','Arbre de décision (profondeur 5)','Régression logistique (descente de gradient)'];
+    const tb=h('tbody');names.forEach((n,i)=>tb.append(h('tr',{},h('td',{},n),h('td',{class:'num'},fr(raw[i]*100,1)+' %'),h('td',{class:'num'},fr(std[i]*100,1)+' %'),h('td',{class:'num',style:Math.abs(raw[i]-std[i])<0.005?'color:var(--muted)':'font-weight:700;color:var(--plus)'},(std[i]-raw[i]>=0?'+':'')+fr((std[i]-raw[i])*100,1)+' pt'))));
+    out.innerHTML='';out.append(h('table',{class:'mini'},h('thead',{},h('tr',{},h('th',{},'Modèle (exactitude de test)'),h('th',{class:'num'},'Sans normalisation'),h('th',{class:'num'},'Standardisé'),h('th',{class:'num'},'Gain'))),tb));
+    vd.innerHTML=`Variable inutile d’échelle <b>${fr(sl,0)}</b> contre 1 pour les deux variables utiles. L’arbre ne change pas (${fr(raw[1]*100,1)} % / ${fr(std[1]*100,1)} %).`;
+  }
+  run();
+})();
+
+/* ---- Normalisation des signaux ---- */
+(function(){
+  const root=$('#lab-sig');const W=640,H=250,L=40;
+  let norm='none',seed=1;
+  const ctl=controls(root);
+  seg(ctl,'Normalisation par individu',[['none','Aucune'],['minmax','Min-max'],['sum1','Somme à 1'],['l2','Norme L2 = 1'],['z','Moyenne 0, écart-type 1']],'none',v=>{norm=v;draw();});
+  const bt=btns(root);bt.append(btn('Nouveaux signaux',()=>{seed++;gen();}));
+  const cv=mkCanvas(root,W,H,'Signaux superposés');const stats=h('div',{class:'stats'});const vd=h('p',{class:'verdict'});
+  root.append(stats,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Sans normalisation, la distance entre signaux est dominée par le niveau de base (jusqu’à 40) et l’amplitude : le plus proche voisin est souvent trompé et retrouve mal la <b>forme</b>. <b>Min-max</b> et <b>moyenne 0 / écart-type 1</b> (par signal) suppriment niveau et amplitude. <b>Somme à 1</b> et <b>norme L2</b> divisent par l’échelle globale sans retirer le niveau : comme le bruit est faible ici, elles suffisent aussi, mais elles sont moins radicales. Le cours précise que le choix dépend de la nature des données : si le niveau moyen est l’information discriminante, une normalisation qui le retire la détruit.</p>'})));
+  let S=[],lab=[];
+  function gen(){const r=rng(seed*41+3);S=[];lab=[];for(let i=0;i<40;i++){const c=i%2;const amp=Math.exp(r()*Math.log(10)-Math.log(2)),off=r()*40;const s=[];for(let t=0;t<L;t++){const u=t/(L-1);const b=c?Math.abs(Math.sin(2*Math.PI*u)):Math.sin(Math.PI*u);s.push(off+amp*b+gauss(r)*(0.02*amp+0.03));}S.push(s);lab.push(c);}draw();}
+  const nrm=(s,k)=>{const mn=Math.min(...s),mx=Math.max(...s),sm=sum(s),m=mean(s),sd=stdev(s)||1;if(k==='minmax')return s.map(v=>(v-mn)/(mx-mn||1));if(k==='sum1')return s.map(v=>v/(sm||1));if(k==='l2'){const n=Math.sqrt(sum(s.map(v=>v*v)))||1;return s.map(v=>v/n);}if(k==='z')return s.map(v=>(v-m)/sd);return s;};
+  const loo=(A)=>{let c=0;A.forEach((a,i)=>{let best=1e18,bl=0;A.forEach((b,j)=>{if(i===j)return;let d=0;for(let t=0;t<L;t++){const q=a[t]-b[t];d+=q*q;}if(d<best){best=d;bl=lab[j];}});if(bl===lab[i])c++;});return c/A.length;};
+  function draw(){
+    const A=S.map(s=>nrm(s,norm));const g=cv.g;g.clearRect(0,0,W,H);
+    const all=A.slice(0,10).flat();const lo=Math.min(...all),hi=Math.max(...all);const ex=t=>30+t/(L-1)*(W-44),ey=v=>H-24-(v-lo)/(hi-lo||1)*(H-44);
+    g.strokeStyle=css('--rule');g.fillStyle=css('--muted');g.font='11px sans-serif';g.fillText('10 premiers signaux (bleu : une bosse, orange : deux bosses)',30,12);g.beginPath();g.moveTo(30,ey(lo));g.lineTo(W-14,ey(lo));g.stroke();g.fillText(fr(lo,2),0,ey(lo));g.fillText(fr(hi,2),0,ey(hi)+8);
+    A.slice(0,10).forEach((s,i)=>{g.strokeStyle=lab[i]?css('--c2'):css('--c1');g.lineWidth=1.8;g.globalAlpha=.85;g.beginPath();s.forEach((v,t)=>t?g.lineTo(ex(t),ey(v)):g.moveTo(ex(t),ey(v)));g.stroke();});g.globalAlpha=1;
+    const a0=loo(S),a1=loo(A);
+    stats.innerHTML='';stats.append(stat('Plus proche voisin, signaux bruts',fr(a0*100,0)+' %','40 signaux, leave-one-out'),stat('Après « '+({none:'aucune',minmax:'min-max',sum1:'somme à 1',l2:'norme L2',z:'moyenne 0 / écart-type 1'})[norm]+' »',fr(a1*100,0)+' %'));
+    vd.innerHTML=norm==='none'?'Les signaux bruts ont des niveaux et des amplitudes très différents.':(a1>a0+0.1?'<span class="ok">La forme est retrouvée</span> : la normalisation par individu supprime l’échelle (et le niveau).':'Cette normalisation ne retire pas assez de l’échelle (le niveau de base reste) ou n’aide pas ici.');
+  }
+  onTheme(draw);gen();
+})();
+
+/* ---- Quiz ---- */
+Quiz($('#qz-main'),[
+  {t:'mcq',q:'Une colonne numérique contient quelques « ? » (valeurs manquantes) et est lue comme du texte. Que faire ?',o:['Déclarer « ? » comme valeur manquante à la lecture, puis imputer','Supprimer la colonne','Convertir « ? » en 0','Ignorer le problème'],a:0,e:'Un seul « ? » suffit à transformer la colonne en type texte (<code>na_values="?"</code> dans pandas).'},
+  {t:'mcq',q:'Quelle est la stratégie d’imputation la plus robuste aux valeurs aberrantes parmi ces trois ?',o:['La médiane','La moyenne','Une valeur arbitraire (0)','Elles sont toutes équivalentes'],a:0,e:'La médiane est peu affectée par quelques valeurs extrêmes, la moyenne l’est beaucoup.'},
+  {t:'num',q:'Puissances connues (ch) : 90, 95, 100, 105, 100, 88, 100, 165, 175, 153. Quelle est leur moyenne ?',a:117.1,tol:0.05,show:'117,1',e:'Somme = 1 171 ; 1 171 / 10 = 117,1.'},
+  {t:'num',q:'Pour ces mêmes dix puissances, quelle est la médiane ?',a:100,tol:0.01,show:'100',e:'Triées : 88, 90, 95, 100, 100, 100, 105, 153, 165, 175. Médiane = (100 + 100) / 2 = 100.'},
+  {t:'mcq',q:'Quelles options le cours cite-t-il pour une variable <b>discrète</b> manquante ?',o:['Valeur la plus fréquente, échantillonnage multinomial, plus proche voisin, prédicteur','Moyenne et médiane','Interpolation linéaire','Suppression de la colonne uniquement'],a:0,e:'Pour les continues : EM, interpolation, suppression des lignes, valeur arbitraire (moyenne, médiane, plus proche voisin).'},
+  {t:'mcq',q:'Pourquoi ne pas coder Red, Yellow, Green par 0, 1, 2 ?',o:['Cela crée un ordre et des distances qui n’existent pas ; le one-hot évite cela','Parce que c’est plus lent','Parce que scikit-learn l’interdit','Parce que 3 est un nombre premier'],a:0,e:'Le one-hot donne une colonne 0/1 par catégorie.'},
+  {t:'num',q:'Le one-hot d’une variable à 5 catégories (sans regroupement) crée combien de colonnes ?',a:5,e:'Une colonne par catégorie.'},
+  {t:'mcq',q:'Que fait <code>OneHotEncoder(min_frequency=6)</code> ?',o:['Regroupe les catégories qui apparaissent moins de 6 fois dans une colonne « infrequent »','Supprime les 6 premières lignes','Impose 6 colonnes','Normalise les données'],a:0,e:'On réduit le nombre de colonnes et le risque de sur-apprentissage sur les catégories rares.'},
+  {t:'mcq',q:'Discrétisation par quantiles ou linéaire : quelle différence ?',o:['Quantiles : même nombre d’exemples par intervalle ; linéaire : même largeur d’intervalle','Aucune','Quantiles : même largeur ; linéaire : même effectif','Linéaire : supprime les valeurs aberrantes'],a:0,e:'Sur une variable asymétrique, les intervalles linéaires sont très déséquilibrés en effectifs.'},
+  {t:'tf',q:'Sur l’exemple « checkers », un classifieur linéaire sur les coordonnées brutes obtient d’excellents scores de validation croisée.',a:false,e:'Scores ≈ 0,5, 0,5, 0,3, 0,5, 0,4. Il faut ajouter des colonnes adaptées (0,75–0,9 avec les colonnes pair/impair, et davantage avec une interaction).'},
+  {t:'mcq',q:'Pourquoi le produit des parités règle-t-il le damier alors que les parités seules ne le font pas ?',o:['Un modèle linéaire sur des colonnes séparées est additif ; un « ou exclusif » exige une colonne qui combine les deux dimensions','Parce que le produit est plus grand','Parce qu’il normalise les données','Parce que le damier est linéaire'],a:0,e:'Comme « largeur × longueur = surface » : une colonne construite avec la connaissance du problème.'},
+  {t:'mcq',q:'Quel est le risque du target encoding ?',o:['Une fuite : la cible entre dans les variables explicatives','Une perte d’exemples','Une dimension trop grande','Aucun'],a:0,e:'Surtout quand les catégories ont peu d’exemples : on encode l’étiquette de l’exemple lui-même.'},
+  {t:'mcq',q:'Comment limiter la fuite du target encoding (complément) ?',o:['Encoder hors pli (avec la moyenne des autres plis) ou lisser vers la moyenne globale','Encoder avec y de tout le jeu, y compris le test','Supprimer les catégories rares uniquement','Ajouter du bruit aux données'],a:0,e:'Chaque ligne ne doit jamais contribuer à sa propre valeur encodée.'},
+  {t:'mcq',q:'Parmi ces raisons de normaliser, laquelle vient en premier « par ordre d’usage » ?',o:['Améliorer les performances (informations à différentes échelles)','Respecter les propriétés du modèle','Faciliter la visualisation','Réduire la mémoire'],a:0,e:'Ensuite : faciliter le réglage des hyperparamètres (mêmes ordres de grandeur), puis respecter les propriétés du modèle (ex. hypothèse multinomiale).'},
+  {t:'mcq',q:'Quelle formule est la normalisation gaussienne (standard) ?',o:['Z<sub>j</sub> = (X<sub>j</sub> − μ<sub>j</sub>) / σ<sub>j</sub>','Z<sub>j</sub> = X<sub>j</sub> / Σ X<sub>j</sub>','Z<sub>j</sub> = (X<sub>j</sub> − min) / (max − min)','Z<sub>j</sub> = X<sub>j</sub>²'],a:0,e:'C’est aussi la « normalisation standard » de scikit-learn, à tester systématiquement.'},
+  {t:'tf',q:'La normalisation des variables améliore en général un arbre de décision ou un gradient boosting.',a:false,e:'Les arbres ne comparent que l’ordre des valeurs de chaque colonne : une transformation croissante par colonne ne change rien.'},
+  {t:'mcq',q:'Laquelle de ces normalisations impose que la somme des composantes d’un individu vaille 1 ?',o:['La normalisation multinomiale','Le min-max','La normalisation gaussienne','La normalisation de Gram'],a:0,e:'x̃<sub>i</sub> = x<sub>i</sub> / Σ<sub>j</sub> x<sub>ij</sub> ; le min-max ramène dans [0, 1] ; la normalisation de Gram donne ‖x<sub>i</sub>‖ = 1.'},
+  {t:'mcq',q:'Pour détecter des motifs dans des signaux indépendamment de leur échelle, que faire ?',o:['Une normalisation par individu (min-max, somme à 1, somme des carrés à 1, somme à 0…)','Une normalisation par colonne uniquement','Aucune normalisation','Supprimer les signaux de grande amplitude'],a:0,e:'Le choix dépend de la nature des données, et de l’invariance en translation voulue ou non.'},
+  {t:'mcq',q:'Quelle est l’approche standard en ML donnée en conclusion ?',o:['Traitements métier ; batteries de tests classiques (normalisation standard, modèles linéaires + forêts, validation croisée) ; optimisation (feature engineering, grid-search, ensembling)','Toujours un réseau de neurones profond','Choisir un modèle au hasard','Optimiser d’abord, tester ensuite'],a:0,e:'Et, lorsqu’il manque un outil : penser intégration dans scikit-learn.'},
+  {t:'mcq',q:'Pourquoi calculer moyenne et écart-type de normalisation à l’intérieur de chaque pli d’une validation croisée (pipeline) ?',o:['Pour ne pas utiliser d’information du pli de test (fuite de données)','Pour aller plus vite','Parce que scikit-learn l’exige','Pour obtenir de meilleurs scores'],a:0,e:'Les statistiques doivent venir de l’apprentissage seulement.'},
+  {t:'order',q:'Remets dans l’ordre une chaîne de traitements raisonnable.',items:['Lire les données en déclarant les valeurs manquantes','Imputer les valeurs manquantes','Encoder les variables discrètes (one-hot)','Normaliser les variables numériques','Apprendre le modèle','Évaluer par validation croisée'],e:'Dans un pipeline, toutes ces étapes sont refaites dans chaque pli.'}
+]);
+
+</script>
+</body>
+</html>

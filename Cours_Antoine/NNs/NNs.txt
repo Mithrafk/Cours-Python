@@ -1,0 +1,77 @@
+- Perceptron : modèle de classification (discrimination entre 2 classes)
+    g : fonction d'activation (non linéaire). Prend en entrée la somme, et donne la sortie : up/down de l'hyper-plan
+    Si on a une erreur, on modifie le vecteur normal par la distance "ox" (??? qu'est ce que c'est) --> Solution = somme pondéré des exemples 
+    S'il existe une forme linéaire pour separer les 2 ensembles, alors il va le trouver en un nombre fini d'étapes
+    -> indépendamment du nombre d'exemples
+    -> indépendamment de la distribution des exemples
+    -> indépendammentde la dimension de l'espace d'entrée
+
+    Entrée : Hyperplan (S wi * xi + Biais >= 0), intermédiaire : fonction d'activation non linéaire, sortie : fonction linéaire
+
+Limites Perceptron : 
+    très sensible au bruitage
+    s'arrete dès qu'on trouve une séparatrice, même si ca semble très peu robuste des qu'on passe sur de l'evaluation
+    Simple couche peu efficient ?--> Perceptron multicouche
+
+T37. Perceptron multicouche :
+    problème initial : si on change un poids, ca devrait changer tout les autres ?
+
+Algorithme d'apprentissage du perceptron : L'intuition
+    Si yi = +1 et wT * xi < 0 => on augmente wT*xi
+    Si yi = -1 et wT * xi > 0 => On diminue wT*xi
+    Généralisation de l'equation : 
+        Si wT * xi * yi < 0
+        Alors wT = wT + n*yi*xi
+
+- Le perceptron ne peut apprendre que des séparatrices linéaires --> Problème comblé si on pas en Perceptron multi-couche
+    Prbl : On ne sais pas comment apprendre les lien entre les couches
+
+- Apprentissage dans réseaux de neurones
+    objectif : trouver des poids qui minimise l'erreur empirique
+    Cas hors-lignes (gradient total) : On itère plusieurs fois pour tenter d'echaper aux minama locaux
+    Car en-ligne (dragient stochastique) : On fait l'optimisation sur chaque exemple, donc on optimise une fonction différente a chaque fois => On echappe direct aux minama locaux. De plus, on peut le faire à la volée (flux données) si les données n'arrivent pas toutes en meme temps
+
+- Règles d'apprentissage :
+    Retro-propagation de gradient : erreur constatées en fin de calcul sont corrigées par retro-propagation
+
+La representation du prbl peut faire que c'est plus ou moins difficile (image 16x16 visuel, vecteur 256 binaire compliqué)
+Le systeme en lui meme ne cree rien. Il va etre performant car il recoit lors de la conception des connaissances a priori et des données lors de l'entrainement.
+
+Enchassement (Embedding):
+Embedding = changer de representation, sans modifier les informations ?
+
+Data augmentation : crée des données artificiellements pour s'entrainer dessus. Par exemple pour faire des modèles robustes aux rotations, on prend une image, on en crée 6 exemples avec des rotations et on entraine le modèle dessus, il devrait devenir robuste a la rotation.
+On peut aussi modifier la luminosite, le constraste, floutter, bruiter ...
+
+Réseaux GANs (Generative Adversarial Networks) : Essayer d'apprendre un mecanismeproducteur de données 
+=> 1 modele qui repere ce qui est reel et ce qui est faut (generer) : Modele de test/recompense
+Le modele d'interet : le generateur. Produit une image a partir de bruit, on passe cette image dans le 1er modele et on voit s'il arrive a le tromper, et on modifie le generateur pour augmenter sa chance de tromper l'autre.
+==> Très difficile à regler avec 2 modeles qui "evoluent" en meme temps
+
+On peut utiliser des données non etiquetées dans un modele supervisé : Par embedding, on apprend une representation, on fait passer les non etiquetée dans cette representation, on les classes et on train le supervisé avec l'etiquette crée.
+
+phenomene "etrange" dans l'embedding : Si on apprend a reconnaitre la coherence d'un flux video (ordre des frames), le systeme apprend des choses utiles (par ex analyse comportementale de vache ...)
+
+
+Comment faire un modèle qui demande une sortie sur 1000 classes ? 1000 neuronnes trop lourd
+Mais on pourrait sortir avec 10 neuronnes qui code pour 1024 classes, si chaque neuronne est un bit.
+-> prbl = 1 bit d'erreur et on change de classe. ==> Code correcteur d'erreur : on va "laisser" des sortie de libre (qui ne code pas de classe) mais vont nous guider pour se rapprocher de la classe la plus proche. On va corriger les bits erreurs et les remplacer par le bits qui donne la bonne classe.
+ex : 2 catégorie, 1 bit pour les différencié, mais avec 3 bits on tolère 1 bit d'erreur qui nous indique quand meme sur qui on est (2 ou 3 bits d'erreur et on passe dans l'autre classe)
+
+
+Le "reservoir computing" :
+une entrée -> un ensemble de neuronne relié entre eux (pas de réseau à face avant, mais aléatoirement = boucle possible) -> une sortie branchée sur plusieurs neuronnes aléatoirement du reservoir (perceptron)
+--> Fonctionne tres bien sur les séries temporelles (intuition : chaque neuronne va dependre des autres, redondance de la dependance en series temporelle)
+--> On ne sait tjr pas comment ca fonctionne, mais on a de +en+ de regle euristique sur le nombre de neuronne du reservoir, nombre d'epoch avant de figer ...
+
+
+ERM : Principe de Minimisation du Risque Empirique => On ajoute en plus un critère de régulation, sinon Sur-Apprentissage
+    Hypothèse qui presente le minimum de risque empirique
+MAP : Maximum à Posteriori
+    Maximiser la vraissemblance
+MDLP : Principe de minimisation de la longueur de la description
+    Quand on a des données, on va essayer de le decrire avec (un modèle et ses erreurs)
+    On va chercher le modèle le moins complexe tout en ayant un minimum d'erreur
+
+Espace des versions : Toutes les hypothèses h tq R^(h) = 0 => EV = {h: R^(h) = 0 
+}

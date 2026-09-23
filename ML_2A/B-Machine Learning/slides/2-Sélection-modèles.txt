@@ -49,4 +49,21 @@
     
     Par PCA : Les sors un X' qui reduit la dimensionnalité, et induit (pas trivialement) une reduction du nombre de variables
         (méthode du coude pour choisir le nombre de vp à keep)
-        
+    On va maximiser les axes qui portent les variables qui ont des valeur propres fortes (et mettre de coter les variables à valeur faible). Souvent reconnu comme peut bruité les axes à valeur forte
+        (métode du coude : selection des n_premiere valeur propre ==> "axe qui maximise la variance")
+
+    S26 : abscisse graph haut, ordonnée bas
+        ==> d'après graph en bas (axe ordonnée) les 0 donne des y très fort, et les 1 des y très petit ==> On peut dire que que les 0 sont en haut de l'ACP, les 0 en bas
+        ==> Les 3,  9, 8 ... plutot à droite | 1, 4, 7 ... plutot à gauche
+
+S27. Régularisation (terme à rajouter dans la Loss fonction):
+    L ==> Minimiser l'ecart aux données
+    Pour choisir les différentes hypothèses, on cherche la parcimonie (utiliser le moins de features possible)
+    - Ridge : C*||w||²  (--> solution peu parcimonieuse)
+    - Lasso : C||w||1   (--> Plus parcimonieuse : utiliser pour grande dimensionnalité, mais perf moins bonnes ==> Mettre pour statisticien même si instable)
+        ==> Lasso pour selectionner les variables puis Ridge (ou SVM ...) pour l'optimisation/performance
+    - Elestic net : C1*S(|w|) + C2||w||² (balance sur 1 et ²)
+
+    
+validation croisées permet de comparé 2 modèles et donner des p-values sur l'ecart des modèles (avec validation croisées, la perf du modèles est une moyenne sur n_fold modèles "compilés" en 1)
+

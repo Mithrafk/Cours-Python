@@ -2,8 +2,10 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Synthèse · Introduction à l'apprentissage automatique</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Fiche de révision interactive : introduction à l’apprentissage automatique (A. Cornuéjols, IODAA 2026–27)">
+<title>Fiche · Introduction à l’apprentissage automatique</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650&family=Public+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -12,6 +14,8 @@
   --bg:#F5F8F7; --surface:#FFFFFF; --ink:#1C2B36; --muted:#5A6B78;
   --moss:#3F6B4A; --moss-soft:#E3EFE6; --rule:#D3DCDF;
   --plus:#2F7A4E; --minus:#B0413E; --unknown:#C9D3D8; --warn:#8A5A00; --warn-bg:#FBF1DC;
+  --blue:#2B6CB0; --blue-soft:#E4EEF8;
+  --c1:#2B6CB0; --c2:#C2571A; --c3:#2F7A4E; --c4:#8B3FA8; --c5:#B08A00; --c6:#0E8A8A;
   --serif:"Newsreader", Georgia, "Times New Roman", serif;
   --sans:"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -21,36 +25,42 @@
     --bg:#11181C; --surface:#18222A; --ink:#E3EBEE; --muted:#9AAAB4;
     --moss:#8DC29A; --moss-soft:#1F3327; --rule:#2C3A43;
     --plus:#6FC08F; --minus:#E07A76; --unknown:#34434C; --warn:#E8B75A; --warn-bg:#2E2615;
+    --blue:#7FB2E5; --blue-soft:#1B2B3B;
+    --c1:#7FB2E5; --c2:#F0A06A; --c3:#6FC08F; --c4:#C79AE0; --c5:#E8C95A; --c6:#5FCFCF;
   }
 }
 :root[data-theme="dark"]{
   --bg:#11181C; --surface:#18222A; --ink:#E3EBEE; --muted:#9AAAB4;
   --moss:#8DC29A; --moss-soft:#1F3327; --rule:#2C3A43;
   --plus:#6FC08F; --minus:#E07A76; --unknown:#34434C; --warn:#E8B75A; --warn-bg:#2E2615;
+  --blue:#7FB2E5; --blue-soft:#1B2B3B;
+  --c1:#7FB2E5; --c2:#F0A06A; --c3:#6FC08F; --c4:#C79AE0; --c5:#E8C95A; --c6:#5FCFCF;
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:1rem;line-height:1.6}
-img{max-width:100%}
+img,svg{max-width:100%}
 a{color:var(--moss)}
 :focus-visible{outline:2px solid var(--moss);outline-offset:2px}
 
-.layout{display:grid;grid-template-columns:15rem minmax(0,1fr);gap:3rem;max-width:72rem;margin:0 auto;padding:2.5rem 1.5rem 5rem}
-nav.toc{position:sticky;top:1.5rem;align-self:start;font-size:.9rem}
+.layout{display:grid;grid-template-columns:15rem minmax(0,1fr);gap:3rem;max-width:74rem;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+nav.toc{position:sticky;top:calc(1.5rem + env(safe-area-inset-top,0px));align-self:start;font-size:.9rem;max-height:calc(100vh - 3rem);overflow:auto}
 nav.toc p{margin:0 0 .6rem;color:var(--muted);font-weight:600}
 nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:t}
-nav.toc li{counter-increment:t;margin:.15rem 0}
-nav.toc a{display:flex;gap:.6rem;padding:.3rem .5rem;border-radius:4px;color:var(--ink);text-decoration:none}
-nav.toc a::before{content:counter(t);font-family:var(--mono);color:var(--moss);min-width:1rem}
+nav.toc li{counter-increment:t;margin:.1rem 0}
+nav.toc a{display:flex;gap:.6rem;padding:.28rem .5rem;border-radius:4px;color:var(--ink);text-decoration:none}
+nav.toc a::before{content:counter(t);font-family:var(--mono);color:var(--moss);min-width:1.1rem}
 nav.toc a:hover{background:var(--moss-soft)}
-main{max-width:48rem}
+main{max-width:50rem;min-width:0}
 
 header.hero{border-bottom:1px solid var(--rule);padding-bottom:1.75rem;margin-bottom:2rem}
 header.hero h1{font-family:var(--serif);font-weight:650;font-size:clamp(2rem,4.5vw,3rem);line-height:1.1;margin:0 0 .75rem;letter-spacing:-.01em}
-header.hero p{margin:0;color:var(--muted);max-width:40rem}
+header.hero p{margin:0;color:var(--muted);max-width:42rem}
 .focus{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.1rem}
 .focus a{font-size:.85rem;padding:.3rem .7rem;border:1px solid var(--moss);border-radius:999px;text-decoration:none}
+.focus a:hover{background:var(--moss-soft)}
 
 section{padding-top:1.5rem;margin-bottom:2.5rem;scroll-margin-top:1rem}
 h2{font-family:var(--serif);font-weight:650;font-size:1.75rem;line-height:1.2;margin:0 0 1rem;display:flex;gap:.75rem;align-items:baseline}
@@ -61,17 +71,22 @@ ul,ol{padding-left:1.25rem;margin:.4rem 0 1rem}
 li{margin:.2rem 0}
 strong{font-weight:700}
 code,.f{font-family:var(--mono);font-size:.9em}
+.fx{font-family:var(--mono);font-size:.95em;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:.55rem .8rem;margin:.6rem 0;overflow-x:auto;white-space:pre;line-height:1.7}
+sub,sup{line-height:0}
 
 .scroll{overflow-x:auto;margin:1rem 0 1.25rem;border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
-table{border-collapse:collapse;width:100%;font-size:.92rem;min-width:36rem}
-th,td{text-align:left;vertical-align:top;padding:.65rem .8rem;border-bottom:1px solid var(--rule)}
+table{border-collapse:collapse;width:100%;font-size:.92rem;min-width:34rem}
+th,td{text-align:left;vertical-align:top;padding:.6rem .8rem;border-bottom:1px solid var(--rule)}
 th{background:var(--moss-soft);font-weight:700}
 tr:last-child td{border-bottom:0}
 td.sub{color:var(--muted);font-style:italic}
 
 .note{border-left:3px solid var(--warn);background:var(--warn-bg);padding:.7rem 1rem;border-radius:0 6px 6px 0;margin:1rem 0;font-size:.93rem}
 .key{border-left:3px solid var(--moss);background:var(--moss-soft);padding:.8rem 1rem;border-radius:0 6px 6px 0;margin:1rem 0}
-.key p{margin:.2rem 0}
+.key p,.note p,.aside p{margin:.2rem 0}
+.aside{border-left:3px solid var(--blue);background:var(--blue-soft);padding:.7rem 1rem;border-radius:0 6px 6px 0;margin:1rem 0;font-size:.93rem}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--warn);margin-right:.4rem}
+.aside .tag{color:var(--blue)} .key .tag{color:var(--moss)}
 
 /* Timeline */
 .timeline{list-style:none;padding:0;margin:1rem 0;position:relative}
@@ -81,63 +96,112 @@ td.sub{color:var(--muted);font-style:italic}
 .timeline li.fail::after{border-color:var(--minus)}
 .timeline .d{font-family:var(--mono);font-size:.82rem;color:var(--muted);text-align:right;padding-top:.15rem}
 .timeline .t{font-weight:700}
-.timeline .b{font-size:.93rem;color:var(--ink)}
+.timeline .b{font-size:.93rem}
 .timeline li.fail .t{color:var(--minus)}
 .hopes{counter-reset:h;list-style:none;padding:0;display:grid;gap:.5rem}
 .hopes li{counter-increment:h;display:flex;gap:.75rem;align-items:baseline}
 .hopes li::before{content:counter(h);font-family:var(--mono);color:var(--moss);font-weight:600}
 
-/* Induction lab */
-.lab{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:1.25rem 1.25rem 1.4rem;margin:1.25rem 0}
-.lab h3{margin-top:0;font-family:var(--serif);font-size:1.3rem;font-weight:650}
-.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:1rem 1.5rem;margin:.75rem 0 1rem}
-.controls label{display:block;font-size:.9rem;font-weight:600;margin-bottom:.3rem}
-.controls output{font-family:var(--mono);color:var(--moss);margin-left:.35rem}
+/* Labs */
+.lab{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:1.25rem 1.25rem 1.4rem;margin:1.5rem 0}
+.lab>h3{margin:0 0 .25rem;font-family:var(--serif);font-size:1.3rem;font-weight:650}
+.lab .lead{margin:.1rem 0 .9rem;color:var(--muted);font-size:.93rem}
+.lab .lead b{color:var(--ink)}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.8rem 1.5rem;margin:.6rem 0 .9rem}
+.ctl label{display:block;font-size:.88rem;font-weight:600;margin-bottom:.25rem}
+.ctl output{font-family:var(--mono);color:var(--moss);margin-left:.2rem;font-weight:600}
 input[type=range]{width:100%;accent-color:var(--moss)}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(10rem,1fr));gap:.75rem;margin-bottom:1rem}
-.stat{border:1px solid var(--rule);border-radius:6px;padding:.6rem .75rem}
-.stat .v{font-family:var(--mono);font-size:1.05rem;font-weight:600;word-break:break-all}
-.stat .l{font-size:.8rem;color:var(--muted)}
-.stat .fx{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(1.9rem,1fr));gap:4px;margin:.5rem 0 .75rem}
-.cell{aspect-ratio:1;border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:600;font-size:.85rem;background:var(--unknown);color:var(--muted)}
-.cell.p{background:var(--plus);color:#fff}
-.cell.m{background:var(--minus);color:#fff}
-.legend{font-size:.85rem;color:var(--muted);margin:0}
-.verdict{margin:.6rem 0 0;font-size:.93rem}
-
-/* Self test */
-details{border:1px solid var(--rule);border-radius:6px;background:var(--surface);margin:.5rem 0}
-summary{cursor:pointer;padding:.7rem .9rem;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:1rem}
-summary::-webkit-details-marker{display:none}
-summary::after{content:"Voir";font-weight:400;font-size:.82rem;color:var(--moss);flex-shrink:0}
-details[open] summary::after{content:"Masquer"}
-details[open] summary{border-bottom:1px solid var(--rule)}
-details .a{padding:.7rem .9rem}
-details .a p{margin:0}
-.bar{display:flex;gap:.5rem;margin:.5rem 0 1rem}
-button{font:inherit;font-size:.85rem;padding:.35rem .8rem;border-radius:4px;border:1px solid var(--moss);background:transparent;color:var(--moss);cursor:pointer}
+input[type=number],input[type=text],select{font:inherit;font-size:.9rem;padding:.25rem .4rem;border:1px solid var(--rule);border-radius:4px;background:var(--bg);color:var(--ink);max-width:100%}
+input[type=number]{width:4.6rem;font-family:var(--mono)}
+.btns{display:flex;flex-wrap:wrap;gap:.5rem;margin:.6rem 0}
+button{font:inherit;font-size:.85rem;padding:.38rem .8rem;border-radius:4px;border:1px solid var(--moss);background:transparent;color:var(--moss);cursor:pointer}
 button:hover{background:var(--moss-soft)}
+button.pri{background:var(--moss);color:var(--surface)} button.pri:hover{opacity:.9;background:var(--moss)}
+button:disabled{opacity:.45;cursor:default}
+.seg{display:inline-flex;flex-wrap:wrap;gap:0;border:1px solid var(--moss);border-radius:5px;overflow:hidden}
+.seg button{border:0;border-radius:0;border-right:1px solid var(--moss)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"],.btns button[aria-pressed="true"]{background:var(--moss);color:var(--surface)}
+canvas{display:block;width:100%;height:auto;border:1px solid var(--rule);border-radius:6px;background:var(--bg);touch-action:manipulation}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:.9rem;align-items:start}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:.6rem;margin:.8rem 0}
+.stat{border:1px solid var(--rule);border-radius:6px;padding:.5rem .7rem;background:var(--bg)}
+.stat .v{font-family:var(--mono);font-size:1.02rem;font-weight:600;word-break:break-all}
+.stat .l{font-size:.78rem;color:var(--muted)}
+.stat .fx2{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+.verdict{margin:.7rem 0 0;font-size:.93rem}
+.ok{color:var(--plus);font-weight:700} .ko{color:var(--minus);font-weight:700}
+.legend{font-size:.83rem;color:var(--muted);margin:.4rem 0 0}
+.sw{display:inline-block;width:.75rem;height:.75rem;border-radius:2px;vertical-align:-1px;margin-right:.25rem}
+details.obs{margin:.8rem 0 0;font-size:.9rem}
+details.obs summary{cursor:pointer;color:var(--moss);font-weight:600}
+details.obs>div{margin-top:.4rem;padding:.4rem .8rem;border-left:2px solid var(--rule)}
+table.mini{min-width:0;font-size:.85rem}
+table.mini td,table.mini th{padding:.35rem .55rem}
+td.num,th.num{text-align:right;font-family:var(--mono)}
+td.hl,th.hl{background:var(--moss-soft)}
+tr.hl td{background:var(--moss-soft)}
+.mono{font-family:var(--mono)}
+.bar{height:.7rem;background:var(--unknown);border-radius:3px;overflow:hidden;min-width:5rem}
+.bar>i{display:block;height:100%;background:var(--moss)}
+
+/* objets induction */
+.objs{display:grid;grid-template-columns:repeat(auto-fill,minmax(8.2rem,1fr));gap:.5rem;margin:.7rem 0}
+.obj{border:1px solid var(--rule);border-radius:6px;padding:.4rem .5rem;text-align:center;background:var(--bg);cursor:pointer;font:inherit;color:var(--ink);position:relative}
+.obj .g{height:2.3rem;display:flex;align-items:center;justify-content:center;gap:.2rem}
+.obj .g span{display:inline-block;background:currentColor}
+.obj .g span.c{border-radius:50%}
+.obj .lb{font-family:var(--mono);font-weight:700;font-size:.95rem}
+.obj .ds{font-size:.7rem;color:var(--muted);line-height:1.2}
+.obj.p{border-color:var(--plus)} .obj.m{border-color:var(--minus)} .obj.q{border-style:dashed;border-width:2px;border-color:var(--warn)}
+.obj.p .lb{color:var(--plus)} .obj.m .lb{color:var(--minus)} .obj.x .lb{color:var(--muted)}
+.obj.bad{outline:2px solid var(--minus)}
+.obj.off{opacity:.55}
+.chk{display:flex;flex-wrap:wrap;gap:.4rem 1rem;font-size:.9rem;margin:.3rem 0}
+.chk label{display:flex;gap:.35rem;align-items:center;cursor:pointer}
+
+/* quiz */
+.qz{margin:.6rem 0}
+.qhead{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;justify-content:space-between;margin:.4rem 0 .8rem}
+.qscore{font-family:var(--mono);font-size:.9rem}
+.qc{border:1px solid var(--rule);border-radius:8px;background:var(--surface);padding:.8rem 1rem;margin:.6rem 0}
+.qc .qq{font-weight:600;margin:0 0 .5rem}
+.qc .qq .qn{font-family:var(--mono);color:var(--moss);margin-right:.4rem}
+.opts{display:grid;gap:.4rem}
+.opts button{text-align:left;padding:.5rem .7rem;border-color:var(--rule);color:var(--ink);background:var(--bg)}
+.opts button:hover:not(:disabled){border-color:var(--moss)}
+.opts button.right{border-color:var(--plus);background:var(--moss-soft);opacity:1}
+.opts button.wrong{border-color:var(--minus);opacity:1}
+.opts.row{display:flex;flex-wrap:wrap}
+.fb{margin:.6rem 0 0;font-size:.92rem}
+.fb:empty{display:none}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:.4rem 0}
+.chips button{border-color:var(--rule);color:var(--ink);background:var(--bg);text-align:left}
+.chips button b{font-family:var(--mono);color:var(--moss);margin-right:.35rem}
+.numin{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.numin input{width:9rem}
 
 footer{border-top:1px solid var(--rule);padding-top:1rem;color:var(--muted);font-size:.85rem}
 
 @media (max-width: 60rem){
   .layout{grid-template-columns:1fr;gap:1rem;padding-top:1.5rem}
-  nav.toc{position:static;border:1px solid var(--rule);border-radius:6px;padding:.75rem;background:var(--surface)}
-  nav.toc ol{display:grid;grid-template-columns:repeat(auto-fill,minmax(11rem,1fr))}
+  nav.toc{position:static;max-height:none;border:1px solid var(--rule);border-radius:6px;padding:.75rem;background:var(--surface)}
+  nav.toc ol{display:grid;grid-template-columns:repeat(auto-fill,minmax(12rem,1fr))}
 }
 @media (max-width: 34rem){
   .timeline::before{left:.35rem}
   .timeline li{grid-template-columns:1fr;gap:.1rem;padding-left:1.6rem}
   .timeline li::after{left:0}
   .timeline .d{text-align:left}
+  .lab{padding:1rem .85rem 1.1rem}
 }
 @media print{
-  nav.toc,.bar,.lab .controls{display:none}
+  nav.toc,.btns,.controls,.seg{display:none}
   .layout{display:block}
-  details{break-inside:avoid}
-  details .a{display:block}
+  .lab{break-inside:avoid}
+  details>*{display:block}
 }
+
 </style>
 </head>
 <body>
@@ -145,290 +209,746 @@ footer{border-top:1px solid var(--rule);padding-top:1rem;color:var(--muted);font
 <nav class="toc" aria-label="Sommaire">
   <p>Sommaire</p>
   <ol>
-    <li><a href="#types">Types d'apprentissage</a></li>
-    <li><a href="#histoire">Historique</a></li>
-    <li><a href="#biais">Le biais inductif</a></li>
+    <li><a href="#pourquoi">Pourquoi apprendre ?</a></li>
+    <li><a href="#histoire">Historique de l’IA</a></li>
+    <li><a href="#types">Types d’apprentissage et données</a></li>
+    <li><a href="#induction">Induction et biais</a></li>
     <li><a href="#nfl">No Free Lunch</a></li>
+    <li><a href="#fit">Sous- et sur-apprentissage</a></li>
     <li><a href="#ingredients">Trois ingrédients</a></li>
     <li><a href="#versions">Espace des versions</a></li>
     <li><a href="#limites">Limites</a></li>
+    <li><a href="#pieges">Pièges à éviter</a></li>
     <li><a href="#test">Auto-test</a></li>
   </ol>
 </nav>
 
 <main>
 <header class="hero">
-  <h1>Introduction à l'apprentissage automatique</h1>
-  <p>Synthèse du cours d'Antoine Cornuéjols (AgroParisTech, IODAA 2026–27), organisée pour réviser avant le test.</p>
-  <div class="focus" aria-label="Points prioritaires">
-    <a href="#types">Grands types</a>
-    <a href="#histoire">Historique</a>
-    <a href="#biais">Biais : quoi et pourquoi</a>
-    <a href="#nfl">No Free Lunch</a>
+  <h1>Introduction à l’apprentissage automatique</h1>
+  <p>Fiche de révision du cours d’Antoine Cornuéjols (AgroParisTech, IODAA 2026–27, 158 diapositives). Chaque grande notion a son petit laboratoire : manipule d’abord, lis ensuite.</p>
+  <div class="focus">
+    <a href="#lab-induction">Jeu de l’induction</a>
+    <a href="#lab-nfl">No Free Lunch</a>
+    <a href="#lab-fit">Sur-apprentissage</a>
+    <a href="#lab-ce">Élimination des candidats</a>
+    <a href="#test">Auto-test</a>
   </div>
 </header>
 
 <!-- 1 -->
-<section id="types">
-  <h2><span class="n">1</span>Les grands types d'apprentissage</h2>
-  <p>Le cours part de trois objectifs : <strong>comprendre</strong> ses données, <strong>prédire</strong>, <strong>prescrire</strong>. S'y ajoute l'apprentissage par renforcement.</p>
+<section id="pourquoi">
+  <h2><span class="n">1</span>Pourquoi apprendre ?</h2>
+  <p>Certains concepts sont trop difficiles à programmer à la main : les mouvements permis d’un robot, savoir s’il faut recruter une personne, les prédispositions à certains cancers. On les <strong>apprend à partir d’exemples</strong>. Tom Mitchell (2006) résume la discipline par deux questions : comment construire des systèmes qui s’améliorent automatiquement avec l’expérience, et quelles lois fondamentales gouvernent tout processus d’apprentissage ?</p>
+
+  <h3>Trois familles d’applications</h3>
   <div class="scroll"><table>
-    <thead><tr><th>Type</th><th>Données d'entrée</th><th>Objectif</th><th>Exemples du cours</th></tr></thead>
+    <thead><tr><th>Famille</th><th>Ce qu’elle fait</th><th>Exemples du cours</th></tr></thead>
     <tbody>
-      <tr><td><strong>Descriptif</strong><br>(non supervisé)</td><td>S = {x<sub>i</sub>}, <strong>sans étiquette</strong></td><td>Trouver des régularités qui rendent compte de S : <strong>clustering</strong> (ex. mélange de gaussiennes), <strong>motifs fréquents / règles d'association</strong></td><td>Groupes de consommateurs Nutrinet ; paniers fréquents (pizza, coca, glace)</td></tr>
-      <tr><td><strong>Prédictif</strong><br>(supervisé)</td><td>S = {(x<sub>i</sub>, y<sub>i</sub>)}, <strong>étiqueté</strong></td><td>Apprendre h ≈ f pour prédire y sur de <strong>nouveaux</strong> x. <strong>Classification</strong> (y discret) ou <strong>régression</strong> (y continu)</td><td>Spam, chiens/chats, filtrage d'articles pour le GIEC (précision/rappel), nombre d'accidents d'un conducteur</td></tr>
-      <tr><td><strong>Prescriptif</strong></td><td>Observations et interventions</td><td>Trouver des <strong>relations causales</strong> pour agir : corrélation ≠ causalité</td><td>Glaces et maillot de bain ; « quel rendement si j'avais planté X au lieu de Y ? » (contrefactuel)</td></tr>
-      <tr><td><strong>Par renforcement</strong></td><td>Séquence (s<sub>t</sub>, a<sub>t</sub>, r<sub>t</sub>) : perceptions, actions, récompenses</td><td>Apprendre une politique <em>situation → action</em> qui <strong>maximise le gain à long terme</strong> ; la récompense peut dépendre d'actions très antérieures</td><td>Hélicoptère, backgammon (1992), Go (2016), portefeuille d'investissements</td></tr>
+      <tr><td><strong>Reconnaissance et prédiction</strong></td><td>Associer une étiquette ou une valeur à une donnée</td><td>Lésions de la peau (mélanome / bénin) ; segmentation d’images satellites ; véhicules autonomes ; séries temporelles (pluies à Bangalore, bourse, volumes de vente, insectes ravageurs) ; parole (assistants, reconnaissance du locuteur)</td></tr>
+      <tr><td><strong>IA générative</strong></td><td>Produire de nouveaux objets (modèles constructifs)</td><td>AlphaFold (structure 3D d’une protéine à partir de sa séquence d’acides aminés) ; ITHACA (restauration de textes anciens : 62 % de bonnes prédictions contre 25 % pour des spécialistes) ; DeepL ; Midjourney, DALL-E ; ChatGPT ; code (Copilot)</td></tr>
+      <tr><td><strong>IA agentique</strong></td><td>Systèmes (en partie) autonomes, sociétés d’agents spécialisés qui agissent dans leur environnement</td><td>Préparer un voyage et réserver ; animer des communautés en ligne ; automatiser des opérations informatiques (code, doc, debug) ; aide à la découverte scientifique (hypothèses, protocoles, rédaction)</td></tr>
     </tbody>
   </table></div>
-  <p><strong>Autres variantes citées :</strong> semi-supervisé, ranking, apprentissage en ligne.</p>
+  <p>AlphaGo illustre l’apprentissage par renforcement : un joueur « extraterrestre » qui a bousculé la façon de jouer au go.</p>
 
-  <h3>Familles d'applications</h3>
+  <h3>Pourquoi maintenant ?</h3>
   <ul>
-    <li><strong>Reconnaissance et prédiction</strong> : vision, séries temporelles, parole.</li>
-    <li><strong>IA générative</strong> : images, texte, code, AlphaFold, ITHACA.</li>
-    <li><strong>IA agentique</strong> : agents autonomes spécialisés qui agissent dans leur environnement.</li>
+    <li><strong>Calcul</strong> : les ressources croissent de façon exponentielle (échelle logarithmique sur les courbes du cours ; 1 pétaflop = 10<sup>15</sup> opérations flottantes).</li>
+    <li><strong>Données</strong> : « avalanche » de données. En agriculture : capteurs (champs, sol, animaux), drones, marchés, météo, réseaux sociaux, chaîne du froid. En informatique : GitHub, Stack Overflow, Hugging Face.</li>
+    <li><strong>Contre-exemples</strong> : l’alimentation (enquête Nutrinet, environ 277 000 internautes, mais 80 % de femmes, milieux socio-professionnels élevés, abandon après quelques jours : données non représentatives) et l’éducation (peu de données sur ce qui se passe en classe).</li>
   </ul>
-
-  <h3>Vocabulaire des données</h3>
-  <ul>
-    <li><strong>Exemple</strong> (instance) = une ligne.</li>
-    <li><strong>Descripteur / attribut</strong> (feature) = une colonne.</li>
-    <li><strong>Étiquette</strong> (label) = la valeur à prédire.</li>
-  </ul>
-  <p>Types de données : vectorielles, séquences, structurées, temporelles, spatiales.</p>
+  <p>Ce que cela permet de nouveau : <strong>aider à comprendre</strong> (phénomènes complexes, systèmes naturels) et <strong>aider à décider</strong> (acteurs multiples, choix répétés à grande latence : conduite d’exploitation, politique environnementale).</p>
 </section>
 
 <!-- 2 -->
 <section id="histoire">
-  <h2><span class="n">2</span>Historique</h2>
-  <ol class="timeline">
-    <li><span class="d">Préquel</span><div><div class="t">Calcul formalisé</div><div class="b">Pascal, Leibniz, Babbage, Lovelace, Boole.</div></div></li>
-    <li><span class="d">1936–1956</span><div><div class="t">Pionniers et cybernétique</div><div class="b">Turing (calculabilité), von Neumann, <strong>McCulloch &amp; Pitts 1943</strong> (1er neurone formel), <strong>Hebb 1949</strong> (règle d'apprentissage), conférences Macy, Wiener 1948, Shannon 1948. Le vivant vu comme un système de traitement de l'information.</div></div></li>
-    <li><span class="d">1956–1968</span><div><div class="t">Méthodes générales de raisonnement</div><div class="b">IA symbolique : démonstrateurs de théorèmes (résolution, puis Prolog), GPS, CHECKER. Premier connexionnisme : <strong>Perceptron de Rosenblatt (1957–62)</strong>.</div></div></li>
-    <li class="fail"><span class="d">fin 1960s</span><div><div class="t">Échecs</div><div class="b">Traduction automatique ; les experts ne sont pas universels ; le Perceptron est limité.</div></div></li>
-    <li><span class="d">1968/70–1985</span><div><div class="t">« Knowledge is power »</div><div class="b">Représentation des connaissances (réseaux sémantiques, frames, scripts), logiques non monotones et floues, <strong>systèmes experts</strong>, projet CYC.</div></div></li>
-    <li class="fail"><span class="d">limite</span><div><div class="t">Goulot de l'acquisition des connaissances</div><div class="b">Processus lourd, peu systématique, maintenance difficile.</div></div></li>
-    <li><span class="d">1980–2011</span><div><div class="t">Méthodes générales d'apprentissage</div><div class="b">Symbolique : arbres de décision, <strong>espace des versions</strong>, méthode de l'étoile. Connexionnisme : <strong>Hopfield 1982</strong>, <strong>PMC 1985</strong>. Algorithmes génétiques.</div></div></li>
-    <li><span class="d">1995–</span><div><div class="t">Apprentissage statistique</div><div class="b">SVM, boosting, réseaux bayésiens, renforcement. Théorie statistique sous hypothèse <strong>i.i.d.</strong>, tirée par l'industrie. On ne parle plus de connaissances.</div></div></li>
-    <li><span class="d">2012–</span><div><div class="t">Deep learning</div><div class="b">CNN, GAN, modèles génératifs, LLM.</div></div></li>
-    <li><span class="d">2022 / 2024</span><div><div class="t">IA générative, puis IA agentique</div><div class="b">Retour possible de la connaissance (causalité) et des interactions avec les experts.</div></div></li>
+  <h2><span class="n">2</span>Historique de l’IA</h2>
+  <p>Fil conducteur : trois « espoirs » successifs, chacun buté sur une limite qui a lancé la période suivante.</p>
+  <ol class="hopes">
+    <li>L’intelligence repose sur des <strong>processus généraux de raisonnement</strong>.</li>
+    <li>Puis sur <strong>beaucoup de connaissances</strong>.</li>
+    <li>Ces connaissances s’obtiendront par des <strong>processus généraux d’apprentissage</strong>.</li>
   </ol>
-
-  <div class="key">
-    <p><strong>Logique d'ensemble : les « espoirs » successifs</strong></p>
-    <ol class="hopes">
-      <li>L'intelligence repose sur un raisonnement général.</li>
-      <li>Puis sur beaucoup de connaissances.</li>
-      <li>Ces connaissances s'obtiendront par un apprentissage général.</li>
-    </ol>
-  </div>
-  <div class="note">Les slides donnent deux découpages pour « Knowledge is power » (1968–1980 et 1970–1985). Retiens l'ordre des périodes plutôt que les dates exactes.</div>
+  <ul class="timeline">
+    <li><span class="d">Préquel</span><div><div class="t">Calcul formalisé et automatisé</div><div class="b">Bacon, Pascal, Descartes, Leibniz ; Babbage et Ada Lovelace ; Boole ; fondements des mathématiques.</div></div></li>
+    <li><span class="d">1936–1956</span><div><div class="t">Pionniers et cybernétique</div><div class="b">Turing (fonctions calculables = machine), von Neumann (architecture, automates), <strong>McCulloch et Pitts 1943</strong> (premier neurone formel), <strong>Hebb 1949</strong> (règle d’apprentissage), conférences Macy. Wiener 1948 (boucles de rétro-action), Shannon 1948 (théorie de la communication), Watson et Crick 1953 (code génétique) : « les êtres vivants deviennent des systèmes de traitement de signal ».</div></div></li>
+    <li><span class="d">1956–1968</span><div><div class="t">Méthodes générales de raisonnement (espoir 1)</div><div class="b">IA symbolique : démonstrateurs de théorèmes (principe de résolution, d’où Prolog), résolveur universel GPS, CHECKER. Premier connexionnisme : <strong>Perceptron de Rosenblatt (1957–1962)</strong>.</div></div></li>
+    <li class="fail"><span class="d">fin 1960</span><div><div class="t">Échecs</div><div class="b">Traduction automatique ; les experts ne sont pas des experts universels ; le Perceptron est limité.</div></div></li>
+    <li><span class="d">~1968–1985</span><div><div class="t">« Knowledge is power » (espoir 2)</div><div class="b">Représentation des connaissances (réseaux sémantiques, scripts, frames), logiques non monotones / temporelles / floues, systèmes experts, projet CYC.</div></div></li>
+    <li class="fail"><span class="d">limite</span><div><div class="t">Le goulot de l’acquisition des connaissances</div><div class="b">Ingénierie très lourde, peu systématisée, maintenance difficile (« dépasse le quantum d’action : la thèse »).</div></div></li>
+    <li><span class="d">1980–2011</span><div><div class="t">Méthodes générales d’apprentissage (espoir 3)</div><div class="b">Symbolique : algorithme d’élimination, arbres de décision, méthode de l’étoile, <strong>espace des versions</strong>. Connexionnisme : Hopfield 1982, <strong>Perceptron multi-couches 1985</strong>. IA distribuée : algorithmes génétiques, vie artificielle.</div></div></li>
+    <li><span class="d">1995–</span><div><div class="t">Apprentissage statistique</div><div class="b">SVM, boosting, réseaux bayésiens, renforcement. Théorie statistique sous hypothèse i.i.d., tirée par les besoins industriels. On ne parle plus de connaissances.</div></div></li>
+    <li><span class="d">2012–</span><div><div class="t">Réseaux de neurones profonds</div><div class="b">Réseaux convolutionnels, GAN, modèles génératifs, LLM.</div></div></li>
+    <li><span class="d">2022 / 2024</span><div><div class="t">IA générative, puis IA agentique</div><div class="b">Retour possible de la connaissance (causalité) et des interactions avec experts et utilisateurs.</div></div></li>
+  </ul>
+  <div class="note"><p><span class="tag">Attention</span>Les diapositives donnent deux découpages pour « Knowledge is power » (1968–1980 sur la diapo détaillée, 1970–1985 sur la diapo de synthèse). Retiens l’<strong>ordre des périodes</strong> plutôt que les dates exactes.</p></div>
 </section>
 
 <!-- 3 -->
-<section id="biais">
-  <h2><span class="n">3</span>Le biais inductif</h2>
-
-  <h3>Le problème de l'induction (calcul à savoir refaire)</h3>
-  <p>Exemples décrits par 4 attributs binaires : nombre, taille, forme, couleur.</p>
-  <ul>
-    <li>|X| = 2<sup>4</sup> = <strong>16</strong> exemples possibles.</li>
-    <li>Fonctions possibles de X vers {+, −} : 2<sup>16</sup> = <strong>65 536</strong>.</li>
-    <li>Après 6 exemples étiquetés, 10 restent inconnus : 2<sup>10</sup> = <strong>1 024</strong> fonctions compatibles.</li>
-    <li>Pour chaque exemple non vu, <strong>exactement la moitié</strong> de ces fonctions prédit + et l'autre −. Les données seules ne permettent rien prédire.</li>
-  </ul>
-  <p><strong>Avec biais de représentation</strong> (2 descripteurs seulement) : |X| = 4, donc 16 fonctions ; après 3 exemples différents, il en reste 2. L'espace est beaucoup plus contraint, mais si le vrai concept dépend d'un attribut écarté, on ne peut pas le trouver.</p>
-
-  <div class="lab" id="lab">
-    <h3>Simulateur : ce que les données seules permettent de conclure</h3>
-    <div class="controls">
-      <div><label for="n">Attributs binaires n <output id="nOut">4</output></label><input type="range" id="n" min="1" max="6" value="4"></div>
-      <div><label for="k">Exemples étiquetés k <output id="kOut">6</output></label><input type="range" id="k" min="0" max="16" value="6"></div>
-    </div>
-    <div class="stats">
-      <div class="stat"><div class="l">Exemples possibles</div><div class="v" id="sX">16</div><div class="fx">|X| = 2ⁿ</div></div>
-      <div class="stat"><div class="l">Fonctions possibles</div><div class="v" id="sF">65 536</div><div class="fx">2^(2ⁿ)</div></div>
-      <div class="stat"><div class="l">Fonctions compatibles</div><div class="v" id="sR">1 024</div><div class="fx">2^(2ⁿ − k)</div></div>
-    </div>
-    <div class="grid" id="grid" aria-label="Espace des exemples"></div>
-    <p class="legend">Chaque case est un exemple de X : vert = étiqueté +, rouge = étiqueté −, gris = inconnu.</p>
-    <p class="verdict" id="verdict"></p>
-  </div>
-
-  <h3>Définition</h3>
-  <div class="key"><p>Un <strong>biais</strong> est toute hypothèse <em>a priori</em>, extérieure aux données, qui fait préférer certaines hypothèses à d'autres.</p></div>
+<section id="types">
+  <h2><span class="n">3</span>Types d’apprentissage et données</h2>
+  <p>Le cours part de trois objectifs : <strong>comprendre</strong> ses données, <strong>prédire</strong>, <strong>prescrire</strong>. S’y ajoute l’apprentissage par renforcement.</p>
   <div class="scroll"><table>
-    <thead><tr><th>Type de biais</th><th>Nature</th><th>Exemples</th></tr></thead>
+    <thead><tr><th>Type</th><th>Données d’entrée</th><th>Objectif</th><th>Exemples du cours</th></tr></thead>
     <tbody>
-      <tr><td><strong>De représentation</strong><br>(déclaratif)</td><td>Restreint l'espace des hypothèses H ; en général H ≠ F (F = toutes les fonctions possibles)</td><td>Modèles linéaires, conjonctions d'attributs, choix des descripteurs</td></tr>
-      <tr><td><strong>De recherche</strong><br>(procédural)</td><td>Détermine comment on explore H et quelle hypothèse on préfère</td><td>Préférer la plus simple (rasoir d'Ockham), recherche gloutonne, arrêt précoce</td></tr>
+      <tr><td><strong>Descriptif</strong><br>(non supervisé)</td><td>S = {x<sub>i</sub>}, sans étiquette</td><td>Trouver des régularités qui rendent compte de S : <em>clustering</em> (ex. mélange de gaussiennes), <em>motifs fréquents</em> et règles d’association</td><td>Groupes de consommateurs Nutrinet (~280 000 répondants) ; paniers fréquents (pizza, coca, glace) ; (steak, frites, vin)</td></tr>
+      <tr><td><strong>Prédictif</strong><br>(supervisé)</td><td>S = {(x<sub>i</sub>, y<sub>i</sub>)}, étiqueté</td><td>Apprendre h ≈ f pour prédire y sur de nouveaux x. Classification (y discret) ou régression (y continu)</td><td>Spam ; chiens/chats ; filtrage d’articles pour le GIEC (précision et rappel) ; client qui change d’opérateur ; nombre d’accidents d’un conducteur</td></tr>
+      <tr><td><strong>Prescriptif</strong></td><td>Observations et interventions</td><td>Trouver des relations <strong>causales</strong> pour agir ; corrélation ≠ causalité</td><td>Glaces et maillots de bain ; « quel rendement si j’avais planté X au lieu de Y ? » (contrefactuel)</td></tr>
+      <tr><td><strong>Par renforcement</strong></td><td>Séquence (s<sub>t</sub>, a<sub>t</sub>, r<sub>t</sub>) : perceptions, actions, récompenses</td><td>Apprendre une politique « situation perçue → action » qui maximise le gain à long terme ; la récompense peut dépendre d’actions très antérieures (comme apprendre des réflexes)</td><td>Hélicoptère, tennis de table, backgammon (1992), go (2016), portefeuille d’investissements, centrale électrique, Grand DARPA Challenge (2005)</td></tr>
     </tbody>
   </table></div>
+  <p>Autres variantes citées en conclusion : semi-supervisé, <em>ranking</em>, apprentissage en ligne.</p>
 
-  <h3>Pourquoi il est nécessaire</h3>
-  <ul>
-    <li><strong>L'apprentissage est une extrapolation.</strong> Sans biais, on ne fait que mémoriser S et on ne peut rien dire hors de S (voir le simulateur).</li>
-    <li><strong>La perception fonctionne de la même manière.</strong> Illusions d'optique, complétion de percepts, « cratère ou colline » : la perception humaine repose aussi sur des a priori.</li>
-    <li><strong>Le choix du biais conditionne la qualité du modèle.</strong> H trop pauvre : <strong>sous-apprentissage</strong>. H trop riche : <strong>sur-apprentissage</strong>. Le clustering dépend aussi fortement de ses biais.</li>
-    <li><strong>Les garanties sont « de lampadaire ».</strong> Si le monde satisfait mes hypothèses, l'algorithme produit (presque) sûrement une bonne hypothèse. Sinon, il peut en produire de très mauvaises (ex. un monde qui n'est pas parcimonieux).</li>
-  </ul>
+  <h3>Vocabulaire des données</h3>
+  <p>Une ligne = un <strong>exemple</strong> (instance). Une colonne = un <strong>descripteur</strong> (attribut, <em>feature</em>). La colonne à prédire = l’<strong>étiquette</strong> (<em>label</em>). Types de données : vectorielles, séquences, structurées, temporelles, spatiales.</p>
+
+  <div class="lab" id="lab-data">
+    <h3>Repère-toi dans un tableau de données</h3>
+    <p class="lead"><b>Clique sur n’importe quelle cellule</b> du tableau de prospection de la diapo 90 : l’exemple, le descripteur et l’étiquette concernés s’allument.</p>
+  </div>
+
+  <h3>Le clustering dépend du biais</h3>
+  <p>Le cours insiste : en non supervisé, le résultat dépend fortement des <strong>biais a priori</strong> (ici : le nombre de groupes et leur forme). Ils sont nécessaires, et il faut bien les choisir.</p>
+  <div class="lab" id="lab-kmeans">
+    <h3>Mêmes points, autre biais, autres groupes</h3>
+    <p class="lead"><b>Prédis avant de manipuler :</b> l’algorithme des k-moyennes suppose des groupes compacts et arrondis. Que donne-t-il sur deux « lunes » entrelacées ?</p>
+  </div>
+  <div class="aside"><p><span class="tag">Complément</span>Les k-moyennes ne sont qu’un exemple de clustering, choisi ici pour visualiser l’effet d’un biais. La diapo parle d’un mélange de gaussiennes, qui a le même type de biais (groupes elliptiques).</p></div>
+
+  <h3>Entraîne-toi à classer</h3>
+  <div id="qz-types"></div>
 </section>
 
 <!-- 4 -->
-<section id="nfl">
-  <h2><span class="n">4</span>Le No Free Lunch theorem</h2>
-  <div class="key"><p><strong>Énoncé</strong> (Wolpert, années 1990) : en moyenne sur <strong>tous les problèmes possibles</strong> (toutes les fonctions cibles, également probables), <strong>tous les algorithmes d'apprentissage ont la même performance</strong> en généralisation, c'est-à-dire sur les exemples hors échantillon. Cette performance moyenne n'est pas meilleure que le hasard.</p></div>
-  <h3>Conséquences</h3>
+<section id="induction">
+  <h2><span class="n">4</span>Le problème de l’induction et le biais</h2>
+  <p>En supervisé, on veut prédire la classe d’exemples <strong>jamais vus</strong>. La question est double : comment <em>trouver</em> une règle générale (invention) et peut-on <em>garantir</em> quelque chose sur elle (justification) ? Ex. : « quelques émeraudes vertes ⇒ toutes les émeraudes sont vertes ».</p>
+
+  <h3>Le calcul à savoir refaire</h3>
+  <p>Exemples décrits par 4 attributs binaires (nombre, taille, forme, couleur).</p>
   <ul>
-    <li>Aucun algorithme n'est universellement meilleur.</li>
-    <li>Si un algorithme gagne sur une classe de problèmes, il perd nécessairement ailleurs.</li>
-    <li>Il faut <strong>choisir l'algorithme, c'est-à-dire son biais, adapté à la classe de problèmes étudiée.</strong></li>
+    <li>|X| = 2<sup>4</sup> = 16 exemples possibles.</li>
+    <li>Fonctions possibles X → {+, −} : 2<sup>16</sup> = 65 536.</li>
+    <li>Après 6 exemples étiquetés, il reste 10 exemples inconnus : 2<sup>10</sup> = 1 024 fonctions compatibles.</li>
+    <li>Pour chaque exemple non vu, <strong>exactement la moitié</strong> de ces fonctions prédit + et l’autre moitié −. Les données seules ne permettent aucune prédiction.</li>
   </ul>
-  <h3>Lien avec le biais</h3>
-  <p>Le NFL généralise le calcul des 1 024 fonctions : sans hypothèse sur le monde, rien ne permet de préférer une prédiction à une autre. Un algorithme ne peut être bon que si son biais correspond au monde réel.</p>
+  <div class="key"><p><span class="tag">Formule</span><code>n</code> attributs binaires : |X| = 2<sup>n</sup> ; fonctions possibles = 2<sup>(2<sup>n</sup>)</sup> ; après <code>k</code> exemples distincts : 2<sup>(2<sup>n</sup> − k)</sup>.</p></div>
+
+  <div class="lab" id="lab-induction">
+    <h3>Le jeu de l’induction</h3>
+    <p class="lead">Les 16 objets de la diapo 96. <b>Clique sur un objet pour le rendre « connu » ou « inconnu »</b>, puis coche les descripteurs que ton hypothèse a le droit d’utiliser (le biais de représentation). La question de la diapo : quelle est la classe de « 2 grands carrés rouges » ?</p>
+  </div>
+
+  <h3>Définition et deux types de biais</h3>
+  <div class="key"><p>Un <strong>biais</strong> est toute hypothèse a priori, extérieure aux données, qui fait préférer certaines hypothèses à d’autres.</p></div>
+  <div class="scroll"><table>
+    <thead><tr><th>Type de biais</th><th>Nature</th><th>Exemples</th></tr></thead>
+    <tbody>
+      <tr><td><strong>De représentation</strong><br>(déclaratif)</td><td>Restreint l’espace des hypothèses H ; en général H ≠ F (F = toutes les fonctions possibles)</td><td>Modèles linéaires, conjonctions d’attributs, choix des descripteurs</td></tr>
+      <tr><td><strong>De recherche</strong><br>(procédural)</td><td>Détermine <em>comment</em> on explore H et quelle hypothèse on préfère</td><td>Préférer la plus simple (rasoir d’Ockham), recherche gloutonne, arrêt précoce</td></tr>
+    </tbody>
+  </table></div>
+  <svg viewBox="0 0 640 210" role="img" aria-label="F contient H ; dans H une trajectoire de recherche mène vers une hypothèse" style="width:100%;height:auto;max-width:40rem">
+    <rect x="10" y="10" width="620" height="190" rx="8" fill="var(--bg)" stroke="var(--rule)"/>
+    <text x="24" y="36" font-size="15" fill="var(--muted)" font-family="serif" font-style="italic">F : toutes les fonctions X → Y</text>
+    <ellipse cx="200" cy="120" rx="150" ry="62" fill="var(--moss-soft)" stroke="var(--moss)"/>
+    <text x="90" y="100" font-size="15" fill="var(--moss)" font-style="italic" font-family="serif">H : hypothèses admises</text>
+    <path d="M110 140 C150 110,170 165,215 135 S 270 128,285 120" fill="none" stroke="var(--minus)" stroke-width="2" marker-end="url(#ar)"/>
+    <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--minus)"/></marker></defs>
+    <text x="115" y="170" font-size="13" fill="var(--minus)">biais de recherche : le chemin suivi dans H</text>
+    <text x="420" y="80" font-size="13" fill="var(--ink)">biais de représentation :</text>
+    <text x="420" y="98" font-size="13" fill="var(--ink)">on ne cherche que dans H</text>
+    <text x="420" y="150" font-size="13" fill="var(--muted)">la cible f peut être hors de H</text>
+    <circle cx="530" cy="170" r="5" fill="var(--ink)"/><text x="512" y="190" font-size="13" fill="var(--ink)">f</text>
+  </svg>
+
+  <h3>Pourquoi un biais est nécessaire</h3>
+  <ul>
+    <li>L’apprentissage est une <strong>extrapolation</strong>. Sans biais, on ne fait que mémoriser S et on ne peut rien dire hors de S (voir le jeu ci-dessus).</li>
+    <li>La <strong>perception</strong> fonctionne pareil : illusions d’optique, complétion de percepts, « cratère ou colline ? » reposent sur des a priori.</li>
+    <li>Un exemple concret de biais : le <strong>plus proche voisin</strong> suppose une notion de distance et une hypothèse de continuité dans X.</li>
+    <li>Le choix du biais conditionne la qualité : H trop pauvre → sous-apprentissage ; H trop riche → sur-apprentissage.</li>
+  </ul>
 </section>
 
 <!-- 5 -->
-<section id="ingredients">
-  <h2><span class="n">5</span>Les trois ingrédients de l'apprentissage</h2>
-  <div class="scroll"><table>
-    <thead><tr><th>Ingrédient</th><th>Question posée</th></tr></thead>
-    <tbody>
-      <tr><td><strong>L'espace des hypothèses H</strong></td><td>Quelle représentation choisir ? En général H ≠ F.</td></tr>
-      <tr><td><strong>Le critère inductif</strong></td><td>Comment évaluer une hypothèse h à partir de S ?</td></tr>
-      <tr><td><strong>La méthode d'exploration de H</strong></td><td>Comment trouver une bonne hypothèse, voire la meilleure ?</td></tr>
-    </tbody>
-  </table></div>
+<section id="nfl">
+  <h2><span class="n">5</span>No Free Lunch theorem</h2>
+  <div class="key"><p><span class="tag">Énoncé (Wolpert, années 1990)</span>En moyenne sur tous les problèmes possibles (toutes les fonctions cibles, également probables), tous les algorithmes d’apprentissage ont la même performance en généralisation, c’est-à-dire hors de l’échantillon d’apprentissage. Cette performance moyenne n’est pas meilleure que le hasard.</p></div>
+  <ul>
+    <li>Aucun algorithme n’est universellement meilleur.</li>
+    <li>S’il gagne sur une classe de problèmes, il perd nécessairement ailleurs.</li>
+    <li>Il faut <strong>choisir l’algorithme, donc son biais, adapté à la classe de problèmes étudiée</strong>.</li>
+  </ul>
+  <p>C’est la généralisation du calcul des 1 024 fonctions : sans hypothèse sur le monde, rien ne permet de préférer une prédiction à une autre.</p>
+
+  <div class="lab" id="lab-nfl">
+    <h3>Vérifie le théorème par le calcul</h3>
+    <p class="lead">Univers minuscule : 3 attributs binaires, donc 8 points et 256 fonctions cibles possibles. Le simulateur entraîne chaque algorithme sur les points « connus » que tu choisis, pour <b>chaque</b> fonction cible d’un « monde », puis mesure l’exactitude sur les points inconnus.</p>
+  </div>
 </section>
 
 <!-- 6 -->
-<section id="versions">
-  <h2><span class="n">6</span>Bonus : l'espace des versions (Mitchell)</h2>
-  <p>L'apprentissage supervisé est vu comme une <strong>recherche dans H</strong>.</p>
-  <ul>
-    <li><strong>Relation de généralité</strong> : h₁ est plus générale que h₂ si les exemples couverts par h₂ sont inclus dans ceux couverts par h₁. C'est un <strong>ordre partiel</strong> sur H, qui forme un <strong>treillis</strong>.</li>
-    <li><strong>Complète</strong> : couvre tous les positifs. <strong>Correcte</strong> : ne couvre aucun négatif. <strong>Cohérente</strong> (consistante) : les deux.</li>
-  </ul>
+<section id="fit">
+  <h2><span class="n">6</span>Sous-apprentissage, sur-apprentissage et garanties</h2>
+  <div class="lab" id="lab-fit">
+    <h3>Richesse de H : ajuste le degré</h3>
+    <p class="lead">Ici, H = polynômes de degré ≤ d. <b>Prédis :</b> l’erreur d’apprentissage peut-elle jamais remonter quand d augmente ? Et l’erreur de test ? Puis change le nombre d’exemples.</p>
+  </div>
+  <div class="scroll"><table>
+    <thead><tr><th>Situation</th><th>Symptôme</th><th>Cause</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Sous-apprentissage</strong></td><td>Erreur forte partout</td><td>H trop pauvre (le vrai concept en est hors)</td></tr>
+      <tr><td><strong>Bon apprentissage</strong></td><td>Erreurs faibles et proches</td><td>Biais adapté au monde</td></tr>
+      <tr><td><strong>Sur-apprentissage</strong></td><td>Erreur d’apprentissage très faible, erreur de test forte</td><td>H trop riche : on colle au bruit</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Les garanties « de lampadaire »</h3>
+  <p>Les résultats théoriques disent : <strong>si</strong> le monde satisfait mes hypothèses sur lui, <strong>alors</strong> l’algorithme produit (quasi sûrement) une bonne hypothèse. Sinon, il peut en produire de très mauvaises (ex. si le monde n’est pas parcimonieux). Comme chercher ses clés sous le lampadaire : on cherche là où l’on sait garantir quelque chose.</p>
+</section>
 
-  <h3>Opérateurs d'exploration</h3>
+<!-- 7 -->
+<section id="ingredients">
+  <h2><span class="n">7</span>Les trois ingrédients de l’apprentissage</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Ingrédient</th><th>Question posée</th></tr></thead>
+    <tbody>
+      <tr><td><strong>L’espace des hypothèses H</strong></td><td>Quelle représentation choisir ? En général H ≠ F.</td></tr>
+      <tr><td><strong>Le critère inductif</strong></td><td>Comment évaluer chaque hypothèse h à partir de S ?</td></tr>
+      <tr><td><strong>La méthode d’exploration de H</strong></td><td>Comment trouver une bonne hypothèse, voire la meilleure ?</td></tr>
+    </tbody>
+  </table></div>
+  <p>Le cours voit l’apprentissage supervisé comme <strong>un jeu entre deux espaces</strong> : l’espace des exemples X et l’espace des hypothèses H. Apprendre = chercher dans H une approximation du concept cible ; toute la question est de <em>contrôler l’exploration de H</em>.</p>
+</section>
+
+<!-- 8 -->
+<section id="versions">
+  <h2><span class="n">8</span>L’espace des versions (Mitchell)</h2>
+  <p>Chaque hypothèse h couvre un sous-ensemble d’exemples de X. Corriger une hypothèse fautive suppose de la <em>généraliser</em> (elle rate un positif) ou de la <em>spécialiser</em> (elle couvre un négatif).</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Propriété</th><th>Signification</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Complète</strong></td><td>Couvre tous les positifs</td></tr>
+      <tr><td><strong>Correcte</strong></td><td>Ne couvre aucun négatif</td></tr>
+      <tr><td><strong>Cohérente</strong> (consistante)</td><td>Complète <em>et</em> correcte</td></tr>
+    </tbody>
+  </table></div>
+  <p><strong>Relation de généralité</strong> : h₁ est plus générale que h₂ si les exemples couverts par h₂ sont inclus dans ceux couverts par h₁. C’est un <strong>ordre partiel</strong> sur H (un treillis).</p>
+  <h3>Opérateurs d’exploration</h3>
   <ul>
-    <li><strong>Généralisation</strong> : supprimer une conjonction (<span class="f">A∧B → C</span> devient <span class="f">A → C</span>) ; ajouter une alternative (<span class="f">A∨B</span>) ; étendre le domaine d'une valeur (rouge devient rouge ∨ bleu) ; monter dans la hiérarchie (chlore et brome deviennent halogène).</li>
-    <li><strong>Spécialisation</strong> : l'inverse.</li>
+    <li><strong>Généralisation</strong> : supprimer une conjonction (A∧B → C devient A → C) ; ajouter une alternative (A → C devient A∨B → C) ; étendre le domaine d’un descripteur (rouge devient rouge ∨ bleu) ; monter dans la hiérarchie des descripteurs (chlore et brome deviennent halogène).</li>
+    <li><strong>Spécialisation</strong> : l’inverse.</li>
     <li><strong>Reformulation</strong> : réécriture logiquement équivalente.</li>
   </ul>
+  <div class="key"><p><span class="tag">Deux bornes suffisent</span>L’espace des versions est l’ensemble des hypothèses de H cohérentes avec les exemples. Il est entièrement défini par sa borne inférieure <strong>S</strong> (hypothèses cohérentes les plus spécifiques) et sa borne supérieure <strong>G</strong> (les plus générales).</p></div>
 
-  <h3>Deux bornes suffisent</h3>
-  <p>L'<strong>espace des versions</strong> est l'ensemble des hypothèses de H cohérentes avec les exemples. Il est entièrement défini par <strong>S</strong> (les plus spécifiques) et <strong>G</strong> (les plus générales).</p>
-
-  <h3>Algorithme d'élimination des candidats</h3>
+  <h3>Algorithme d’élimination des candidats</h3>
+  <p>Initialiser S et G avec les hypothèses les plus spécifiques (générales) cohérentes avec le premier exemple positif. Pour chaque nouvel exemple, mettre à jour S puis G, jusqu’à convergence (S = G) ou effondrement (S = G = ∅).</p>
   <div class="scroll"><table>
     <thead><tr><th>Exemple reçu</th><th>Mise à jour de S</th><th>Mise à jour de G</th></tr></thead>
     <tbody>
-      <tr><td><strong>Positif</strong></td><td>Généraliser <strong>minimalement</strong> pour le couvrir, puis éliminer ce qui couvre un négatif ou est plus général qu'un autre élément de S</td><td>Éliminer les hypothèses qui ne le couvrent pas</td></tr>
-      <tr><td><strong>Négatif</strong></td><td>Éliminer les hypothèses qui le couvrent</td><td>Spécialiser <strong>minimalement</strong> pour l'exclure, garder ce qui est plus général qu'au moins un élément de S, éliminer ce qui est plus spécifique qu'un autre élément de G</td></tr>
+      <tr><td><strong>Positif</strong></td><td>Généraliser <em>minimalement</em> les hypothèses qui ne le couvrent pas ; puis éliminer celles qui couvrent un négatif ou qui sont plus générales qu’un autre élément de S</td><td>Éliminer les hypothèses qui ne le couvrent pas</td></tr>
+      <tr><td><strong>Négatif</strong></td><td>Éliminer les hypothèses qui le couvrent</td><td>Spécialiser <em>minimalement</em> celles qui le couvrent ; garder celles plus générales qu’au moins un élément de S ; éliminer celles plus spécifiques qu’un autre élément de G</td></tr>
     </tbody>
   </table></div>
 
-  <h3>Exemple minimal</h3>
-  <p>Hypothèses notées <span class="f">⟨Taille, Forme, Couleur⟩</span>, « ? » = n'importe quelle valeur.</p>
-  <div class="scroll"><table>
-    <thead><tr><th>Étape</th><th>Exemple</th><th>S</th><th>G</th></tr></thead>
-    <tbody>
-      <tr><td>1</td><td>+ (grand, carré, rouge)</td><td class="f">⟨grand, carré, rouge⟩</td><td class="f">⟨?, ?, ?⟩</td></tr>
-      <tr><td>2</td><td>+ (grand, cercle, rouge)</td><td class="f">⟨grand, ?, rouge⟩</td><td class="f">⟨?, ?, ?⟩</td></tr>
-      <tr><td>3</td><td>− (petit, cercle, rouge)</td><td class="f">⟨grand, ?, rouge⟩</td><td class="f">⟨grand, ?, ?⟩</td></tr>
-      <tr><td class="sub" colspan="4">Candidats à l'étape 3 : ⟨grand, ?, ?⟩, ⟨?, carré, ?⟩, ⟨?, ?, vert⟩. Seul le premier reste plus général que S.</td></tr>
-      <tr><td>4</td><td>− (grand, cercle, vert)</td><td class="f">⟨grand, ?, rouge⟩</td><td class="f">⟨grand, ?, rouge⟩</td></tr>
-      <tr><td class="sub" colspan="4">S = G : convergence.</td></tr>
-    </tbody>
-  </table></div>
+  <div class="lab" id="lab-ce">
+    <h3>Simulateur d’élimination des candidats</h3>
+    <p class="lead">Hypothèses de la forme ⟨taille, forme, couleur⟩ où « ? » = n’importe quelle valeur. <b>Ajoute des exemples un par un</b> (ou charge l’exemple du cours) et regarde S et G se resserrer. Le tableau du bas énumère <em>toutes</em> les hypothèses cohérentes pour vérifier que S et G en sont bien les bornes.</p>
+  </div>
 
   <h3>Propriétés (questions probables)</h3>
   <div class="scroll"><table>
     <thead><tr><th>Question</th><th>Réponse</th></tr></thead>
     <tbody>
       <tr><td>Incrémental ?</td><td>Oui, il traite les exemples un par un.</td></tr>
-      <tr><td>Complexité ?</td><td>G peut croître <strong>exponentiellement</strong>.</td></tr>
-      <tr><td>Que faire sans convergence ?</td><td>Faire <strong>voter</strong> les hypothèses de l'espace des versions.</td></tr>
-      <tr><td>Que signifie S = G = ∅ ?</td><td>Aucune hypothèse de H n'est cohérente : données <strong>bruitées</strong> ou <strong>biais inadapté</strong> (le concept cible n'est pas dans H).</td></tr>
-      <tr><td>Apprentissage actif possible ?</td><td>Oui : demander l'étiquette de l'exemple qui <strong>coupe l'espace des versions en deux</strong>.</td></tr>
+      <tr><td>Complexité ?</td><td>G peut croître exponentiellement.</td></tr>
+      <tr><td>Que faire sans convergence ?</td><td>Faire voter les hypothèses de l’espace des versions.</td></tr>
+      <tr><td>Que signifie S = G = ∅ ?</td><td>Aucune hypothèse de H n’est cohérente : données bruitées, ou biais inadapté (le concept cible n’est pas dans H).</td></tr>
+      <tr><td>Apprentissage actif possible ?</td><td>Oui : demander l’étiquette de l’exemple qui coupe l’espace des versions en deux.</td></tr>
       <tr><td>Données bruitées ?</td><td>Très fragile : un seul exemple mal étiqueté élimine la bonne hypothèse.</td></tr>
     </tbody>
   </table></div>
-  <p><strong>Illustration du cours :</strong> LEX (Mitchell), qui apprend des heuristiques d'intégration symbolique.</p>
+  <h3>Illustration : LEX (Mitchell)</h3>
+  <p>LEX apprend des heuristiques d’intégration symbolique par un cycle à quatre modules : le <em>générateur de problèmes</em> propose un exercice → le <em>résolveur</em> tente de le résoudre → le <em>critique</em> analyse la trace détaillée de la tentative → le <em>généralisateur</em> tire des exemples d’apprentissage et produit des heuristiques partiellement apprises, qui orientent le générateur.</p>
 </section>
 
-<!-- 7 -->
+<!-- 9 -->
 <section id="limites">
-  <h2><span class="n">7</span>Limites évoquées</h2>
+  <h2><span class="n">9</span>Limites évoquées</h2>
   <ul>
     <li><strong>Exemples adversariaux</strong> : une perturbation imperceptible suffit à changer la prédiction.</li>
-    <li><strong>Explicabilité</strong> : les cartes Grad-CAM montrent que l'explication d'un réseau profond reste difficile.</li>
-    <li><strong>Voiture dans la piscine</strong> (Bottou) : le modèle s'appuie sur des corrélations de contexte plutôt que sur l'objet.</li>
-    <li><strong>Données non représentatives</strong> : Nutrinet compte ~80 % de femmes, surtout de milieux socio-professionnels élevés, avec beaucoup d'abandons.</li>
+    <li><strong>Explicabilité</strong> : les cartes Grad-CAM montrent que l’explication d’un réseau profond reste difficile (même sur des illusions d’optique).</li>
+    <li><strong>Voiture dans la piscine</strong> (Bottou, ICML 2015) : le modèle s’appuie sur des corrélations de contexte plutôt que sur l’objet.</li>
+    <li><strong>Annotation d’images</strong> automatique : pas toujours fiable.</li>
+    <li><strong>Données non représentatives</strong> : Nutrinet (~80 % de femmes, milieux favorisés, abandons).</li>
   </ul>
+  <div class="key"><p><span class="tag">Conclusion du cours</span>Plusieurs types de tâches : supervisé, non supervisé, renforcement (et semi-supervisé, ranking, en ligne). L’apprentissage supervisé est une <strong>recherche dans un espace d’hypothèses</strong> : comment coder les entrées ? comment choisir H ? comment évaluer les hypothèses ? comment explorer H ?</p></div>
 </section>
 
-<!-- 8 -->
+<!-- 10 -->
+<section id="pieges">
+  <h2><span class="n">10</span>Pièges à éviter</h2>
+  <div class="note"><ul>
+    <li><strong>2<sup>2ⁿ</sup> n’est pas (2<sup>n</sup>)<sup>2</sup></strong> : fonctions possibles = 2 puissance |X|, avec |X| = 2<sup>n</sup>. Pour n = 4 : 2<sup>16</sup>, pas 2<sup>8</sup>.</li>
+    <li>Après k exemples il reste 2<sup>(|X|−k)</sup> fonctions, et <em>pas</em> |X|−k. Chaque exemple divise le nombre par 2.</li>
+    <li><strong>Non supervisé ≠ pas de biais</strong> : le clustering dépend fortement des hypothèses faites (nombre et forme des groupes).</li>
+    <li><strong>Complète ≠ correcte</strong> : complète = couvre tous les positifs ; correcte = ne couvre aucun négatif. Seule la conjonction des deux est « cohérente ».</li>
+    <li>Les diapos donnent deux découpages pour « Knowledge is power » : retiens l’ordre, pas les dates.</li>
+    <li>NFL : la moyenne porte sur <em>tous</em> les problèmes. Un algorithme peut très bien être meilleur sur <em>votre</em> classe de problèmes.</li>
+    <li>S = G = ∅ ne dit pas « pas de chance » : il dit que <em>H ne contient pas le concept</em> (ou que les données sont bruitées).</li>
+  </ul></div>
+</section>
+
+<!-- 11 -->
 <section id="test">
-  <h2><span class="n">8</span>Auto-test</h2>
-  <p>Réponds de tête, puis vérifie.</p>
-  <div class="bar"><button type="button" id="openAll">Tout afficher</button><button type="button" id="closeAll">Tout masquer</button></div>
-
-  <details><summary>Qu'est-ce qui distingue supervisé et non supervisé ?</summary><div class="a"><p>La présence ou non d'étiquettes y dans l'échantillon S.</p></div></details>
-  <details><summary>Pourquoi l'apprentissage prescriptif est-il difficile ?</summary><div class="a"><p>Il exige des relations causales, pas seulement des corrélations (glaces et maillots de bain).</p></div></details>
-  <details><summary>Qu'est-ce qui distingue le renforcement du supervisé ?</summary><div class="a"><p>Une récompense éventuellement retardée au lieu d'une étiquette par exemple, et l'objectif de maximiser un gain à long terme.</p></div></details>
-  <details><summary>Citer les grandes périodes de l'IA dans l'ordre.</summary><div class="a"><p>Cybernétique et pionniers → raisonnement général (IA symbolique, Perceptron) → « Knowledge is power » (systèmes experts) → méthodes générales d'apprentissage → apprentissage statistique → deep learning → IA générative puis agentique.</p></div></details>
-  <details><summary>Qu'est-ce qui a mis fin à l'ère des systèmes experts ?</summary><div class="a"><p>Le goulot de l'acquisition des connaissances : ingénierie lourde, peu systématique, maintenance difficile.</p></div></details>
-  <details><summary>Combien de fonctions pour n attributs binaires ? Combien après k exemples distincts ?</summary><div class="a"><p><span class="f">2^(2ⁿ)</span>, puis <span class="f">2^(2ⁿ − k)</span>.</p></div></details>
-  <details><summary>Qu'est-ce qu'un biais et pourquoi est-il nécessaire ?</summary><div class="a"><p>Une hypothèse a priori, extérieure aux données, qui fait préférer certaines hypothèses. Sans elle, toutes les fonctions compatibles avec S restent également plausibles et aucune généralisation n'est possible.</p></div></details>
-  <details><summary>Biais de représentation ou biais de recherche ?</summary><div class="a"><p>Le premier restreint ce qu'on peut apprendre (H), le second détermine comment on choisit parmi les hypothèses possibles.</p></div></details>
-  <details><summary>Énoncer le No Free Lunch theorem et sa conséquence pratique.</summary><div class="a"><p>En moyenne sur tous les problèmes possibles, tous les algorithmes se valent en généralisation. En pratique : tester plusieurs modèles et choisir celui dont le biais correspond au domaine.</p></div></details>
-  <details><summary>Quels sont les trois ingrédients de l'apprentissage ?</summary><div class="a"><p>L'espace des hypothèses H, le critère inductif, la méthode d'exploration de H.</p></div></details>
-  <details><summary>Que signifie S = G = ∅ dans l'algorithme d'élimination des candidats ?</summary><div class="a"><p>Aucune hypothèse de H n'est cohérente avec les données : bruit ou biais inadapté.</p></div></details>
+  <h2><span class="n">11</span>Auto-test</h2>
+  <p>QCM, vrai/faux, questions numériques et mises en ordre, avec correction immédiate et explication. Le bouton « Recommencer » mélange les questions et les propositions.</p>
+  <div id="qz-main"></div>
 </section>
 
-<footer>Source : transparents « Introduction à l'Apprentissage Automatique », A. Cornuéjols, AgroParisTech. Référence : Cornuéjols, Miclet &amp; Barra, <em>L'apprentissage artificiel</em>, Eyrolles, 4e éd. 2021.</footer>
+<footer>Source : transparents « Introduction à l’Apprentissage Automatique », A. Cornuéjols, AgroParisTech (IODAA 2026–27). Référence : Cornuéjols, Miclet & Barra, <em>L’apprentissage artificiel</em>, Eyrolles, 4<sup>e</sup> éd. 2021. Les encadrés « Complément » sortent du cours.</footer>
 </main>
 </div>
 
 <script>
+'use strict';
+/* ---------- helpers ---------- */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function h(tag,attrs,...kids){
+  const e=document.createElement(tag);
+  for(const k in (attrs||{})){const v=attrs[k];
+    if(v==null||v===false)continue;
+    if(k==='class')e.className=v;
+    else if(k==='html')e.innerHTML=v;
+    else if(k.slice(0,2)==='on')e.addEventListener(k.slice(2),v);
+    else e.setAttribute(k,v===true?'':v);}
+  for(const c of kids.flat(Infinity)){if(c==null||c===false)continue;e.append(c.nodeType?c:document.createTextNode(String(c)));}
+  return e;}
+const redraws=[]; const onTheme=fn=>{redraws.push(fn);};
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>redraws.forEach(f=>f()));}catch(e){}
+new MutationObserver(()=>redraws.forEach(f=>f())).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+function mkCanvas(parent,w,hh,label){
+  const c=h('canvas',{role:'img','aria-label':label||''});
+  const d=Math.min(window.devicePixelRatio||1,2);
+  c.width=Math.round(w*d);c.height=Math.round(hh*d);
+  const g=c.getContext('2d');g.scale(d,d);parent.append(c);
+  return {c,g,w,h:hh};}
+let _id=0;
+function slider(parent,o){
+  const id='s'+(++_id);const out=h('output',{for:id});
+  const inp=h('input',{type:'range',id,min:o.min,max:o.max,step:o.step||1,value:o.value});
+  const fmt=o.fmt||(v=>v);const upd=()=>{out.textContent=fmt(+inp.value)};
+  inp.addEventListener('input',()=>{upd();o.onchange&&o.onchange(+inp.value)});upd();
+  const wrap=h('div',{class:'ctl'},h('label',{for:id},o.label,' ',out),inp);parent.append(wrap);
+  return {wrap,inp,get v(){return +inp.value},set v(x){inp.value=x;upd()}};}
+function seg(parent,label,opts,val,onchange){
+  const wrap=h('div',{class:'ctl'});const grp=h('div',{class:'seg',role:'group','aria-label':label});let cur=val;
+  const bs=opts.map(([v,t])=>{const b=h('button',{type:'button','aria-pressed':String(v===cur),onclick:()=>{cur=v;bs.forEach(x=>x.b.setAttribute('aria-pressed',String(x.v===cur)));onchange&&onchange(cur)}},t);return{v,b}});
+  grp.append(...bs.map(x=>x.b));wrap.append(h('label',{},label),grp);parent.append(wrap);
+  return {wrap,get v(){return cur},set(v){cur=v;bs.forEach(x=>x.b.setAttribute('aria-pressed',String(x.v===cur)))}};}
+const btn=(t,f,c)=>h('button',{type:'button',class:c||'',onclick:f},t);
+const controls=parent=>{const c=h('div',{class:'controls'});parent.append(c);return c;};
+const btns=parent=>{const c=h('div',{class:'btns'});parent.append(c);return c;};
+const stat=(l,v,f)=>{const e=h('div',{class:'stat'},h('div',{class:'v'},v),h('div',{class:'l'},l),f?h('div',{class:'fx2'},f):null);e.set=(x)=>{e.firstChild.textContent=x};return e;};
+
+/* ---------- maths ---------- */
+function rng(seed){let a=seed>>>0;return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function gauss(r){let u=0;while(u===0)u=r();const v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const fr=(x,d=2)=>{if(!isFinite(x))return String(x);return x.toFixed(d).replace('.',',').replace('-','\u2212')};
+const fmtBig=b=>b.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'\u202F');
+function shuffle(a,r){r=r||Math.random;a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function colorMix(c1,c2,t){ // hex or rgb() strings -> rgb string
+  const p=c=>{if(c[0]==='#'){const n=parseInt(c.slice(1),16);return [n>>16&255,n>>8&255,n&255]}const m=c.match(/[\d.]+/g);return m.slice(0,3).map(Number)};
+  const a=p(c1),b=p(c2);return `rgb(${a.map((x,i)=>Math.round(x+(b[i]-x)*t)).join(',')})`;}
+
+/* ---------- quiz ---------- */
+function Quiz(root,qs,opts){
+  opts=opts||{};let cards=[],score=0,done=0;
+  const head=h('div',{class:'qhead'});const sc=h('div',{class:'qscore','aria-live':'polite'});
+  const list=h('div',{class:'qs'});
+  const bar=h('div',{class:'btns'},btn('Recommencer (ordre mélangé)',()=>build(true)));
+  head.append(sc,bar);root.append(head,list);
+  const upd=()=>{sc.textContent=`Répondu : ${done}/${qs.length} · Score : ${score}/${qs.length}`+(done===qs.length?(score===qs.length?'  — sans faute !':'  — relis les explications des erreurs.'):'')};
+  function finish(card,ok,fbHtml){ if(card.locked)return;card.locked=true;done++;if(ok)score++;card.fb.innerHTML=(ok?'<span class="ok">Correct.</span> ':'<span class="ko">Pas tout à fait.</span> ')+fbHtml;upd();}
+  function build(shuf){
+    score=0;done=0;list.innerHTML='';cards=[];
+    const order=shuf?shuffle(qs):qs;
+    order.forEach((q,n)=>{
+      const card={locked:false,fb:h('div',{class:'fb','aria-live':'polite'})};
+      const el=h('div',{class:'qc'},h('p',{class:'qq'},h('span',{class:'qn'},String(n+1).padStart(2,'0')),h('span',{html:q.q})));
+      if(q.t==='mcq'){
+        const os=shuffle(q.o.map((t,i)=>({t,i})));
+        const box=h('div',{class:'opts'});
+        os.forEach(o=>{const b=h('button',{type:'button',onclick:()=>{
+          if(card.locked)return;
+          $$('button',box).forEach((x,k)=>{x.disabled=true;if(os[k].i===q.a)x.classList.add('right');});
+          if(o.i!==q.a)b.classList.add('wrong');
+          finish(card,o.i===q.a,q.e);}} ,h('span',{html:o.t}));box.append(b);});
+        el.append(box);
+      }else if(q.t==='tf'){
+        const box=h('div',{class:'opts row'});
+        [[true,'Vrai'],[false,'Faux']].forEach(([v,t])=>{const b=h('button',{type:'button',onclick:()=>{
+          if(card.locked)return;$$('button',box).forEach(x=>x.disabled=true);
+          b.classList.add(v===q.a?'right':'wrong');
+          if(v!==q.a)$$('button',box).forEach(x=>{if(x!==b)x.classList.add('right')});
+          finish(card,v===q.a,q.e);}},t);box.append(b);});
+        el.append(box);
+      }else if(q.t==='num'){
+        const inp=h('input',{type:'text',inputmode:'decimal','aria-label':'Ta réponse',placeholder:'ta réponse'});
+        const go=()=>{ if(card.locked)return;
+          const v=parseFloat(inp.value.replace(/[\s\u00a0\u202f]/g,'').replace(',','.'));
+          const ok=isFinite(v)&&Math.abs(v-q.a)<=(q.tol||0);
+          inp.disabled=true;b.disabled=true;
+          finish(card,ok,`Réponse : <b>${q.show||fmtBig(BigInt(Math.round(q.a)))}</b>. `+q.e);};
+        const b=btn('Valider',go);inp.addEventListener('keydown',e=>{if(e.key==='Enter')go()});
+        el.append(h('div',{class:'numin'},inp,b));
+      }else if(q.t==='order'){
+        const pool=h('div',{class:'chips'});const seq=[];
+        const line=h('p',{class:'legend'},'Clique les éléments dans l’ordre.');
+        const items=shuffle(q.items.map((t,i)=>({t,i})));
+        const bs=items.map(it=>{const b=h('button',{type:'button',onclick:()=>{
+          if(card.locked)return;seq.push(it.i);b.disabled=true;b.prepend(h('b',{},String(seq.length)));
+          if(seq.length===items.length){const ok=seq.every((v,i)=>v===i);
+            finish(card,ok,(ok?'':'Ordre attendu : <ol>'+q.items.map(x=>`<li>${x}</li>`).join('')+'</ol>')+q.e);} }},h('span',{html:it.t}));pool.append(b);return b;});
+        const reset=btn('Effacer',()=>{if(card.locked)return;seq.length=0;bs.forEach(b=>{b.disabled=false;const x=b.querySelector('b');x&&x.remove();});});
+        el.append(pool,h('div',{class:'btns'},reset),line);
+      }
+      el.append(card.fb);list.append(el);cards.push(card);
+    });
+    upd();
+  }
+  build(false);
+  return {rebuild:build};
+}
+
+/* ================= Fiche 1 : laboratoires ================= */
+
+/* ---- Vocabulaire des données ---- */
 (function(){
-  var nEl=document.getElementById('n'), kEl=document.getElementById('k');
-  var nOut=document.getElementById('nOut'), kOut=document.getElementById('kOut');
-  var grid=document.getElementById('grid'), verdict=document.getElementById('verdict');
-  function fmt(b){return b.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'\u202F');}
-  function pow2(e){return 1n<<BigInt(e);}
-  // étiquettes pseudo-aléatoires stables
-  function label(i){return ((i*2654435761)>>>0)%3===0?'m':'p';}
-  function render(){
-    var n=+nEl.value, size=1<<n;
-    kEl.max=size; if(+kEl.value>size) kEl.value=size;
-    var k=+kEl.value;
-    nOut.textContent=n; kOut.textContent=k;
-    document.getElementById('sX').textContent=fmt(BigInt(size));
-    document.getElementById('sF').textContent=fmt(pow2(size));
-    document.getElementById('sR').textContent=fmt(pow2(size-k));
-    var html='';
-    for(var i=0;i<size;i++){
-      if(i<k){var l=label(i);html+='<div class="cell '+l+'">'+(l==='p'?'+':'−')+'</div>';}
-      else html+='<div class="cell">?</div>';
+  const root=$('#lab-data');
+  const cols=['Identifiant','Genre','Âge','Niveau d’études','Marié ?','Nb enfants','Revenu','Profession','À prospecter ?'];
+  const rows=[['I_21','M',43,'Bac+5','Oui',3,'55 000','Architecte','OUI'],['I_34','M',25,'Bac+2','Non',0,'21 000','Infirmier','NON'],['I_38','F',34,'Bac+8','Oui',2,'35 000','Chercheuse','OUI'],['I_39','F',67,'Bac','Oui',5,'20 000','Retraitée','NON'],['I_58','F',56,'CAP','Oui',4,'27 000','Ouvrière','NON'],['I_73','M',40,'Bac+3','Non',2,'31 000','Commercial','OUI'],['I_81','F',51,'Bac+5','Oui',3,'75 000','Chef d’entreprise','OUI']];
+  const info=h('p',{class:'verdict','aria-live':'polite'},'Clique sur une cellule.');
+  const tb=h('tbody');
+  const trs=rows.map((r,i)=>{const tr=h('tr',{},r.map((v,j)=>h('td',{'data-c':j,style:'cursor:pointer',tabindex:0,onclick:()=>sel(i,j),onkeydown:e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();sel(i,j)}}},String(v))));tb.append(tr);return tr;});
+  const th=h('tr',{},cols.map((c,j)=>h('th',{'data-c':j},c)));
+  const tbl=h('table',{class:'mini'},h('thead',{},th),tb);
+  root.append(h('div',{class:'scroll'},tbl),info);
+  function sel(i,j){
+    trs.forEach(t=>t.classList.remove('hl'));$$('[data-c]',tbl).forEach(x=>x.classList.remove('hl'));
+    trs[i].classList.add('hl');$$(`[data-c="${j}"]`,tbl).forEach(x=>x.classList.add('hl'));
+    const id=rows[i][0];
+    if(j===8) info.innerHTML=`<b>Étiquette</b> (<em>label</em>) : « ${rows[i][8]} » est la valeur à prédire pour l’exemple ${id}. C’est ce qui distingue le supervisé du non supervisé.`;
+    else if(j===0) info.innerHTML=`<b>Identifiant</b> : il distingue les exemples mais ne sert pas à prédire. La ligne entière ${id} est un <b>exemple</b> (instance).`;
+    else info.innerHTML=`« ${cols[j]} » = <b>${rows[i][j]}</b> : valeur du <b>descripteur</b> (attribut, <em>feature</em>) « ${cols[j]} » pour l’<b>exemple</b> ${id}.`;
+  }
+})();
+
+/* ---- k-moyennes et biais ---- */
+(function(){
+  const root=$('#lab-kmeans');const W=640,H=400;
+  let ds='blobs',seed=1,k=3,pts=[],lab=[];
+  const ctl=controls(root);
+  const sd=seg(ctl,'Jeu de données',[['blobs','Trois nuages'],['moons','Deux lunes']],'blobs',v=>{ds=v;if(v==='moons'&&ks.v===3)ks.v=2;if(v==='blobs'&&ks.v===2)ks.v=3;k=ks.v;gen();run();});
+  const ks=slider(ctl,{label:'Nombre de groupes k',min:1,max:6,value:3,onchange:v=>{k=v;run();}});
+  const bt=btns(root);bt.append(btn('Autre initialisation des centres',()=>{seed++;run();}));
+  const cv=mkCanvas(root,W,H,'Nuage de points colorés par groupe');
+  const stats=h('div',{class:'stats'});const sI=stat('Inertie (somme des carrés des distances aux centres)','—');const sP=stat('Accord avec les vrais groupes','—','pureté');stats.append(sI,sP);
+  const vd=h('p',{class:'verdict','aria-live':'polite'});root.append(stats,vd);
+  root.append(h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{},'Sur les lunes, k = 2 coupe le plan en deux moitiés : les groupes « corrects » ne sont pas convexes, alors que le biais des k-moyennes l’est. Change l’initialisation : même k, résultats différents (deuxième source de biais, côté recherche). Ce n’est pas un défaut de l’algorithme mais la démonstration que « comprendre ses données » passe par des choix a priori.')));
+  let truth=[];
+  function gen(){
+    const r=rng(11);pts=[];truth=[];
+    if(ds==='blobs'){[[-0.9,-0.35],[0.85,-0.5],[0.05,0.6]].forEach((c,ci)=>{for(let i=0;i<60;i++){pts.push([c[0]+gauss(r)*0.22,c[1]+gauss(r)*0.2]);truth.push(ci);}});}
+    else{for(let i=0;i<100;i++){const t=Math.PI*r();pts.push([Math.cos(t)-0.5+gauss(r)*0.07,Math.sin(t)-0.25+gauss(r)*0.07]);truth.push(0);}
+      for(let i=0;i<100;i++){const t=Math.PI*r();pts.push([1-Math.cos(t)-0.5+gauss(r)*0.07,0.5-Math.sin(t)-0.25+gauss(r)*0.07]);truth.push(1);}}
+  }
+  const sx=x=>(x+1.7)/3.4*W, sy=y=>(1.1-y)/2.2*H;
+  let cent=[];
+  function run(){
+    const r=rng(seed*97+k);const idx=shuffle(pts.map((_,i)=>i),r).slice(0,k);
+    cent=idx.map(i=>pts[i].slice());lab=new Array(pts.length).fill(0);
+    for(let it=0;it<60;it++){
+      let ch=false;
+      pts.forEach((p,i)=>{let b=0,bd=1e9;cent.forEach((c,j)=>{const d=(p[0]-c[0])**2+(p[1]-c[1])**2;if(d<bd){bd=d;b=j;}});if(lab[i]!==b){lab[i]=b;ch=true;}});
+      cent=cent.map((c,j)=>{let sx_=0,sy_=0,n=0;pts.forEach((p,i)=>{if(lab[i]===j){sx_+=p[0];sy_+=p[1];n++;}});return n?[sx_/n,sy_/n]:c;});
+      if(!ch)break;
     }
-    grid.innerHTML=html;
-    var u=size-k;
-    if(u===0){
-      verdict.innerHTML='Tous les exemples sont étiquetés : une seule fonction reste, mais il n\u2019y a plus rien à prédire. Sans biais, on ne fait que <strong>mémoriser</strong>.';
-    } else {
-      verdict.innerHTML='Pour chacun des <strong>'+u+'</strong> exemples inconnus, <strong>'+fmt(pow2(u-1))+'</strong> fonctions compatibles prédisent + et autant prédisent −. Sans biais, aucune prédiction n\u2019est justifiée.';
+    draw();
+  }
+  function draw(){
+    const g=cv.g;g.clearRect(0,0,W,H);
+    const cols=['--c1','--c2','--c3','--c4','--c5','--c6'].map(css);
+    pts.forEach((p,i)=>{g.fillStyle=cols[lab[i]%6];g.globalAlpha=.85;g.beginPath();g.arc(sx(p[0]),sy(p[1]),4,0,7);g.fill();});
+    g.globalAlpha=1;
+    cent.forEach((c,j)=>{const x=sx(c[0]),y=sy(c[1]);g.lineWidth=5;g.strokeStyle=css('--surface');g.beginPath();g.moveTo(x-9,y-9);g.lineTo(x+9,y+9);g.moveTo(x+9,y-9);g.lineTo(x-9,y+9);g.stroke();g.lineWidth=2.5;g.strokeStyle=cols[j%6];g.stroke();});
+    let I=0;pts.forEach((p,i)=>{const c=cent[lab[i]];I+=(p[0]-c[0])**2+(p[1]-c[1])**2;});
+    // pureté
+    let pur=0;for(let j=0;j<k;j++){const cnt={};pts.forEach((p,i)=>{if(lab[i]===j){cnt[truth[i]]=(cnt[truth[i]]||0)+1;}});pur+=Math.max(0,...Object.values(cnt));}
+    sI.set(fr(I,1));sP.set(Math.round(100*pur/pts.length)+' %');
+    const nTrue=ds==='blobs'?3:2;
+    vd.innerHTML=(pur/pts.length>0.97)?`<span class="ok">Les groupes trouvés correspondent aux vrais groupes.</span>`:(k===nTrue?`<span class="ko">Le bon nombre de groupes ne suffit pas :</span> le biais de l’algorithme (groupes compacts) ne correspond pas à la forme des données.`:`k = ${k} alors que les données ont ${nTrue} groupes : l’inertie diminue toujours quand k augmente, elle ne dit pas quel k est « vrai ».`);
+  }
+  onTheme(draw);gen();run();
+})();
+
+/* ---- Quiz : classer des scénarios ---- */
+Quiz($('#qz-types'),(()=>{
+  const O=['Descriptif (non supervisé)','Prédictif (supervisé)','Prescriptif','Par renforcement'];
+  const S=[
+    ['Regrouper les répondants de Nutrinet en groupes de consommateurs, sans étiquette de départ.',0,'Pas d’étiquette : on cherche des régularités (clustering).'],
+    ['Décider si un e-mail est un spam à partir de milliers d’e-mails déjà étiquetés.',1,'On dispose de couples (x, y) : classification supervisée.'],
+    ['Savoir quel rendement un agriculteur aurait eu l’an dernier en plantant autre chose.',2,'Question contrefactuelle : il faut des relations causales pour agir, pas de simples corrélations.'],
+    ['Un programme apprend à jouer au go en jouant, avec pour seul signal la victoire ou la défaite.',3,'Perceptions, actions, récompenses éventuellement très différées : renforcement.'],
+    ['Prédire le nombre d’accidents déclarés par un conducteur d’après l’ancienneté de son permis.',1,'y est continu : c’est de la régression, donc du supervisé.'],
+    ['Repérer que (pizza, coca, glace) apparaissent souvent ensemble dans des relevés de consommation.',0,'Recherche de motifs fréquents : descriptif.']
+  ];
+  return S.map(s=>({t:'mcq',q:s[0],o:O,a:s[1],e:s[2]}));
+})());
+
+/* ---- Jeu de l'induction ---- */
+(function(){
+  const root=$('#lab-induction');
+  const P=(n,s,f,c,l)=>({n,s,f,c,l});
+  // s: 0 petit 1 grand ; f: 0 cercle 1 carré ; c: 0 rouge 1 vert
+  const objs=[P(1,1,1,0,'-'),P(1,1,1,1,'+'),P(2,0,1,0,'+'),P(2,1,0,0,'-'),P(1,1,0,1,'+'),P(1,0,0,0,'+'),P(1,0,1,1,'-'),P(1,0,1,0,'+'),P(2,1,1,1,'+'),P(2,0,1,1,'+'),P(2,0,0,0,'+'),P(1,0,0,1,'-'),P(2,1,0,1,'-'),P(2,0,0,1,'+'),P(1,1,0,0,'-'),P(2,1,1,0,null)];
+  const names=['nombre','taille','forme','couleur'];
+  let known=new Set([0,1,2,3,4,5]);const used=[true,true,true,true];
+  const chk=h('div',{class:'chk'});
+  names.forEach((nm,i)=>{const cb=h('input',{type:'checkbox',checked:true,onchange:()=>{used[i]=cb.checked;render();}});chk.append(h('label',{},cb,nm));});
+  const bt=btns(root);
+  bt.append(btn('6 premiers (diapo 95)',()=>{known=new Set([0,1,2,3,4,5]);render();}),btn('15 exemples (diapo 96)',()=>{known=new Set([...Array(15).keys()]);render();}),btn('Aucun',()=>{known=new Set();render();}),btn('8 au hasard',()=>{known=new Set(shuffle([...Array(15).keys()]).slice(0,8));render();}));
+  const grid=h('div',{class:'objs'});
+  const stats=h('div',{class:'stats'});
+  const sX=stat('Exemples possibles','','|X| = 2^d');const sF=stat('Fonctions possibles','','2^|X|');const sK=stat('Exemples connus','');const sR=stat('Fonctions compatibles','','2^(|X|−k) si aucune contradiction');
+  stats.append(sX,sF,sK,sR);
+  const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(h('p',{class:'legend'},'Descripteurs autorisés à l’hypothèse :'),chk,bt,grid,stats,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Avec les 4 descripteurs et les 15 exemples de la diapo 96, il reste <b>2 fonctions</b> (2<sup>16−15</sup>) : l’une dit « + » pour le seizième objet, l’autre « − ». Les données seules ne tranchent pas.</p><p>Décoche « nombre » et « taille » (biais de représentation : 2 descripteurs, |X| = 4, 16 fonctions) et garde 3 exemples différents : il n’en reste que 2 fonctions, et l’objet inconnu peut être <em>prédit</em>. Mais avec beaucoup d’exemples connus, deux objets de même forme et couleur ont des étiquettes différentes : <b>contradiction</b>, plus aucune fonction de H n’est cohérente. Un biais trop fort empêche d’apprendre le vrai concept.</p>'})));
+  function key(o){const v=[o.n-1,o.s,o.f,o.c];return v.filter((_,i)=>used[i]).join('');}
+  function glyph(o){const g=h('div',{class:'g'});const sz=o.s?'1.15rem':'.7rem';const col=o.c?'#2E8B57':'#C0392B';for(let i=0;i<o.n;i++)g.append(h('span',{class:o.f?'':'c',style:`width:${sz};height:${sz};color:${col}`}));return g;}
+  const desc=o=>`${o.n} ${o.s?'grand':'petit'}${o.n>1?'s':''} ${o.f?'carré':'cercle'}${o.n>1?'s':''} ${o.c?'vert':'rouge'}${o.n>1?'s':''}`;
+  function render(){
+    const groups=new Map();
+    known.forEach(i=>{const o=objs[i];const kk=key(o);const g=groups.get(kk)||{p:0,m:0};if(o.l==='+')g.p++;else g.m++;groups.set(kk,g);});
+    const bad=new Set([...groups].filter(([,g])=>g.p&&g.m).map(([kk])=>kk));
+    grid.innerHTML='';
+    objs.forEach((o,i)=>{
+      const q=i===15;const isK=known.has(i);
+      const cls='obj '+(q?'q x':isK?(o.l==='+'?'p':'m'):'x off')+(isK&&bad.has(key(o))?' bad':'');
+      const b=h('button',{type:'button',class:cls,'aria-pressed':String(isK),title:q?'Objet dont on cherche la classe':'Clique pour connu/inconnu',onclick:()=>{if(q)return;known.has(i)?known.delete(i):known.add(i);render();}},
+        glyph(o),h('div',{class:'lb'},q?'?':isK?(o.l==='+'?'+':'−'):'·'),h('div',{class:'ds'},desc(o)));
+      grid.append(b);});
+    const d=used.filter(Boolean).length;const nC=2**d;const covered=groups.size;const free=nC-covered;
+    const contra=bad.size>0;
+    sX.set(String(nC));sF.set(fmtBig(2n**BigInt(nC)));sK.set(String(known.size));
+    sR.set(contra?'0':fmtBig(2n**BigInt(free)));
+    const kq=key(objs[15]);const gq=groups.get(kq);
+    let msg;
+    if(contra) msg='<span class="ko">Contradiction :</span> deux objets indiscernables avec ces descripteurs ont des classes différentes (cartes cerclées de rouge). Aucune fonction de H n’est cohérente avec les données : ce biais de représentation est trop fort.';
+    else if(gq) msg=`<span class="ok">Prédiction possible :</span> avec ces descripteurs, l’objet « ? » est indiscernable d’un objet connu de classe <b>${gq.p?'+':'−'}</b>. Le biais de représentation fait le travail que les données ne font pas.`;
+    else msg=`<b>Aucune prédiction justifiée :</b> sur les ${fmtBig(2n**BigInt(free))} fonctions compatibles, exactement ${fmtBig(2n**BigInt(Math.max(free-1,0)))} disent « + » pour l’objet « ? » et autant disent « − ».`;
+    vd.innerHTML=msg;
+  }
+  render();
+})();
+
+/* ---- No Free Lunch ---- */
+(function(){
+  const root=$('#lab-nfl');
+  const ham=(a,b)=>{let x=a^b,c=0;while(x){c+=x&1;x>>=1}return c};
+  const edges=[];for(let a=0;a<8;a++)for(let b=a+1;b<8;b++)if(ham(a,b)===1)edges.push([a,b]);
+  const fns=[];for(let m=0;m<256;m++){let d=0;edges.forEach(([a,b])=>{if(((m>>a)&1)!==((m>>b)&1))d++;});fns.push({m,d});}
+  const worlds=[['tous','Tous les problèmes',f=>true],['lisse','Monde « lisse » (voisins de même classe)',f=>f.d<=4],['anti','Monde « anti-lisse » (voisins de classes opposées)',f=>f.d>=8]];
+  const bit=(m,i)=>(m>>i)&1;
+  const algos=[
+    ['ppv','Plus proche voisin (distance de Hamming)',(T,m,t)=>{let bd=9,ones=0,zeros=0;T.forEach(i=>{const d=ham(i,t);if(d<bd){bd=d;ones=0;zeros=0;}if(d===bd){bit(m,i)?ones++:zeros++;}});return ones>zeros?1:0;}],
+    ['maj','Classe majoritaire de S',(T,m,t)=>{let o=0;T.forEach(i=>o+=bit(m,i));return o*2>T.length?1:0;}],
+    ['zero','Toujours « 0 »',(T,m,t)=>0],
+    ['anti','Contraire du plus proche voisin',(T,m,t)=>{let bd=9,ones=0,zeros=0;T.forEach(i=>{const d=ham(i,t);if(d<bd){bd=d;ones=0;zeros=0;}if(d===bd){bit(m,i)?ones++:zeros++;}});return ones>zeros?0:1;}]
+  ];
+  let train=new Set([0,3,5,6]);
+  const pts=h('div',{class:'btns'});
+  const bs=[...Array(8).keys()].map(i=>{const b=h('button',{type:'button','aria-pressed':'true',class:'mono',onclick:()=>{
+    if(train.has(i)){if(train.size>1)train.delete(i);}else if(train.size<7)train.add(i);render();}},i.toString(2).padStart(3,'0'));pts.append(b);return b;});
+  const out=h('div',{class:'scroll'});
+  const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(h('p',{class:'legend'},'Points « connus » (l’algorithme voit leurs étiquettes) ; les autres sont inconnus :'),pts,out,vd,
+    h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Première ligne : <b>tous les algorithmes tombent à 50 %</b>, même le « contraire du plus proche voisin », quels que soient les points connus. C’est le théorème.</p><p>Deuxième et troisième lignes : dès qu’on <em>restreint</em> le monde, les biais se départagent. Le plus proche voisin gagne dans le monde lisse (il suppose la continuité) et perd dans le monde anti-lisse, où c’est son contraire qui gagne. Aucun algorithme n’est bon partout : il faut choisir son biais d’après ce qu’on sait du monde.</p>'})));
+  function render(){
+    bs.forEach((b,i)=>b.setAttribute('aria-pressed',String(train.has(i))));
+    const T=[...train];const test=[...Array(8).keys()].filter(i=>!train.has(i));
+    const tb=h('tbody');
+    algos.forEach(([id,name,fn])=>{
+      const tr=h('tr',{},h('td',{},name));
+      worlds.forEach(([wid,,pred])=>{
+        let s=0,n=0;fns.forEach(f=>{if(!pred(f))return;let c=0;test.forEach(t=>{if(fn(T,f.m,t)===bit(f.m,t))c++;});s+=c/test.length;n++;});
+        const acc=100*s/n;const cls=acc>50.05?'ok':acc<49.95?'ko':'';
+        tr.append(h('td',{},h('span',{class:'mono '+cls},fr(acc,1)+' %'),h('div',{class:'bar',style:'position:relative'},h('i',{style:`width:${acc}%;background:${acc>50.05?'var(--plus)':acc<49.95?'var(--minus)':'var(--muted)'}`}),h('b',{style:'position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--ink)'}))));});
+      tb.append(tr);});
+    const counts=worlds.map(([,, p])=>fns.filter(p).length);
+    const tbl=h('table',{class:'mini'},h('thead',{},h('tr',{},h('th',{},'Exactitude hors échantillon (moyenne sur les problèmes du monde)'),worlds.map((w,i)=>h('th',{},w[1],h('div',{class:'legend'},counts[i]+' fonctions'))))),tb);
+    out.innerHTML='';out.append(tbl);
+    vd.innerHTML=`Points inconnus testés : <b>${test.length}</b>. Barre pleine = 100 %, le trait de 50 % correspond au hasard.`;
+  }
+  render();
+})();
+
+/* ---- Sous / sur-apprentissage ---- */
+(function(){
+  const root=$('#lab-fit');const W=640,Hh=300;
+  let seed=3,n=12,deg=3,train=[],test=[],errs=[];
+  const f=x=>0.8*Math.sin(3*x)+0.25*x;
+  const ctl=controls(root);
+  const sd=slider(ctl,{label:'Degré maximal d du polynôme',min:0,max:12,value:3,onchange:v=>{deg=v;draw();}});
+  const sn=slider(ctl,{label:'Nombre d’exemples d’apprentissage',min:8,max:80,value:12,onchange:v=>{n=v;gen();draw();}});
+  const bt=btns(root);bt.append(btn('Nouveau tirage',()=>{seed++;gen();draw();}));
+  const cv=mkCanvas(root,W,Hh,'Points et courbe ajustée');
+  const cv2=mkCanvas(root,W,190,'Erreur d’apprentissage et de test selon le degré');
+  const stats=h('div',{class:'stats'});const sA=stat('Erreur d’apprentissage (EQM)','');const sT=stat('Erreur de test (EQM)','');const sV=stat('Diagnostic','');stats.append(sA,sT,sV);
+  root.append(stats,h('p',{class:'legend'},'Cercles pleins : exemples d’apprentissage. Petits points : nouveaux exemples (test). Pointillés : la vraie fonction.'));
+  root.append(h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>L’erreur d’apprentissage ne peut que baisser quand H grandit (H emboîtés). L’erreur de test fait une courbe en U : trop basse = sous-apprentissage, trop haute = sur-apprentissage. Avec plus d’exemples, le minimum de test descend et se décale vers des modèles plus riches : les données « contrôlent » la richesse acceptable de H.</p>'})));
+  function cheb(x,d){const t=[1,x];for(let k=2;k<=d;k++)t.push(2*x*t[k-1]-t[k-2]);return t.slice(0,d+1);}
+  function fit(d){
+    const m=d+1;const A=Array.from({length:m},()=>new Array(m+1).fill(0));
+    train.forEach(([x,y])=>{const t=cheb(x,d);for(let i=0;i<m;i++){for(let j=0;j<m;j++)A[i][j]+=t[i]*t[j];A[i][m]+=t[i]*y;}});
+    for(let i=0;i<m;i++)A[i][i]+=1e-9;
+    for(let c=0;c<m;c++){let p=c;for(let r=c+1;r<m;r++)if(Math.abs(A[r][c])>Math.abs(A[p][c]))p=r;[A[c],A[p]]=[A[p],A[c]];
+      for(let r=c+1;r<m;r++){const q=A[r][c]/A[c][c];for(let j=c;j<=m;j++)A[r][j]-=q*A[c][j];}}
+    const w=new Array(m).fill(0);for(let i=m-1;i>=0;i--){let s=A[i][m];for(let j=i+1;j<m;j++)s-=A[i][j]*w[j];w[i]=s/A[i][i];}
+    return x=>{const t=cheb(x,d);return t.reduce((s,v,i)=>s+v*w[i],0);};
+  }
+  function gen(){
+    let r=rng(seed*13+1);train=[];for(let i=0;i<n;i++){const x=r()*2-1;train.push([x,f(x)+gauss(r)*0.25]);}
+    r=rng(seed*13+2);test=[];for(let i=0;i<300;i++){const x=r()*2-1;test.push([x,f(x)+gauss(r)*0.25]);}
+    errs=[];for(let d=0;d<=12;d++){const p=fit(d);const e1=train.reduce((s,[x,y])=>s+(p(x)-y)**2,0)/n;const e2=test.reduce((s,[x,y])=>s+(p(x)-y)**2,0)/test.length;errs.push([e1,e2]);}
+  }
+  const sx=x=>(x+1)/2*W, sy=y=>Hh/2-y/1.8*(Hh/2-8);
+  function draw(){
+    const g=cv.g;g.clearRect(0,0,W,Hh);
+    g.strokeStyle=css('--rule');g.lineWidth=1;g.beginPath();g.moveTo(0,sy(0));g.lineTo(W,sy(0));g.stroke();
+    g.setLineDash([5,4]);g.strokeStyle=css('--muted');g.beginPath();for(let i=0;i<=200;i++){const x=-1+i/100;i?g.lineTo(sx(x),sy(f(x))):g.moveTo(sx(x),sy(f(x)));}g.stroke();g.setLineDash([]);
+    g.fillStyle=css('--muted');g.globalAlpha=.35;test.slice(0,70).forEach(([x,y])=>{g.beginPath();g.arc(sx(x),sy(y),2.2,0,7);g.fill();});g.globalAlpha=1;
+    const p=fit(deg);g.strokeStyle=css('--c2');g.lineWidth=2.5;g.beginPath();let first=true;for(let i=0;i<=300;i++){const x=-1+i/150;const y=clamp(p(x),-1.8,1.8);first?g.moveTo(sx(x),sy(y)):g.lineTo(sx(x),sy(y));first=false;}g.stroke();
+    g.fillStyle=css('--c1');train.forEach(([x,y])=>{g.beginPath();g.arc(sx(x),sy(y),4.5,0,7);g.fill();});
+    // courbe des erreurs
+    const g2=cv2.g,W2=W,H2=190;g2.clearRect(0,0,W2,H2);
+    const lo=-2.5,hi=3;const ex=d=>30+d/12*(W2-50), ey=v=>H2-22-(clamp(Math.log10(Math.max(v,1e-4)),lo,hi)-lo)/(hi-lo)*(H2-36);
+    g2.strokeStyle=css('--rule');g2.fillStyle=css('--muted');g2.font='11px sans-serif';g2.lineWidth=1;
+    for(let d=0;d<=12;d+=2){g2.beginPath();g2.moveTo(ex(d),8);g2.lineTo(ex(d),H2-22);g2.stroke();g2.fillText(String(d),ex(d)-3,H2-8);}
+    g2.fillText('degré d',W2-110,H2-8);g2.fillText('erreur (échelle log)',34,14);
+    const line=(idx,col)=>{g2.strokeStyle=col;g2.lineWidth=2.4;g2.beginPath();errs.forEach((e,d)=>{d?g2.lineTo(ex(d),ey(e[idx])):g2.moveTo(ex(d),ey(e[idx]));});g2.stroke();};
+    line(0,css('--c1'));line(1,css('--c2'));
+    g2.fillStyle=css('--c1');g2.fillText('apprentissage',W2-190,26);g2.fillStyle=css('--c2');g2.fillText('test',W2-95,26);
+    g2.strokeStyle=css('--moss');g2.lineWidth=1.5;g2.setLineDash([4,3]);g2.beginPath();g2.moveTo(ex(deg),8);g2.lineTo(ex(deg),H2-22);g2.stroke();g2.setLineDash([]);
+    const best=errs.reduce((b,e,d)=>e[1]<errs[b][1]?d:b,0);
+    sA.set(fr(errs[deg][0],3));sT.set(fr(errs[deg][1],3));
+    sV.set(deg<best-1?'sous-apprentissage':deg>best+1?'sur-apprentissage':'bon compromis');
+  }
+  onTheme(draw);gen();draw();
+})();
+
+/* ---- Élimination des candidats ---- */
+(function(){
+  const root=$('#lab-ce');
+  const V=[['petit','grand'],['carré','cercle'],['rouge','vert']];const AN=['taille','forme','couleur'];
+  const covers=(h_,x)=>h_!==null&&h_.every((v,i)=>v==='?'||v===x[i]);
+  const moreGen=(a,b)=>b===null?true:a===null?false:a.every((v,i)=>v==='?'||v===b[i]);
+  const eq=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+  const dedupe=arr=>arr.filter((a,i)=>arr.findIndex(b=>eq(a,b))===i);
+  const str=hh=>hh===null?'∅':'⟨'+hh.map((v,i)=>v==='?'?'?':V[i][v]).join(', ')+'⟩';
+  const exStr=x=>'('+x.map((v,i)=>V[i][v]).join(', ')+')';
+  let exs=[];
+  function run(list){
+    let S=[null],G=[['?','?','?']];const steps=[];
+    list.forEach(([x,pos])=>{
+      if(pos){
+        G=G.filter(g=>covers(g,x));
+        const nS=[];S.forEach(s=>{if(s===null){nS.push(x.slice());}else if(covers(s,x)){nS.push(s);}else{const gen=s.map((v,i)=>v===x[i]?v:'?');if(G.some(g=>moreGen(g,gen)))nS.push(gen);}});
+        S=dedupe(nS);S=S.filter(a=>!S.some(b=>!eq(a,b)&&moreGen(a,b)));
+      }else{
+        S=S.filter(s=>!covers(s,x));
+        const nG=[];G.forEach(g=>{if(!covers(g,x)){nG.push(g);return;}for(let i=0;i<3;i++)if(g[i]==='?')for(let v=0;v<2;v++)if(v!==x[i]){const hh=g.slice();hh[i]=v;if(S.some(s=>moreGen(hh,s)))nG.push(hh);}});
+        G=dedupe(nG);G=G.filter(a=>!G.some(b=>!eq(a,b)&&moreGen(b,a)));
+      }
+      steps.push({x,pos,S:S.map(s=>s&&s.slice()),G:G.map(g=>g.slice())});
+    });
+    return {S,G,steps};
+  }
+  // formulaire
+  const sel=[0,1,2].map(i=>{const s=h('select',{'aria-label':AN[i]},V[i].map((t,k)=>h('option',{value:k},t)));return s;});
+  let posSel='+';
+  const ctl=controls(root);
+  sel.forEach((s,i)=>{const w=h('div',{class:'ctl'},h('label',{},AN[i]),s);ctl.append(w);});
+  const sg=seg(ctl,'Classe',[['+','Positif (+)'],['-','Négatif (−)']],'+',v=>{posSel=v;});
+  const bt=btns(root);
+  bt.append(btn('Ajouter l’exemple',()=>{exs.push([sel.map(s=>+s.value),posSel==='+']);render();},'pri'),
+    btn('Exemple du cours (4 exemples)',()=>{exs=[[[1,0,0],true],[[1,1,0],true],[[0,1,0],false],[[1,1,1],false]];render();}),
+    btn('Annuler le dernier',()=>{exs.pop();render();}),btn('Tout effacer',()=>{exs=[];render();}));
+  const box=h('div');root.append(box);
+  function render(){
+    const {S,G,steps}=run(exs);
+    box.innerHTML='';
+    // tableau des étapes
+    const tb=h('tbody');
+    tb.append(h('tr',{},h('td',{class:'num'},'0'),h('td',{},'départ'),h('td',{class:'mono'},'{∅}'),h('td',{class:'mono'},'{⟨?, ?, ?⟩}')));
+    steps.forEach((st,i)=>{tb.append(h('tr',{},h('td',{class:'num'},String(i+1)),h('td',{},(st.pos?'+ ':'− ')+exStr(st.x)),h('td',{class:'mono'},st.S.length?'{'+st.S.map(str).join(', ')+'}':'∅'),h('td',{class:'mono'},st.G.length?'{'+st.G.map(str).join(', ')+'}':'∅')));});
+    box.append(h('div',{class:'scroll'},h('table',{class:'mini'},h('thead',{},h('tr',{},h('th',{},'#'),h('th',{},'Exemple'),h('th',{},'S'),h('th',{},'G'))),tb)));
+    // énumération
+    const all=[];for(let a of [0,1,'?'])for(let b of [0,1,'?'])for(let c of [0,1,'?'])all.push([a,b,c]);
+    const pos=exs.filter(e=>e[1]).map(e=>e[0]),neg=exs.filter(e=>!e[1]).map(e=>e[0]);
+    const cons=all.filter(hh=>pos.every(x=>covers(hh,x))&&!neg.some(x=>covers(hh,x)));
+    const emptyOK=pos.length===0;
+    const lvl=hh=>hh.filter(v=>v==='?').length;cons.sort((a,b)=>lvl(b)-lvl(a));
+    const inS=hh=>S.some(s=>s&&eq(s,hh)),inG=hh=>G.some(g=>eq(g,hh));
+    const collapsed=!S.length||!G.length||(cons.length===0&&!emptyOK);
+    const conv=S.length===1&&G.length===1&&eq(S[0],G[0]);
+    box.append(h('p',{class:'verdict'},collapsed?h('span',{html:'<span class="ko">S = G = ∅ :</span> aucune hypothèse de H n’est cohérente avec ces exemples (bruit ou biais inadapté).'}):conv?h('span',{html:'<span class="ok">Convergence : S = G</span> = '+str(S[0])+'. Une seule hypothèse reste cohérente.'}):h('span',{},`Espace des versions : ${cons.length} hypothèse${cons.length>1?'s':''} cohérente${cons.length>1?'s':''} (sur 27 de H).`)));
+    const list=h('div',{class:'chips'});
+    cons.forEach(hh=>{const t=inS(hh)&&inG(hh)?' S=G':inS(hh)?' S':inG(hh)?' G':'';list.append(h('span',{class:'mono',style:`padding:.15rem .5rem;border-radius:4px;border:1px solid ${t?'var(--moss)':'var(--rule)'};background:${t?'var(--moss-soft)':'var(--bg)'};font-size:.82rem`},str(hh)+(t?' ·'+t:'')));});
+    if(exs.length&&cons.length&&!collapsed)box.append(h('p',{class:'legend'},'Toutes les hypothèses cohérentes (énumération exhaustive des 27 hypothèses), des plus générales aux plus spécifiques :'),list);
+    // vote
+    if(exs.length&&!collapsed&&cons.length){
+      const vt=h('tbody');let bestQ=null,bestD=9;
+      const insts=[];for(let a=0;a<2;a++)for(let b=0;b<2;b++)for(let c=0;c<2;c++)insts.push([a,b,c]);
+      const rows=insts.map(x=>{const p=cons.filter(hh=>covers(hh,x)).length;const m=cons.length-p;const d=Math.abs(p-m);return {x,p,m,d};});
+      rows.forEach(r=>{if(!exs.some(e=>eq(e[0],r.x))&&r.d<bestD){bestD=r.d;bestQ=r.x;}});
+      rows.forEach(r=>{const known=exs.find(e=>eq(e[0],r.x));const verdict=known?`connu (${known[1]?'+':'−'})`:r.m===0?'unanime : +':r.p===0?'unanime : −':'indécis';
+        vt.append(h('tr',{class:(!known&&bestQ&&eq(r.x,bestQ)&&r.d<cons.length)?'hl':''},h('td',{},exStr(r.x)),h('td',{class:'num'},String(r.p)),h('td',{class:'num'},String(r.m)),h('td',{},verdict+((!known&&bestQ&&eq(r.x,bestQ)&&r.p&&r.m)?' ← question la plus informative':''))));});
+      box.append(h('p',{class:'legend'},'Vote des hypothèses cohérentes sur chacun des 8 exemples possibles (utile quand S ≠ G) :'),h('div',{class:'scroll'},h('table',{class:'mini'},h('thead',{},h('tr',{},h('th',{},'Exemple'),h('th',{class:'num'},'vote +'),h('th',{class:'num'},'vote −'),h('th',{},'Verdict'))),vt)));
     }
   }
-  nEl.addEventListener('input',render); kEl.addEventListener('input',render);
+  root.append(h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Charge l’exemple du cours : S monte à ⟨grand, ?, rouge⟩ après le 2<sup>e</sup> positif ; le 1<sup>er</sup> négatif fait descendre G à ⟨grand, ?, ?⟩ (les autres spécialisations, ⟨?, carré, ?⟩ et ⟨?, ?, vert⟩, ne sont pas plus générales que S et sont éliminées) ; le 2<sup>e</sup> négatif ramène G sur S : convergence.</p><p>Provoque ensuite <b>S = G = ∅</b> : ajoute deux fois le même exemple avec des classes opposées. Regarde aussi la colonne « vote » avant convergence, et la ligne marquée « question la plus informative » : c’est l’exemple qui coupe l’espace des versions au plus près de la moitié (apprentissage actif).</p>'})));
   render();
-  var ds=document.querySelectorAll('#test details');
-  document.getElementById('openAll').addEventListener('click',function(){ds.forEach(function(d){d.open=true;});});
-  document.getElementById('closeAll').addEventListener('click',function(){ds.forEach(function(d){d.open=false;});});
 })();
+
+/* ---- Quiz final ---- */
+Quiz($('#qz-main'),[
+  {t:'mcq',q:'Qu’est-ce qui distingue l’apprentissage supervisé du non supervisé ?',o:['La présence (ou non) d’étiquettes y dans l’échantillon S','Le nombre de descripteurs','L’usage d’un réseau de neurones','La taille de l’échantillon'],a:0,e:'Supervisé : S = {(x<sub>i</sub>, y<sub>i</sub>)}. Non supervisé : S = {x<sub>i</sub>}.'},
+  {t:'tf',q:'En apprentissage par renforcement, la récompense à l’instant t dépend toujours de la dernière action seulement.',a:false,e:'Elle peut dépendre d’actions très antérieures ; l’objectif est de maximiser un gain à long terme.'},
+  {t:'order',q:'Remets les grandes périodes de l’IA dans l’ordre chronologique.',items:['Cybernétique et pionniers (Turing, McCulloch & Pitts)','Méthodes générales de raisonnement (IA symbolique, Perceptron)','« Knowledge is power » (systèmes experts)','Méthodes générales d’apprentissage (espace des versions, PMC)','Apprentissage statistique (SVM, boosting)','Réseaux profonds (CNN, GAN, LLM)'],e:''},
+  {t:'mcq',q:'Qu’est-ce qui a mis fin à l’ère des systèmes experts ?',o:['Le goulot de l’acquisition des connaissances : ingénierie lourde, peu systématique, maintenance difficile','Le manque de puissance de calcul','L’invention du Perceptron','L’interdiction de la logique floue'],a:0,e:'C’est ce qui a déclenché l’espoir « les connaissances s’obtiendront par apprentissage ».'},
+  {t:'num',q:'n = 4 attributs binaires. Combien de fonctions possibles de X vers {+, −} ?',a:65536,e:'|X| = 2<sup>4</sup> = 16, donc 2<sup>16</sup> fonctions.'},
+  {t:'num',q:'Toujours 4 attributs binaires et 6 exemples distincts étiquetés. Combien de fonctions restent compatibles ?',a:1024,e:'Il reste 16 − 6 = 10 exemples inconnus : 2<sup>10</sup>.'},
+  {t:'mcq',q:'Parmi ces 1 024 fonctions compatibles, combien prédisent « + » pour un exemple non vu ?',o:['512 : la moitié','Toutes','Aucune','Cela dépend de l’exemple'],a:0,e:'Pour chaque exemple inconnu, les fonctions se répartissent à égalité entre + et − : sans biais, aucune prédiction n’est justifiée.'},
+  {t:'mcq',q:'Préférer, entre deux hypothèses cohérentes, la plus simple (rasoir d’Ockham) est un biais…',o:['de recherche (procédural)','de représentation (déclaratif)','de sélection','d’échantillonnage'],a:0,e:'Il ne restreint pas H : il oriente <em>quelle</em> hypothèse on choisit. Restreindre H (ex. conjonctions d’attributs) serait un biais de représentation.'},
+  {t:'mcq',q:'Que dit le théorème No Free Lunch ?',o:['En moyenne sur tous les problèmes possibles, tous les algorithmes se valent en généralisation','Un algorithme plus complexe généralise toujours mieux','L’apprentissage sans biais est le plus performant','Il faut toujours préférer les réseaux de neurones'],a:0,e:'D’où la nécessité de choisir l’algorithme (donc le biais) adapté à la classe de problèmes étudiée.'},
+  {t:'tf',q:'Si l’algorithme A bat l’algorithme B sur une classe de problèmes, il les bat sur tous les problèmes.',a:false,e:'Au contraire : s’il gagne quelque part, il perd nécessairement ailleurs.'},
+  {t:'mcq',q:'Lequel n’est PAS l’un des trois ingrédients de l’apprentissage ?',o:['Le nombre de processeurs disponibles','L’espace des hypothèses H','Le critère inductif','La méthode d’exploration de H'],a:0,e:'Les trois ingrédients : H, le critère inductif, la méthode d’exploration.'},
+  {t:'mcq',q:'Une hypothèse couvre tous les exemples positifs mais aussi un exemple négatif. Elle est…',o:['complète mais incorrecte','correcte mais incomplète','cohérente','ni complète ni correcte'],a:0,e:'Complète = couvre tous les positifs ; correcte = ne couvre aucun négatif ; cohérente = les deux.'},
+  {t:'order',q:'Mise à jour de G quand arrive un exemple <b>négatif</b> : remets les étapes dans l’ordre.',items:['Repérer les hypothèses de G qui couvrent l’exemple négatif','Les retirer de G','Ajouter leurs spécialisations minimales qui ne couvrent plus l’exemple','Ne garder que celles plus générales qu’au moins un élément de S','Éliminer celles plus spécifiques qu’un autre élément de G'],e:''},
+  {t:'mcq',q:'Que signifie S = G = ∅ dans l’algorithme d’élimination des candidats ?',o:['Aucune hypothèse de H n’est cohérente : bruit ou biais inadapté','L’algorithme a convergé','Tous les exemples sont positifs','Il faut plus d’exemples positifs'],a:0,e:'Le concept cible n’est pas dans H, ou une étiquette est fausse.'},
+  {t:'mcq',q:'S et G ne se rejoignent pas à la fin des exemples. Que faire ?',o:['Faire voter les hypothèses de l’espace des versions','Supprimer G','Recommencer avec S = ∅','Rien : l’algorithme a échoué'],a:0,e:'On peut aussi demander l’étiquette de l’exemple qui coupe l’espace des versions en deux (apprentissage actif).'},
+  {t:'tf',q:'L’algorithme d’élimination des candidats tolère bien les exemples mal étiquetés.',a:false,e:'Très fragile : un seul exemple mal étiqueté élimine la bonne hypothèse.'},
+  {t:'mcq',q:'Erreur d’apprentissage très faible mais erreur de test forte : c’est…',o:['du sur-apprentissage','du sous-apprentissage','un bon compromis biais-variance','un problème de clustering'],a:0,e:'H est trop riche : on colle aux données d’apprentissage, bruit compris.'},
+  {t:'mcq',q:'Que veut dire « garanties de lampadaire » ?',o:['Si le monde satisfait mes hypothèses, alors l’algorithme produit (quasi sûrement) une bonne hypothèse ; sinon, tout peut arriver','Les garanties valent dans tous les mondes','Les garanties ne valent que la nuit','Il n’existe aucune garantie théorique'],a:0,e:'On ne garantit que ce qu’on sait mesurer sous ses propres hypothèses.'},
+  {t:'mcq',q:'Que penser de la base Nutrinet pour apprendre les habitudes alimentaires de toute la population ?',o:['Elle est peu représentative : ~80 % de femmes, milieux favorisés, abandons','Elle est idéale car très grande','Elle est inutile car non étiquetée','Elle ne contient pas de descripteurs'],a:0,e:'La quantité de données ne compense pas leur non-représentativité.'}
+]);
+
 </script>
 </body>
 </html>

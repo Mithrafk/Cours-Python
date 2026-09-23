@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Fiche de révision interactive : sélection de modèles et cas avancés (V. Guigue, R. Thoreau, AgroParisTech)">
+<title>Fiche · Sélection de modèles et cas avancés</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650&family=Public+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F8F7; --surface:#FFFFFF; --ink:#1C2B36; --muted:#5A6B78;
+  --moss:#3F6B4A; --moss-soft:#E3EFE6; --rule:#D3DCDF;
+  --plus:#2F7A4E; --minus:#B0413E; --unknown:#C9D3D8; --warn:#8A5A00; --warn-bg:#FBF1DC;
+  --blue:#2B6CB0; --blue-soft:#E4EEF8;
+  --c1:#2B6CB0; --c2:#C2571A; --c3:#2F7A4E; --c4:#8B3FA8; --c5:#B08A00; --c6:#0E8A8A;
+  --serif:"Newsreader", Georgia, "Times New Roman", serif;
+  --sans:"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11181C; --surface:#18222A; --ink:#E3EBEE; --muted:#9AAAB4;
+    --moss:#8DC29A; --moss-soft:#1F3327; --rule:#2C3A43;
+    --plus:#6FC08F; --minus:#E07A76; --unknown:#34434C; --warn:#E8B75A; --warn-bg:#2E2615;
+    --blue:#7FB2E5; --blue-soft:#1B2B3B;
+    --c1:#7FB2E5; --c2:#F0A06A; --c3:#6FC08F; --c4:#C79AE0; --c5:#E8C95A; --c6:#5FCFCF;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11181C; --surface:#18222A; --ink:#E3EBEE; --muted:#9AAAB4;
+  --moss:#8DC29A; --moss-soft:#1F3327; --rule:#2C3A43;
+  --plus:#6FC08F; --minus:#E07A76; --unknown:#34434C; --warn:#E8B75A; --warn-bg:#2E2615;
+  --blue:#7FB2E5; --blue-soft:#1B2B3B;
+  --c1:#7FB2E5; --c2:#F0A06A; --c3:#6FC08F; --c4:#C79AE0; --c5:#E8C95A; --c6:#5FCFCF;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:1rem;line-height:1.6}
+img,svg{max-width:100%}
+a{color:var(--moss)}
+:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
+
+.layout{display:grid;grid-template-columns:15rem minmax(0,1fr);gap:3rem;max-width:74rem;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+nav.toc{position:sticky;top:calc(1.5rem + env(safe-area-inset-top,0px));align-self:start;font-size:.9rem;max-height:calc(100vh - 3rem);overflow:auto}
+nav.toc p{margin:0 0 .6rem;color:var(--muted);font-weight:600}
+nav.toc ol{list-style:none;margin:0;padding:0;counter-reset:t}
+nav.toc li{counter-increment:t;margin:.1rem 0}
+nav.toc a{display:flex;gap:.6rem;padding:.28rem .5rem;border-radius:4px;color:var(--ink);text-decoration:none}
+nav.toc a::before{content:counter(t);font-family:var(--mono);color:var(--moss);min-width:1.1rem}
+nav.toc a:hover{background:var(--moss-soft)}
+main{max-width:50rem;min-width:0}
+
+header.hero{border-bottom:1px solid var(--rule);padding-bottom:1.75rem;margin-bottom:2rem}
+header.hero h1{font-family:var(--serif);font-weight:650;font-size:clamp(2rem,4.5vw,3rem);line-height:1.1;margin:0 0 .75rem;letter-spacing:-.01em}
+header.hero p{margin:0;color:var(--muted);max-width:42rem}
+.focus{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.1rem}
+.focus a{font-size:.85rem;padding:.3rem .7rem;border:1px solid var(--moss);border-radius:999px;text-decoration:none}
+.focus a:hover{background:var(--moss-soft)}
+
+section{padding-top:1.5rem;margin-bottom:2.5rem;scroll-margin-top:1rem}
+h2{font-family:var(--serif);font-weight:650;font-size:1.75rem;line-height:1.2;margin:0 0 1rem;display:flex;gap:.75rem;align-items:baseline}
+h2 .n{font-family:var(--mono);font-size:1rem;color:var(--moss);font-weight:600}
+h3{font-size:1.05rem;margin:1.75rem 0 .5rem}
+p{margin:.5rem 0 .9rem}
+ul,ol{padding-left:1.25rem;margin:.4rem 0 1rem}
+li{margin:.2rem 0}
+strong{font-weight:700}
+code,.f{font-family:var(--mono);font-size:.9em;overflow-wrap:anywhere}
+.fx{font-family:var(--mono);font-size:.95em;background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:.55rem .8rem;margin:.6rem 0;overflow-x:auto;white-space:pre;line-height:1.7}
+sub,sup{line-height:0}
+
+.scroll{overflow-x:auto;margin:1rem 0 1.25rem;border:1px solid var(--rule);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.92rem;min-width:34rem}
+th,td{text-align:left;vertical-align:top;padding:.6rem .8rem;border-bottom:1px solid var(--rule)}
+th{background:var(--moss-soft);font-weight:700}
+tr:last-child td{border-bottom:0}
+td.sub{color:var(--muted);font-style:italic}
+
+.note{border-left:3px solid var(--warn);background:var(--warn-bg);padding:.7rem 1rem;border-radius:0 6px 6px 0;margin:1rem 0;font-size:.93rem}
+.key{border-left:3px solid var(--moss);background:var(--moss-soft);padding:.8rem 1rem;border-radius:0 6px 6px 0;margin:1rem 0}
+.key p,.note p,.aside p{margin:.2rem 0}
+.aside{border-left:3px solid var(--blue);background:var(--blue-soft);padding:.7rem 1rem;border-radius:0 6px 6px 0;margin:1rem 0;font-size:.93rem}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--warn);margin-right:.4rem}
+.aside .tag{color:var(--blue)} .key .tag{color:var(--moss)}
+
+/* Timeline */
+.timeline{list-style:none;padding:0;margin:1rem 0;position:relative}
+.timeline::before{content:"";position:absolute;left:6.4rem;top:.4rem;bottom:.4rem;width:2px;background:var(--rule)}
+.timeline li{display:grid;grid-template-columns:5.6rem 1fr;gap:1.6rem;margin:0 0 1.1rem;position:relative}
+.timeline li::after{content:"";position:absolute;left:6.05rem;top:.45rem;width:.8rem;height:.8rem;border-radius:50%;background:var(--surface);border:2px solid var(--moss)}
+.timeline li.fail::after{border-color:var(--minus)}
+.timeline .d{font-family:var(--mono);font-size:.82rem;color:var(--muted);text-align:right;padding-top:.15rem}
+.timeline .t{font-weight:700}
+.timeline .b{font-size:.93rem}
+.timeline li.fail .t{color:var(--minus)}
+.hopes{counter-reset:h;list-style:none;padding:0;display:grid;gap:.5rem}
+.hopes li{counter-increment:h;display:flex;gap:.75rem;align-items:baseline}
+.hopes li::before{content:counter(h);font-family:var(--mono);color:var(--moss);font-weight:600}
+
+/* Labs */
+.lab{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:1.25rem 1.25rem 1.4rem;margin:1.5rem 0}
+.lab>h3{margin:0 0 .25rem;font-family:var(--serif);font-size:1.3rem;font-weight:650}
+.lab .lead{margin:.1rem 0 .9rem;color:var(--muted);font-size:.93rem}
+.lab .lead b{color:var(--ink)}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:.8rem 1.5rem;margin:.6rem 0 .9rem}
+.ctl label{display:block;font-size:.88rem;font-weight:600;margin-bottom:.25rem}
+.ctl output{font-family:var(--mono);color:var(--moss);margin-left:.2rem;font-weight:600}
+input[type=range]{width:100%;accent-color:var(--moss)}
+input[type=number],input[type=text],select{font:inherit;font-size:.9rem;padding:.25rem .4rem;border:1px solid var(--rule);border-radius:4px;background:var(--bg);color:var(--ink);max-width:100%}
+input[type=number]{width:4.6rem;font-family:var(--mono)}
+.btns{display:flex;flex-wrap:wrap;gap:.5rem;margin:.6rem 0}
+button{font:inherit;font-size:.85rem;padding:.38rem .8rem;border-radius:4px;border:1px solid var(--moss);background:transparent;color:var(--moss);cursor:pointer}
+button:hover{background:var(--moss-soft)}
+button.pri{background:var(--moss);color:var(--surface)} button.pri:hover{opacity:.9;background:var(--moss)}
+button:disabled{opacity:.45;cursor:default}
+.seg{display:inline-flex;flex-wrap:wrap;gap:0;border:1px solid var(--moss);border-radius:5px;overflow:hidden}
+.seg button{border:0;border-radius:0;border-right:1px solid var(--moss)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"],.btns button[aria-pressed="true"]{background:var(--moss);color:var(--surface)}
+canvas{display:block;width:100%;height:auto;border:1px solid var(--rule);border-radius:6px;background:var(--bg);touch-action:manipulation}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:.9rem;align-items:start}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));gap:.6rem;margin:.8rem 0}
+.stat{border:1px solid var(--rule);border-radius:6px;padding:.5rem .7rem;background:var(--bg)}
+.stat .v{font-family:var(--mono);font-size:1.02rem;font-weight:600;word-break:break-all}
+.stat .l{font-size:.78rem;color:var(--muted)}
+.stat .fx2{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+.verdict{margin:.7rem 0 0;font-size:.93rem}
+.ok{color:var(--plus);font-weight:700} .ko{color:var(--minus);font-weight:700}
+.legend{font-size:.83rem;color:var(--muted);margin:.4rem 0 0}
+.sw{display:inline-block;width:.75rem;height:.75rem;border-radius:2px;vertical-align:-1px;margin-right:.25rem}
+details.obs{margin:.8rem 0 0;font-size:.9rem}
+details.obs summary{cursor:pointer;color:var(--moss);font-weight:600}
+details.obs>div{margin-top:.4rem;padding:.4rem .8rem;border-left:2px solid var(--rule)}
+table.mini{min-width:0;font-size:.85rem}
+table.mini td,table.mini th{padding:.35rem .55rem}
+td.num,th.num{text-align:right;font-family:var(--mono)}
+td.hl,th.hl{background:var(--moss-soft)}
+tr.hl td{background:var(--moss-soft)}
+.mono{font-family:var(--mono)}
+.bar{height:.7rem;background:var(--unknown);border-radius:3px;overflow:hidden;min-width:5rem}
+.bar>i{display:block;height:100%;background:var(--moss)}
+
+/* objets induction */
+.objs{display:grid;grid-template-columns:repeat(auto-fill,minmax(8.2rem,1fr));gap:.5rem;margin:.7rem 0}
+.obj{border:1px solid var(--rule);border-radius:6px;padding:.4rem .5rem;text-align:center;background:var(--bg);cursor:pointer;font:inherit;color:var(--ink);position:relative}
+.obj .g{height:2.3rem;display:flex;align-items:center;justify-content:center;gap:.2rem}
+.obj .g span{display:inline-block;background:currentColor}
+.obj .g span.c{border-radius:50%}
+.obj .lb{font-family:var(--mono);font-weight:700;font-size:.95rem}
+.obj .ds{font-size:.7rem;color:var(--muted);line-height:1.2}
+.obj.p{border-color:var(--plus)} .obj.m{border-color:var(--minus)} .obj.q{border-style:dashed;border-width:2px;border-color:var(--warn)}
+.obj.p .lb{color:var(--plus)} .obj.m .lb{color:var(--minus)} .obj.x .lb{color:var(--muted)}
+.obj.bad{outline:2px solid var(--minus)}
+.obj.off{opacity:.55}
+.chk{display:flex;flex-wrap:wrap;gap:.4rem 1rem;font-size:.9rem;margin:.3rem 0}
+.chk label{display:flex;gap:.35rem;align-items:center;cursor:pointer}
+
+/* quiz */
+.qz{margin:.6rem 0}
+.qhead{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;justify-content:space-between;margin:.4rem 0 .8rem}
+.qscore{font-family:var(--mono);font-size:.9rem}
+.qc{border:1px solid var(--rule);border-radius:8px;background:var(--surface);padding:.8rem 1rem;margin:.6rem 0}
+.qc .qq{font-weight:600;margin:0 0 .5rem}
+.qc .qq .qn{font-family:var(--mono);color:var(--moss);margin-right:.4rem}
+.opts{display:grid;gap:.4rem}
+.opts button{text-align:left;padding:.5rem .7rem;border-color:var(--rule);color:var(--ink);background:var(--bg)}
+.opts button:hover:not(:disabled){border-color:var(--moss)}
+.opts button.right{border-color:var(--plus);background:var(--moss-soft);opacity:1}
+.opts button.wrong{border-color:var(--minus);opacity:1}
+.opts.row{display:flex;flex-wrap:wrap}
+.fb{margin:.6rem 0 0;font-size:.92rem}
+.fb:empty{display:none}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:.4rem 0}
+.chips button{border-color:var(--rule);color:var(--ink);background:var(--bg);text-align:left}
+.chips button b{font-family:var(--mono);color:var(--moss);margin-right:.35rem}
+.numin{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.numin input{width:9rem}
+
+footer{border-top:1px solid var(--rule);padding-top:1rem;color:var(--muted);font-size:.85rem}
+
+@media (max-width: 60rem){
+  .layout{grid-template-columns:1fr;gap:1rem;padding-top:1.5rem}
+  nav.toc{position:static;max-height:none;border:1px solid var(--rule);border-radius:6px;padding:.75rem;background:var(--surface)}
+  nav.toc ol{display:grid;grid-template-columns:repeat(auto-fill,minmax(12rem,1fr))}
+}
+@media (max-width: 34rem){
+  .timeline::before{left:.35rem}
+  .timeline li{grid-template-columns:1fr;gap:.1rem;padding-left:1.6rem}
+  .timeline li::after{left:0}
+  .timeline .d{text-align:left}
+  .lab{padding:1rem .85rem 1.1rem}
+}
+@media print{
+  nav.toc,.btns,.controls,.seg{display:none}
+  .layout{display:block}
+  .lab{break-inside:avoid}
+  details>*{display:block}
+}
+
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc" aria-label="Sommaire">
+  <p>Sommaire</p>
+  <ol>
+    <li><a href="#metriques">Métriques d’évaluation</a></li>
+    <li><a href="#confusion">Matrice de confusion</a></li>
+    <li><a href="#roc">Déséquilibre, ROC et AUC</a></li>
+    <li><a href="#processus">Processus d’évaluation</a></li>
+    <li><a href="#selmod">Sélection de modèles</a></li>
+    <li><a href="#fleau">Fléau de la dimensionnalité</a></li>
+    <li><a href="#bonnevar">Bonne ou mauvaise variable ?</a></li>
+    <li><a href="#iteratif">Sélection itérative</a></li>
+    <li><a href="#acp">ACP</a></li>
+    <li><a href="#regul">Régularisation</a></li>
+    <li><a href="#protocole">Apprentissage / validation / test</a></li>
+    <li><a href="#pieges">Pièges à éviter</a></li>
+    <li><a href="#test">Auto-test</a></li>
+  </ol>
+</nav>
+
+<main>
+<header class="hero">
+  <h1>Sélection de modèles et cas avancés</h1>
+  <p>Fiche de révision du cours 2 de Vincent Guigue et Romain Thoreau (AgroParisTech, 30 diapositives en 60 vues), complétée par tes notes. Les encadrés bleus « Tes notes » reprennent ce que tu avais écrit, avec quelques précisions.</p>
+  <div class="focus">
+    <a href="#lab-roc">Seuil, ROC, AUC</a>
+    <a href="#lab-hyper">Hyperparamètres</a>
+    <a href="#lab-reg">Chemins de régularisation</a>
+    <a href="#lab-search">Backward / forward</a>
+    <a href="#lab-pca">ACP</a>
+    <a href="#test">Auto-test</a>
+  </div>
+</header>
+
+<!-- 1 -->
+<section id="metriques">
+  <h2><span class="n">1</span>Métriques d’évaluation</h2>
+  <p>Observations {(x<sub>i</sub>, y<sub>i</sub>)}<sub>i=1..n</sub>. Métriques classiques :</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Métrique</th><th>Formule</th><th>Usage</th></tr></thead>
+    <tbody>
+      <tr><td><strong>MSE / RMSE</strong></td><td>L = (1/n) Σ (f(x<sub>i</sub>) − y<sub>i</sub>)² ; RMSE = √MSE</td><td>Régression ; la RMSE est dans l’unité de y</td></tr>
+      <tr><td><strong>MAPE</strong></td><td>L = (1/n) Σ |f(x<sub>i</sub>) − y<sub>i</sub>| / |y<sub>i</sub>|</td><td>Erreur relative ; problème si y<sub>i</sub> = 0 (variantes : sMAPE)</td></tr>
+      <tr><td><strong>Accuracy</strong> (taux de bonne classification)</td><td>L = (1/n) Σ 1[y<sub>i</sub> = f(x<sub>i</sub>)]</td><td>Classification (en français, « précision » signifie autre chose, voir plus bas)</td></tr>
+      <tr><td><strong>Negative log-likelihood</strong> (NLL)</td><td>−Σ log P(y<sub>i</sub> | x<sub>i</sub>)</td><td>Modèles probabilistes</td></tr>
+      <tr><td><strong>Perceptron / SVM</strong></td><td>(1/n) Σ (−y<sub>i</sub> f(x<sub>i</sub>))<sub>+</sub> ou (1/n) Σ (1 − y<sub>i</sub> f(x<sub>i</sub>))<sub>+</sub></td><td>Pertes utilisées pour apprendre</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><p><span class="tag">Attention</span>Quelle métrique pour quelle application ? Quelles contraintes sur X × Y ? Et surtout : <strong>ne pas confondre la métrique d’évaluation et le coût qu’on optimise</strong>. On peut apprendre avec une perte lisse (charnière, entropie croisée) et évaluer avec l’accuracy ou la F1.</p></div>
+  <div class="aside"><p><span class="tag">Tes notes</span>Tu notes que les méthodes d’évaluation sont indépendantes de la façon d’obtenir le modèle : un modèle de régression peut être évalué comme un classifieur en modifiant les données (par exemple en seuillant la sortie). C’est cohérent avec la remarque ci-dessus.</p></div>
+  <h3>Autres problèmes, autres métriques (ranking)</h3>
+  <p>Pour ordonner (moteurs de recherche, recommandation) : distance d’édition (Levenshtein), <em>Mean Reciprocal Rank</em> (MRR : en combien de coups j’attrape un document d’intérêt), et pour favoriser le haut de la liste : Mean Average Precision, nDCG, ATOP. Le cours renvoie à un éventuel séminaire.</p>
+</section>
+
+<!-- 2 -->
+<section id="confusion">
+  <h2><span class="n">2</span>Classification : matrice de confusion, précision, rappel, F1</h2>
+  <p>La <strong>matrice de confusion</strong> compte ce qui est bien classé ou pas et permet de <strong>comprendre les confusions</strong> : cas binaire (2×2), ou données de chiffres USPS où la diagonale domine et où l’on repère des paires souvent confondues (dans tes notes : 4 et 9).</p>
+  <h3>Détection d’un évènement (contre le bruit de fond)</h3>
+  <p>Métriques dédiées à <strong>une classe particulière</strong> :</p>
+  <div class="fx">Précision = TP / (TP + FP)   = détections pertinentes / détections
+Rappel    = TP / (TP + FN)   = détections pertinentes / taille de la classe      (couverture)
+F1        = 2 · précision · rappel / (précision + rappel)          (moyenne harmonique)</div>
+  <div class="scroll"><table>
+    <thead><tr><th></th><th>Prédit positif</th><th>Prédit négatif</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Vraiment positif</strong></td><td>TP (vrai positif)</td><td>FN (faux négatif : détection manquée)</td></tr>
+      <tr><td><strong>Vraiment négatif</strong></td><td>FP (faux positif : fausse alerte)</td><td>TN (vrai négatif)</td></tr>
+    </tbody>
+  </table></div>
+  <p>Pour agréger sur <strong>toutes les classes</strong> (dans les cas pertinents) : <strong>macro-moyenne</strong> = moyenne des scores de chaque classe (non pondérée) ; <strong>micro-moyenne</strong> = agrégation au niveau des échantillons (donc pondération des classes par leur effectif).</p>
+  <div class="lab" id="lab-macro">
+    <h3>Macro ou micro ?</h3>
+    <p class="lead">Une matrice de confusion à 3 classes très déséquilibrées (lignes = vraie classe, colonnes = classe prédite). <b>Modifie les nombres</b> et compare la F1 macro et la F1 micro.</p>
+  </div>
+  <div class="aside"><p><span class="tag">Tes notes</span>Tes notes définissent la précision comme le « taux de faux positifs » et le rappel comme le « taux de faux négatifs » : c’est l’idée, mais pas la formule. La <strong>précision</strong> est la part de <em>vraies</em> alertes parmi les alertes : TP/(TP+FP), donc elle <em>baisse</em> quand il y a beaucoup de faux positifs. Le <strong>rappel</strong> est la part des vrais évènements détectés : TP/(TP+FN), donc il baisse quand il y a beaucoup de faux négatifs. Le « taux de faux positifs » (FPR = FP/(FP+TN)) est une autre grandeur, celle de l’axe horizontal de la courbe ROC. Tu as bien noté qu’on les calcule <strong>sur une seule classe</strong>. Complément : la diapo écrit « précision (sensibilité) » ; dans l’usage courant, la sensibilité est plutôt un autre nom du rappel.</p></div>
+</section>
+
+<!-- 3 -->
+<section id="roc">
+  <h2><span class="n">3</span>Classification déséquilibrée, courbe ROC et AUC</h2>
+  <p>Exemple : la fraude à la carte bleue, environ 0,3 pour mille des transactions. <strong>Impact sur les modèles</strong> : le modèle apprend à prédire que tout est OK. <strong>Impact sur les métriques</strong> : la métrique annonce 99,07 % de bonne classification, alors que le modèle ne détecte rien.</p>
+  <h3>ROC : un classifieur = un ensemble de classifieurs biaisés</h3>
+  <p>En faisant varier le seuil de décision (le biais <em>b</em> d’un classifieur linéaire), on obtient toute une famille de classifieurs. La <strong>courbe ROC</strong> (<em>receiver operating characteristic</em>) trace, pour chaque seuil, le taux de vrais positifs (TPR = rappel) en fonction du taux de faux positifs (FPR). Elle mesure la capacité à <strong>détecter les évènements sans ajouter de bruit</strong> quand on fait varier la sensibilité. On peut faire la même chose en <strong>précision / rappel</strong>.</p>
+  <p>Indicateurs multiples = difficile à manipuler et à expliquer : précision + rappel ⇒ <strong>F1</strong> ; ROC ⇒ <strong>AUC</strong> (<em>Area Under the Curve</em>) : 0,5 pour un classifieur aléatoire, 1 pour un classifieur parfait.</p>
+  <div class="lab" id="lab-roc">
+    <h3>Seuil, matrice de confusion, ROC et précision/rappel</h3>
+    <p class="lead">Scores simulés : les positifs ont un score décalé de d′ par rapport aux négatifs. <b>Prédis :</b> avec 1 % de positifs, quelle exactitude obtient le modèle nul ? Que devient la précision quand on baisse le seuil ?</p>
+  </div>
+  <div class="aside"><p><span class="tag">Tes notes</span>« Courbe ROC : permet de challenger le modèle ; AUC : 0,5 = aléatoire, meilleur à 1. » Oui (« Area Under the Curve », et non « Ara »). Chaque point de la courbe est un seuil ; l’AUC est la probabilité qu’un positif tiré au hasard ait un score plus élevé qu’un négatif tiré au hasard.</p></div>
+</section>
+
+<!-- 4 -->
+<section id="processus">
+  <h2><span class="n">4</span>Processus d’évaluation</h2>
+  <ul>
+    <li>Évaluer sur les données d’apprentissage = <strong>tricherie</strong> (surestimation). Évaluer sur des données vierges = OK. Problème de la répartition apprentissage / test : la <strong>validation croisée</strong> (K itérations, K modèles, K performances).</li>
+    <li><strong>Deux implémentations</strong> : (1) séparation train/test (itérative pour la validation croisée) + apprentissage + calcul des scores ; (2) calcul direct des scores de validation croisée (la boucle, la division, l’apprentissage et la mesure sont cachés dans la méthode).</li>
+  </ul>
+  <div class="key"><p><span class="tag">L’évaluation est la clé de la sélection</span>(1) Phase critique de dialogue avec le client : identifier les attentes, montrer le niveau de performance. (2) Outil critique pour la sélection de modèles. (3) <strong>Significativité</strong> : quand un modèle est-il <em>vraiment</em> meilleur qu’un autre ? Très peu de données (&lt; 50) ⇒ statistiques avancées. Beaucoup de données (&gt; 10 000, ex. MNIST) ⇒ presque toujours significatif. Intermédiaire ⇒ <strong>test de Student sur des validations croisées</strong>. Étape coûteuse mais indispensable, parallélisable (<code>n_jobs</code>).</p></div>
+  <div class="lab" id="lab-cmp">
+    <h3>Deux modèles : la différence est-elle significative ?</h3>
+    <p class="lead">Un arbre de profondeur A contre un arbre de profondeur B, sur les mêmes découpes de validation croisée. Un test t apparié sur les scores par partie donne une p-value. <b>Prédis :</b> la p-value baisse-t-elle quand on ajoute des données ?</p>
+  </div>
+  <div class="aside"><p><span class="tag">Tes notes</span>« La validation croisée permet de comparer 2 modèles et de donner des p-values sur l’écart. » Oui. Deux précisions : (1) les K modèles de la validation croisée ne sont pas « compilés en 1 » : chacun est évalué sur sa partie de test, et on <em>moyenne les K scores</em> ; le modèle final se réentraîne ensuite sur toutes les données. (2) Complément : les K scores ne sont pas indépendants (les jeux d’apprentissage se recouvrent), donc le test t classique est optimiste ; des corrections existent (Nadeau et Bengio).</p></div>
+  <h3>Jusqu’où aller dans la séparation des données ?</h3>
+  <p>Optimiser les paramètres avec les scores de validation croisée <em>puis</em> publier ces mêmes scores = <strong>surestimation des performances</strong>. Deux architectures multi-boucles : une <strong>boucle externe</strong> qui estime la performance de généralisation (on garde un pli de test), et une <strong>boucle interne</strong> qui règle les paramètres sur le reste (validation croisée dans l’apprentissage) ; ou le découpage simple apprentissage / validation / test (section 11).</p>
+</section>
+
+<!-- 5 -->
+<section id="selmod">
+  <h2><span class="n">5</span>Sélection de modèles</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Approche</th><th>Principe</th><th>Limites</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Experte</strong></td><td>Suivre une carte de décision selon la tâche et la taille des données (la « cheat-sheet » de scikit-learn : classification, régression, clustering, réduction de dimension ; « plus de 50 échantillons ? », « catégorie ou quantité ? »)</td><td>Dépend de l’expérience de l’utilisateur</td></tr>
+      <tr><td><strong>Théorique</strong></td><td>Critères qui minimisent un compromis complexité / vraisemblance : BIC = log(n)·k − 2 log 𝓛 ; AIC = 2k − log 𝓛 (k = nombre de paramètres, n = observations, 𝓛 = vraisemblance)</td><td>Modélisations probabilistes seulement ; ne marche pas en pratique, sauf si k a peu d’impact (ex. modèles AR)</td></tr>
+      <tr><td><strong>Empirique</strong> (en complément de l’expert)</td><td>Modèles de <em>référence</em> : Naïve Bayes, régression logistique, SVM, arbre de décision. Modèles <em>avancés</em> : forêt aléatoire, gradient boosting, réseaux de neurones. Essai + performance ⇒ sélection</td><td>Les références et l’état de l’art dépendent des applications ; ne pas oublier la puissance des approches ensemblistes</td></tr>
+    </tbody>
+  </table></div>
+  <p>Complément : la forme usuelle de l’AIC est 2k − 2 log 𝓛 ; la diapo écrit 2k − log 𝓛, ce qui ne change pas l’idée (pénaliser k, récompenser la vraisemblance).</p>
+  <h3>Les outils pratiques</h3>
+  <p>On crée un ensemble de paramètres à tester S. Boucle <em>for</em> + critère pour scorer chaque S<sub>i</sub> : apprentissage + performance en test, ou <strong>validation croisée</strong>, ou critère de séparabilité des données (Fisher…). Le <strong>Grid Search</strong> est la même procédure généralisée à plusieurs paramètres. En pratique, on <strong>tâtonne d’abord à la main</strong> pour trouver les paramètres les plus influents et déterminer la plage à explorer, puis on teste finement sur une grille.</p>
+  <div class="scroll"><table>
+    <thead><tr><th></th><th>Paramètre</th><th>Hyperparamètre</th></tr></thead>
+    <tbody>
+      <tr><td>Qui le règle ?</td><td>Le modèle, pendant l’apprentissage (<code>fit</code>)</td><td>L’utilisateur, pour choisir le modèle qui marche le mieux</td></tr>
+      <tr><td>Exemples</td><td>Poids w d’un modèle linéaire, seuils de coupure d’un arbre</td><td>Profondeur maximale d’un arbre, C et σ d’un SVM, nombre de voisins, force de régularisation, arrêt prématuré</td></tr>
+    </tbody>
+  </table></div>
+  <div class="lab" id="lab-hyper">
+    <h3>Grille, recherche aléatoire et jeu de test</h3>
+    <p class="lead">Hyperparamètres d’un arbre : profondeur × taille minimale des feuilles. <b>Prédis :</b> si on choisit la meilleure cellule <em>sur le jeu de test</em>, la performance annoncée est-elle honnête ? Compare aux 2 000 nouveaux points.</p>
+  </div>
+  <div class="aside"><p><span class="tag">Tes notes</span>(1) « Great Search » : c’est <strong>Grid Search</strong> (recherche sur grille). (2) « Optnua » : <strong>Optuna</strong>, une bibliothèque d’optimisation d’hyperparamètres : on lui donne l’espace de recherche et un <em>budget</em> (N essais) et elle choisit intelligemment les jeux à tester au lieu de parcourir une grille complète. (3) « Pour ne pas sur-apprendre, ajouter un terme de pénalisation de la complexité » : c’est la régularisation (section 10). (4) Ta question « faut-il 3 jeux de données ? » : oui, apprentissage (règle les paramètres), validation (règle les hyperparamètres), test (évaluation finale, utilisé une seule fois) ; ou une validation croisée imbriquée.</p></div>
+</section>
+
+<!-- 6 -->
+<section id="fleau">
+  <h2><span class="n">6</span>Sélection de variables : fléau de la dimensionnalité</h2>
+  <p>Un individu x<sub>i</sub> ∈ ℝ<sup>d</sup> ; une caractéristique X<sub>j</sub>. <strong>Croyance naïve</strong> : plus d est grand, plus j’ai de chances de bien répondre à la tâche. <strong>Contre-exemple</strong> : régression aux moindres carrés avec d &gt; n : XᵀX · w = Xᵀy. La matrice XᵀX est d × d mais de rang n seulement : on n’a que <strong>n équations indépendantes pour d inconnues</strong>, problème mal posé.</p>
+  <p><strong>Fléau de la dimensionnalité</strong> (<em>curse of dimensionality</em>) : sur un problème facile (classes séparées), on ajoute des dimensions de bruit. La matrice de distances entre points perd sa structure en blocs : la distance euclidienne est très sensible à la dimension ; les points tendent à se placer sur une hypersphère (ils deviennent équidistants). Un classifieur de base voit son exactitude d’apprentissage monter et celle de test <strong>descendre</strong> : c’est du sur-apprentissage.</p>
+  <div class="lab" id="lab-curse">
+    <h3>Ajoute des colonnes de bruit</h3>
+    <p class="lead">Deux dimensions utiles et 67 exemples, comme sur la diapo 17/30. <b>Prédis :</b> que devient l’exactitude de test du plus proche voisin quand on ajoute 20 colonnes de bruit ? Et la matrice de distances ?</p>
+  </div>
+  <div class="aside"><p><span class="tag">Tes notes</span>« Imshow (heatmap) donne de manière visuelle les distances entre des points ; permet de discerner le bruit à l’œil humain, mais la machine a du mal → penser à nettoyer ses données. » C’est ce que montre la matrice de distances ci-dessus : à l’œil, les blocs disparaissent avec le bruit ; pour la machine, tous les points deviennent pareillement éloignés. « Rajouter du bruit (des colonnes) pousse au sur-apprentissage » : modèle très complexe en apprentissage, faible en test.</p></div>
+</section>
+
+<!-- 7 -->
+<section id="bonnevar">
+  <h2><span class="n">7</span>Bonne ou mauvaise variable ?</h2>
+  <p>Comment savoir si X<sub>j</sub> est une variable d’intérêt ? <strong>Corrélation</strong> X<sub>j</sub>ᵀY : mais elle ignore les approches <em>non linéaires</em> (avec un SVM on peut construire une variable idéale pour estimer Y de corrélation nulle), et les variables intéressantes mais <em>corrélées entre elles</em> (X<sub>j</sub>ᵀY et X<sub>k</sub>ᵀY élevées avec X<sub>j</sub> ≈ X<sub>k</sub> : redondance). Autres questions : <strong>combien</strong> de variables garder ? Certaines variables ont-elles un intérêt <strong>combinées</strong> à d’autres ?</p>
+  <p>Trois grandes familles : (1) choisir les caractéristiques pertinentes et éliminer les autres : avec un <strong>expert</strong>, en analysant les paramètres des classifieurs (<strong>introspection</strong>), en testant des combinaisons + scoring (<strong>extrospection</strong>) ; (2) utiliser l’<strong>ACP</strong> pour trouver les meilleures combinaisons ; (3) <strong>apprendre à éliminer</strong> les variables pendant l’apprentissage (régularisation).</p>
+  <ul>
+    <li><strong>(0) Corrélations avec la cible</strong> : parfois (souvent) les stratégies les plus naïves méritent d’être testées.</li>
+    <li><strong>(1) Poids d’un classifieur linéaire</strong> : f(x) = Σ w<sub>j</sub> x<sub>j</sub>, w<sub>j</sub> ≈ importance de X<sub>j</sub> (SVM linéaire, régression logistique, ridge classification…). Bonne nouvelle : les poids des variables importantes sont plus hauts. Mauvaise nouvelle : les poids des autres sont eux aussi assez importants.</li>
+    <li><strong>Importance dans les forêts</strong> : les méthodes d’ensemble sont moins sensibles à la dimension (si leurs hypothèses sont assez faibles, une forme de régularisation) et calculent l’importance : nombre de fois où la variable est utilisée, nombre de fois où elle est à la racine, où elle détermine les feuilles, pondération par l’utilité de l’arbre… Dans tes notes : la hauteur dans l’arbre (haut = très discriminant).</li>
+  </ul>
+  <div class="lab" id="lab-rank">
+    <h3>Corrélations, poids et effet d’échelle</h3>
+    <p class="lead">n = 67 exemples, d = 22 variables dont <b>2 informatives</b> (en vert). Compare le classement par corrélation et par poids d’un modèle linéaire. Puis change les échelles des variables.</p>
+  </div>
+  <div class="aside"><p><span class="tag">Tes notes</span>Tes deux mises en garde sont justes : (1) <strong>effet d’échelle</strong> : un poids dépend de l’unité de la variable (multiplie une variable par 100, son poids est divisé par 100), donc il faut standardiser (moyenne 0, écart-type 1) avant de comparer les w<sub>j</sub> ; (2) <strong>effet de masquage</strong> : deux variables corrélées se partagent le poids, chacune paraît moins importante. Tu peux le voir en cochant la copie de la variable 0 ci-dessus.</p></div>
+</section>
+
+<!-- 8 -->
+<section id="iteratif">
+  <h2><span class="n">8</span>Sélection itérative de caractéristiques</h2>
+  <p>Approches gloutonnes, mais <strong>très chères</strong>.</p>
+  <div class="fx">Élimination récursive (Recursive Backward Elimination)
+  1. S = {X₁,…,X_d}
+  2. Faire d fois : pour tous les S_i = S \ X_i : p_i = perf(S_i) (taux en test, validation croisée…) ; conserver S = meilleur S_i
+
+Sélection ascendante (Forward selection)
+  1. S = ∅
+  2. Faire d fois : pour tous les S_i = S + X_i : p_i = perf(S_i) ; conserver S = meilleur S_i</div>
+  <p><strong>Coût</strong> : d itérations × (d − 1) tests (avec d décroissant pour le backward, croissant pour le forward) × un test = un apprentissage + évaluation, ou n<sub>CV</sub> apprentissages + évaluations. Le forward est « un peu moins cher… mais pourquoi ? » : il faut réfléchir à la <strong>forme de la courbe</strong> de performance, d’où la notion d’<em>early stopping</em> : la performance monte, atteint un maximum puis stagne ou baisse ; si l’optimum est atteint avec peu de variables, le forward s’arrête très tôt, alors que le backward doit descendre presque jusqu’à la fin.</p>
+  <div class="lab" id="lab-search">
+    <h3>Backward contre forward, avec le coût</h3>
+    <p class="lead">Score = R² en validation croisée (5 plis) d’un classifieur linéaire (moindres carrés sur y = ±1). Les deux méthodes sont exécutées pour de vrai ; l’arrêt prématuré s’applique quand le score ne progresse plus (de plus de 0,005) depuis 3 étapes.</p>
+  </div>
+  <div class="aside"><p><span class="tag">Tes notes</span>« Recursive Backward Elimination : on retire la moins bonne colonne, puis on recommence ; la performance atteint un maximum (on a enlevé le bruit) ; si on continue, on enlève des colonnes qui contiennent de l’information. » C’est exactement la forme de courbe ci-dessus. Précision : la version de la diapo teste <em>toutes</em> les suppressions possibles à chaque étape (coûteux) ; la version « à poids » (on retire la variable au plus petit |w|) est plus rapide mais dépend de l’échelle des variables.</p></div>
+</section>
+
+<!-- 9 -->
+<section id="acp">
+  <h2><span class="n">9</span>ACP (PCA) : analyse en composantes principales</h2>
+  <p><strong>Idée</strong> : trouver la combinaison d’axes qui explique au mieux la <strong>variance</strong> des données ; la <strong>valeur propre</strong> donne la force de l’explication. Pour d = 22 : 22 valeurs propres et 22 vecteurs propres, mais peu de valeurs significatives (la courbe des valeurs propres décroît). Les axes sont <strong>orthogonaux</strong>, même en 22 dimensions. Question de la diapo : est-ce de la <em>sélection</em> ou de la <em>construction</em> de caractéristiques ? Réponse : de la construction (chaque composante est une combinaison linéaire de toutes les variables), qui permet ensuite de réduire la dimension.</p>
+  <p>« Un algorithme à tout faire » : variantes pour les réseaux de capteurs (combinaison linéaire de sources), <strong>visualisation</strong> (Iris en 4D ; chiffres en 256 dimensions projetés en 2D).</p>
+  <div class="lab" id="lab-pca">
+    <h3>Variance n’est pas information</h3>
+    <p class="lead">Mêmes 22 variables : 2 informatives, 20 de bruit. <b>Prédis :</b> quand le signal est faible, les 2 premières composantes séparent-elles les classes ? Augmente la force du signal.</p>
+  </div>
+  <div class="aside"><p><span class="tag">Tes notes</span>(1) « Méthode du coude pour choisir le nombre de valeurs propres à garder » : oui, on regarde où la courbe des valeurs propres (ou de la variance cumulée) cesse de décroître fortement. (2) Les valeurs propres sont attachées aux <em>axes</em> (composantes), pas aux variables d’origine. (3) « Les axes à valeur propre forte sont souvent reconnus comme peu bruités » : c’est une hypothèse, vraie seulement si le signal domine la variance. Le laboratoire montre le cas contraire : l’ACP est <em>non supervisée</em>, elle ignore les étiquettes. (4) Pour tes remarques sur le graphique des chiffres (0 en haut, 1 en bas ; 3, 9, 8 à droite, 1, 4, 7 à gauche) : chaque axe est une combinaison de pixels, et la position d’une classe sur l’axe dit quels motifs de pixels la distinguent.</p></div>
+</section>
+
+<!-- 10 -->
+<section id="regul">
+  <h2><span class="n">10</span>Régularisation : apprendre les variables utiles</h2>
+  <div class="fx">Moindres carrés :   L = Σ_i ( Σ_j w_j x_ij − y_i )²
+Ridge (L2) :        L = Σ_i ( Σ_j w_j x_ij − y_i )² + C ‖w‖²
+Lasso (L1) :        L = Σ_i ( Σ_j w_j x_ij − y_i )² + C ‖w‖₁ = … + C Σ_j |w_j|
+Elastic net :       L = Σ_i ( Σ_j w_j x_ij − y_i )² + C₁ Σ_j |w_j| + C₂ ‖w‖²</div>
+  <p>Cas limites : C = 0 ⇒ moindres carrés ; C → ∞ ⇒ w = 0. Les cas intermédiaires forment le <strong>chemin de régularisation</strong>. Pour tout terme : « L » minimise l’écart aux données, le terme en C cherche la <strong>parcimonie</strong> (utiliser peu de variables).</p>
+  <div class="scroll"><table>
+    <thead><tr><th></th><th>Ridge (L2)</th><th>Lasso (L1)</th><th>Elastic net</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Gradient du terme</strong></td><td>∇₂ = 2w ; w ← w − ε∇₂ = w(1 − 2ε) : les poids sont <em>affaiblis</em></td><td>∇₂ = sign(w) ; w ← w − ε sign(w) : les poids sont <em>annulés</em></td><td>Les deux</td></tr>
+      <tr><td><strong>Effet</strong></td><td>Peu parcimonieux (utilise directement les 22 dimensions) ; bonnes performances</td><td>Sélectionne des variables ; performances moins bonnes, plus difficile à régler</td><td>Confort et performance du L2 avec la sélection du L1</td></tr>
+      <tr><td><strong>Réglage</strong></td><td>1 paramètre</td><td>1 paramètre</td><td>2 paramètres : plus dur, mais en pratique C₁ est « epsilonesque » et on joue presque uniquement sur C₂</td></tr>
+    </tbody>
+  </table></div>
+  <div class="lab" id="lab-reg">
+    <h3>Chemins de régularisation</h3>
+    <p class="lead">Régression aux moindres carrés sur les 67 exemples et 22 variables standardisées (2 informatives). <b>Prédis :</b> quand les poids du bruit tombent-ils exactement à zéro : Ridge ou Lasso ? Lis aussi P<sub>train</sub>, P<sub>test</sub> et la part de poids non nuls (#w) comme sur les diapos.</p>
+  </div>
+  <div class="aside"><p><span class="tag">Tes notes</span>(1) « Lasso pour sélectionner les variables, puis Ridge (ou SVM…) pour l’optimisation et la performance » : c’est une stratégie courante en deux temps. (2) « Ridge : solution peu parcimonieuse ; Lasso : plus parcimonieux, utilisé en grande dimension, performances moins bonnes, pour le statisticien même si instable » : bien noté, avec en plus que le Lasso choisit arbitrairement une seule variable parmi plusieurs corrélées, d’où son instabilité (complément). (3) Le cours écrit L₂ = « C‖w‖² » : n’oublie pas le carré (« Elestic net » = Elastic net).</p></div>
+</section>
+
+<!-- 11 -->
+<section id="protocole">
+  <h2><span class="n">11</span>Apprentissage-test ⇒ apprentissage / validation / test</h2>
+  <p>La multiplication des hyperparamètres (C, σ, arrêt prématuré…) pose problème.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Protocole dégradé</th><th>Nouveau protocole</th></tr></thead>
+    <tbody>
+      <tr><td>Pour tous les hyperparamètres : apprentissage sur (X<sub>app</sub>, y<sub>app</sub>) ; évaluation sur (X<sub>test</sub>, y<sub>test</sub>). <strong>Sur-apprentissage du jeu de test</strong> par les hyperparamètres.</td><td>Pour tous les hyperparamètres : apprentissage sur (X<sub>app</sub>, y<sub>app</sub>) ; évaluation sur (X<sub>val</sub>, y<sub>val</sub>) ⇒ <strong>sélection de modèles</strong>. Puis <strong>évaluation finale</strong> sur (X<sub>test</sub>, y<sub>test</sub>), une seule fois.</td></tr>
+    </tbody>
+  </table></div>
+  <p>Retrouve les deux protocoles dans le laboratoire de la section 5 (critère de sélection « validation » ou « test »).</p>
+</section>
+
+<!-- 12 -->
+<section id="pieges">
+  <h2><span class="n">12</span>Pièges à éviter</h2>
+  <div class="note"><ul>
+    <li><strong>Précision ≠ accuracy</strong> (en français) ; précision = TP/(TP+FP) ; rappel = TP/(TP+FN) ; FPR = FP/(FP+TN).</li>
+    <li>Précision et rappel se calculent <strong>sur une classe</strong> ; pour plusieurs classes, choisir macro (non pondérée) ou micro (pondérée par les effectifs).</li>
+    <li>Sur des données déséquilibrées, une exactitude de 99 % peut cacher un modèle qui ne détecte rien.</li>
+    <li>Ne pas confondre métrique d’évaluation et coût optimisé.</li>
+    <li>Choisir les hyperparamètres sur le jeu de test : le test n’est plus vierge, la performance annoncée est optimiste.</li>
+    <li>Publier le score de validation croisée qui a servi à régler les paramètres : surestimation.</li>
+    <li>Comparer des poids w<sub>j</sub> de variables non standardisées.</li>
+    <li>Croire que l’ACP garde l’information utile : elle garde la <strong>variance</strong>.</li>
+    <li>Une corrélation faible n’exclut pas une variable utile (non linéaire, ou utile en combinaison).</li>
+    <li>Ridge affaiblit, Lasso annule ; ne pas attendre de sélection du Ridge.</li>
+    <li>d &gt; n en moindres carrés : problème mal posé sans régularisation.</li>
+  </ul></div>
+</section>
+
+<!-- 13 -->
+<section id="test">
+  <h2><span class="n">13</span>Auto-test</h2>
+  <p>QCM, vrai/faux, questions numériques et mises en ordre, avec correction immédiate. « Recommencer » mélange questions et propositions.</p>
+  <div id="qz-main"></div>
+</section>
+
+<footer>Source : diapositives « Machine-learning (2) : sélection de modèles et cas avancés », V. Guigue et R. Thoreau, AgroParisTech. Tes notes personnelles sont signalées par les encadrés bleus « Tes notes ». Les encadrés « Complément » sortent du cours.</footer>
+</main>
+</div>
+
+<script>
+'use strict';
+/* ---------- helpers ---------- */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function h(tag,attrs,...kids){
+  const e=document.createElement(tag);
+  for(const k in (attrs||{})){const v=attrs[k];
+    if(v==null||v===false)continue;
+    if(k==='class')e.className=v;
+    else if(k==='html')e.innerHTML=v;
+    else if(k.slice(0,2)==='on')e.addEventListener(k.slice(2),v);
+    else e.setAttribute(k,v===true?'':v);}
+  for(const c of kids.flat(Infinity)){if(c==null||c===false)continue;e.append(c.nodeType?c:document.createTextNode(String(c)));}
+  return e;}
+const redraws=[]; const onTheme=fn=>{redraws.push(fn);};
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>redraws.forEach(f=>f()));}catch(e){}
+new MutationObserver(()=>redraws.forEach(f=>f())).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+function mkCanvas(parent,w,hh,label){
+  const c=h('canvas',{role:'img','aria-label':label||''});
+  const d=Math.min(window.devicePixelRatio||1,2);
+  c.width=Math.round(w*d);c.height=Math.round(hh*d);
+  const g=c.getContext('2d');g.scale(d,d);parent.append(c);
+  return {c,g,w,h:hh};}
+let _id=0;
+function slider(parent,o){
+  const id='s'+(++_id);const out=h('output',{for:id});
+  const inp=h('input',{type:'range',id,min:o.min,max:o.max,step:o.step||1,value:o.value});
+  const fmt=o.fmt||(v=>v);const upd=()=>{out.textContent=fmt(+inp.value)};
+  inp.addEventListener('input',()=>{upd();o.onchange&&o.onchange(+inp.value)});upd();
+  const wrap=h('div',{class:'ctl'},h('label',{for:id},o.label,' ',out),inp);parent.append(wrap);
+  return {wrap,inp,get v(){return +inp.value},set v(x){inp.value=x;upd()}};}
+function seg(parent,label,opts,val,onchange){
+  const wrap=h('div',{class:'ctl'});const grp=h('div',{class:'seg',role:'group','aria-label':label});let cur=val;
+  const bs=opts.map(([v,t])=>{const b=h('button',{type:'button','aria-pressed':String(v===cur),onclick:()=>{cur=v;bs.forEach(x=>x.b.setAttribute('aria-pressed',String(x.v===cur)));onchange&&onchange(cur)}},t);return{v,b}});
+  grp.append(...bs.map(x=>x.b));wrap.append(h('label',{},label),grp);parent.append(wrap);
+  return {wrap,get v(){return cur},set(v){cur=v;bs.forEach(x=>x.b.setAttribute('aria-pressed',String(x.v===cur)))}};}
+const btn=(t,f,c)=>h('button',{type:'button',class:c||'',onclick:f},t);
+const controls=parent=>{const c=h('div',{class:'controls'});parent.append(c);return c;};
+const btns=parent=>{const c=h('div',{class:'btns'});parent.append(c);return c;};
+const stat=(l,v,f)=>{const e=h('div',{class:'stat'},h('div',{class:'v'},v),h('div',{class:'l'},l),f?h('div',{class:'fx2'},f):null);e.set=(x)=>{e.firstChild.textContent=x};return e;};
+
+/* ---------- maths ---------- */
+function rng(seed){let a=seed>>>0;return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function gauss(r){let u=0;while(u===0)u=r();const v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const fr=(x,d=2)=>{if(!isFinite(x))return String(x);return x.toFixed(d).replace('.',',').replace('-','\u2212')};
+const fmtBig=b=>b.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'\u202F');
+function shuffle(a,r){r=r||Math.random;a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function colorMix(c1,c2,t){ // hex or rgb() strings -> rgb string
+  const p=c=>{if(c[0]==='#'){const n=parseInt(c.slice(1),16);return [n>>16&255,n>>8&255,n&255]}const m=c.match(/[\d.]+/g);return m.slice(0,3).map(Number)};
+  const a=p(c1),b=p(c2);return `rgb(${a.map((x,i)=>Math.round(x+(b[i]-x)*t)).join(',')})`;}
+
+/* ---------- quiz ---------- */
+function Quiz(root,qs,opts){
+  opts=opts||{};let cards=[],score=0,done=0;
+  const head=h('div',{class:'qhead'});const sc=h('div',{class:'qscore','aria-live':'polite'});
+  const list=h('div',{class:'qs'});
+  const bar=h('div',{class:'btns'},btn('Recommencer (ordre mélangé)',()=>build(true)));
+  head.append(sc,bar);root.append(head,list);
+  const upd=()=>{sc.textContent=`Répondu : ${done}/${qs.length} · Score : ${score}/${qs.length}`+(done===qs.length?(score===qs.length?'  — sans faute !':'  — relis les explications des erreurs.'):'')};
+  function finish(card,ok,fbHtml){ if(card.locked)return;card.locked=true;done++;if(ok)score++;card.fb.innerHTML=(ok?'<span class="ok">Correct.</span> ':'<span class="ko">Pas tout à fait.</span> ')+fbHtml;upd();}
+  function build(shuf){
+    score=0;done=0;list.innerHTML='';cards=[];
+    const order=shuf?shuffle(qs):qs;
+    order.forEach((q,n)=>{
+      const card={locked:false,fb:h('div',{class:'fb','aria-live':'polite'})};
+      const el=h('div',{class:'qc'},h('p',{class:'qq'},h('span',{class:'qn'},String(n+1).padStart(2,'0')),h('span',{html:q.q})));
+      if(q.t==='mcq'){
+        const os=shuffle(q.o.map((t,i)=>({t,i})));
+        const box=h('div',{class:'opts'});
+        os.forEach(o=>{const b=h('button',{type:'button',onclick:()=>{
+          if(card.locked)return;
+          $$('button',box).forEach((x,k)=>{x.disabled=true;if(os[k].i===q.a)x.classList.add('right');});
+          if(o.i!==q.a)b.classList.add('wrong');
+          finish(card,o.i===q.a,q.e);}} ,h('span',{html:o.t}));box.append(b);});
+        el.append(box);
+      }else if(q.t==='tf'){
+        const box=h('div',{class:'opts row'});
+        [[true,'Vrai'],[false,'Faux']].forEach(([v,t])=>{const b=h('button',{type:'button',onclick:()=>{
+          if(card.locked)return;$$('button',box).forEach(x=>x.disabled=true);
+          b.classList.add(v===q.a?'right':'wrong');
+          if(v!==q.a)$$('button',box).forEach(x=>{if(x!==b)x.classList.add('right')});
+          finish(card,v===q.a,q.e);}},t);box.append(b);});
+        el.append(box);
+      }else if(q.t==='num'){
+        const inp=h('input',{type:'text',inputmode:'decimal','aria-label':'Ta réponse',placeholder:'ta réponse'});
+        const go=()=>{ if(card.locked)return;
+          const v=parseFloat(inp.value.replace(/[\s\u00a0\u202f]/g,'').replace(',','.'));
+          const ok=isFinite(v)&&Math.abs(v-q.a)<=(q.tol||0);
+          inp.disabled=true;b.disabled=true;
+          finish(card,ok,`Réponse : <b>${q.show||fmtBig(BigInt(Math.round(q.a)))}</b>. `+q.e);};
+        const b=btn('Valider',go);inp.addEventListener('keydown',e=>{if(e.key==='Enter')go()});
+        el.append(h('div',{class:'numin'},inp,b));
+      }else if(q.t==='order'){
+        const pool=h('div',{class:'chips'});const seq=[];
+        const line=h('p',{class:'legend'},'Clique les éléments dans l’ordre.');
+        const items=shuffle(q.items.map((t,i)=>({t,i})));
+        const bs=items.map(it=>{const b=h('button',{type:'button',onclick:()=>{
+          if(card.locked)return;seq.push(it.i);b.disabled=true;b.prepend(h('b',{},String(seq.length)));
+          if(seq.length===items.length){const ok=seq.every((v,i)=>v===i);
+            finish(card,ok,(ok?'':'Ordre attendu : <ol>'+q.items.map(x=>`<li>${x}</li>`).join('')+'</ol>')+q.e);} }},h('span',{html:it.t}));pool.append(b);return b;});
+        const reset=btn('Effacer',()=>{if(card.locked)return;seq.length=0;bs.forEach(b=>{b.disabled=false;const x=b.querySelector('b');x&&x.remove();});});
+        el.append(pool,h('div',{class:'btns'},reset),line);
+      }
+      el.append(card.fb);list.append(el);cards.push(card);
+    });
+    upd();
+  }
+  build(false);
+  return {rebuild:build};
+}
+
+/* ================= ml.js : primitives d'apprentissage (sans DOM) ================= */
+const sum=a=>{let s=0;for(let i=0;i<a.length;i++)s+=a[i];return s;};
+const mean=a=>sum(a)/a.length;
+const stdev=(a,pop=true)=>{const m=mean(a);let s=0;for(const x of a)s+=(x-m)*(x-m);return Math.sqrt(s/(a.length-(pop?0:1)));};
+const H2=p=>(p<=0||p>=1)?0:-(p*Math.log2(p)+(1-p)*Math.log2(1-p));
+const sigm=x=>1/(1+Math.exp(-x));
+
+/* ---- jeux de données ---- */
+function genSet(kind,n,noise,seed){
+  const r=rng(seed);const X=[],y=[];
+  for(let i=0;i<n;i++){
+    let x1,x2,l;
+    if(kind==='blobs'){l=i%2;const c=l?0.42:-0.42;x1=c+gauss(r)*(0.2+noise*0.5);x2=c*0.7+gauss(r)*(0.2+noise*0.5);}
+    else if(kind==='xor'){x1=r()*2-1;x2=r()*2-1;l=(x1*x2>0)?1:0;x1+=gauss(r)*noise*0.3;x2+=gauss(r)*noise*0.3;}
+    else if(kind==='circle'){l=i%2;const rr=l?r()*0.45:0.65+r()*0.35;const a=r()*6.283;x1=rr*Math.cos(a)+gauss(r)*noise*0.3;x2=rr*Math.sin(a)+gauss(r)*noise*0.3;}
+    else{ /* moons */ l=i%2;const t=Math.PI*r();const px=l?1-Math.cos(t):Math.cos(t),py=l?0.5-Math.sin(t):Math.sin(t);x1=(px-0.5)/1.5+gauss(r)*noise*0.3;x2=(py-0.25)/0.75+gauss(r)*noise*0.3;}
+    X.push([x1,x2]);y.push(l);
+  }
+  return {X,y};
+}
+/* jeu de la diapo 11 : domaine [0,10]^2, classe 1 si X2>6 ou X1<=3 */
+function genSlide(n,flip,seed){
+  const r=rng(seed);const X=[],y=[];
+  for(let i=0;i<n;i++){const a=r()*10,b=r()*10;let l=(b>6||a<=3)?1:0;if(r()<flip)l=1-l;X.push([a,b]);y.push(l);}
+  return {X,y};
+}
+
+/* ---- arbre de décision (d variables, poids d'exemples optionnels) ---- */
+function buildTree(X,y,o){
+  o=Object.assign({maxDepth:99,minLeaf:1,maxFeat:0,crit:'entropy',rng:Math.random,w:null},o||{});
+  const w=o.w||new Array(X.length).fill(1);const d=X[0].length;
+  const imp=(pw,tw)=>{if(tw<=0)return 0;const p=pw/tw;return o.crit==='gini'?2*p*(1-p):H2(p);};
+  function build(idx,depth){
+    let tw=0,pw=0;idx.forEach(i=>{tw+=w[i];pw+=w[i]*y[i];});
+    const node={n:idx.length,p:tw>0?pw/tw:0.5,imp:imp(pw,tw)};
+    if(depth>=o.maxDepth||idx.length<2*o.minLeaf||pw<=1e-12||tw-pw<=1e-12){node.leaf=true;return node;}
+    let feats=[...Array(d).keys()];
+    if(o.maxFeat&&o.maxFeat<d)feats=shuffle(feats,o.rng).slice(0,o.maxFeat);
+    let best=null;
+    feats.forEach(f=>{
+      const s=idx.slice().sort((a,b)=>X[a][f]-X[b][f]);let lw=0,lp=0;
+      for(let k=0;k<s.length-1;k++){const i=s[k];lw+=w[i];lp+=w[i]*y[i];
+        if(X[s[k]][f]===X[s[k+1]][f])continue;
+        const nl=k+1,nr=s.length-nl;if(nl<o.minLeaf||nr<o.minLeaf)continue;
+        const score=(lw*imp(lp,lw)+(tw-lw)*imp(pw-lp,tw-lw))/tw;
+        if(!best||score<best.score-1e-12)best={score,f,t:(X[s[k]][f]+X[s[k+1]][f])/2};}
+    });
+    if(!best){node.leaf=true;return node;}
+    const L=[],R=[];idx.forEach(i=>(X[i][best.f]<=best.t?L:R).push(i));
+    node.f=best.f;node.t=best.t;node.gain=node.imp-best.score;node.l=build(L,depth+1);node.r=build(R,depth+1);
+    return node;
+  }
+  return build([...Array(X.length).keys()],0);
+}
+function treeProba(n,x){while(!n.leaf)n=x[n.f]<=n.t?n.l:n.r;return n.p;}
+function treeDepth(n){return n.leaf?0:1+Math.max(treeDepth(n.l),treeDepth(n.r));}
+function treeLeaves(n){return n.leaf?1:treeLeaves(n.l)+treeLeaves(n.r);}
+const acc=(pred,y)=>{let c=0;for(let i=0;i<y.length;i++)if(pred[i]===y[i])c++;return c/y.length;};
+
+/* ---- validation croisée ---- */
+function kfold(n,K,r,groups){
+  const F=Array.from({length:K},()=>[]);
+  if(groups){const gs=shuffle([...new Set(groups)],r);const m=new Map();gs.forEach((g,i)=>m.set(g,i%K));groups.forEach((g,i)=>F[m.get(g)].push(i));return F;}
+  shuffle([...Array(n).keys()],r).forEach((i,k)=>F[k%K].push(i));return F;
+}
+const sub=(A,idx)=>idx.map(i=>A[i]);
+const compl=(n,idx)=>{const s=new Set(idx);const o=[];for(let i=0;i<n;i++)if(!s.has(i))o.push(i);return o;};
+
+/* ---- régression logistique (descente de gradient) ---- */
+function fitLogistic(P,y,o){
+  o=Object.assign({lr:0.8,iters:400,l2:1e-3},o||{});const n=P.length,d=P[0].length;const w=new Array(d+1).fill(0);
+  for(let it=0;it<o.iters;it++){const g=new Array(d+1).fill(0);
+    for(let i=0;i<n;i++){let z=w[0];const p=P[i];for(let j=0;j<d;j++)z+=w[j+1]*p[j];const e=sigm(z)-y[i];g[0]+=e;for(let j=0;j<d;j++)g[j+1]+=e*p[j];}
+    w[0]-=o.lr*g[0]/n;for(let j=0;j<d;j++)w[j+1]-=o.lr*(g[j+1]/n+o.l2*w[j+1]);}
+  return w;
+}
+const logitScore=(w,p)=>{let z=w[0];for(let j=0;j<p.length;j++)z+=w[j+1]*p[j];return z;};
+
+/* ---- plus proches voisins ---- */
+function knnProba(Xtr,ytr,x,k){
+  const d=Xtr.map((p,i)=>{let s=0;for(let j=0;j<p.length;j++){const a=p[j]-x[j];s+=a*a;}return [s,i];});
+  d.sort((a,b)=>a[0]-b[0]);let c=0;for(let i=0;i<k;i++)c+=ytr[d[i][1]];return c/k;
+}
+
+/* ---- algèbre linéaire ---- */
+function solveLin(A0,b0){
+  const n=b0.length;const A=A0.map((r,i)=>r.concat([b0[i]]));
+  for(let c=0;c<n;c++){let p=c;for(let r=c+1;r<n;r++)if(Math.abs(A[r][c])>Math.abs(A[p][c]))p=r;[A[c],A[p]]=[A[p],A[c]];
+    const piv=A[c][c]||1e-12;for(let r=c+1;r<n;r++){const q=A[r][c]/piv;if(q!==0)for(let j=c;j<=n;j++)A[r][j]-=q*A[c][j];}}
+  const x=new Array(n).fill(0);for(let i=n-1;i>=0;i--){let s=A[i][n];for(let j=i+1;j<n;j++)s-=A[i][j]*x[j];x[i]=s/(A[i][i]||1e-12);}
+  return x;
+}
+/* moindres carrés avec intercept non pénalisé et ridge léger : retourne [b0,w1..wd] */
+function lstsq(X,y,lam){
+  lam=lam||1e-8;const n=X.length,d=X[0].length;const m=d+1;
+  const A=Array.from({length:m},()=>new Array(m).fill(0)),b=new Array(m).fill(0);
+  for(let i=0;i<n;i++){const v=[1].concat(X[i]);for(let a=0;a<m;a++){b[a]+=v[a]*y[i];for(let c=0;c<m;c++)A[a][c]+=v[a]*v[c];}}
+  for(let a=1;a<m;a++)A[a][a]+=lam*n;
+  return solveLin(A,b);
+}
+const lsPredict=(w,x)=>{let z=w[0];for(let j=0;j<x.length;j++)z+=w[j+1]*x[j];return z;};
+function standardize(X,ref){
+  const d=X[0].length;const R=ref||X;const mu=[],sd=[];
+  for(let j=0;j<d;j++){const c=R.map(r=>r[j]);mu.push(mean(c));sd.push(stdev(c)||1);}
+  return {Z:X.map(r=>r.map((v,j)=>(v-mu[j])/sd[j])),mu,sd};
+}
+/* Elastic net par descente de coordonnées : (1/n)||y-Xw||² + C1|w|₁ + C2||w||² ; X standardisé, y centré */
+function elasticNet(X,y,C1,C2,iters){
+  const n=X.length,d=X[0].length;const w=new Array(d).fill(0);const r=y.slice();
+  const z=[];for(let j=0;j<d;j++){let s=0;for(let i=0;i<n;i++)s+=X[i][j]*X[i][j];z.push(s/n);}
+  for(let it=0;it<(iters||200);it++){
+    for(let j=0;j<d;j++){let rho=0;for(let i=0;i<n;i++)rho+=X[i][j]*r[i];rho=rho/n+z[j]*w[j];
+      const t=C1/2;const s=rho>t?rho-t:(rho<-t?rho+t:0);const wn=s/(z[j]+C2);
+      const dl=wn-w[j];if(dl!==0){for(let i=0;i<n;i++)r[i]-=X[i][j]*dl;w[j]=wn;}}
+  }
+  return w;
+}
+function ridgeCF(X,y,C2){
+  const n=X.length,d=X[0].length;const A=Array.from({length:d},()=>new Array(d).fill(0)),b=new Array(d).fill(0);
+  for(let i=0;i<n;i++)for(let a=0;a<d;a++){b[a]+=X[i][a]*y[i]/n;for(let c=0;c<d;c++)A[a][c]+=X[i][a]*X[i][c]/n;}
+  for(let a=0;a<d;a++)A[a][a]+=C2;return solveLin(A,b);
+}
+/* valeurs/vecteurs propres d'une matrice symétrique (Jacobi cyclique) */
+function eigSym(M){
+  const n=M.length;const A=M.map(r=>r.slice());const V=Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?1:0));
+  for(let sw=0;sw<80;sw++){let off=0;for(let p=0;p<n;p++)for(let q=p+1;q<n;q++)off+=A[p][q]*A[p][q];if(off<1e-20)break;
+    for(let p=0;p<n;p++)for(let q=p+1;q<n;q++){if(Math.abs(A[p][q])<1e-14)continue;
+      const th=(A[q][q]-A[p][p])/(2*A[p][q]);const t=Math.sign(th||1)/(Math.abs(th)+Math.sqrt(th*th+1));const c=1/Math.sqrt(t*t+1),s=t*c;
+      for(let k=0;k<n;k++){const akp=A[k][p],akq=A[k][q];A[k][p]=c*akp-s*akq;A[k][q]=s*akp+c*akq;}
+      for(let k=0;k<n;k++){const apk=A[p][k],aqk=A[q][k];A[p][k]=c*apk-s*aqk;A[q][k]=s*apk+c*aqk;}
+      for(let k=0;k<n;k++){const vkp=V[k][p],vkq=V[k][q];V[k][p]=c*vkp-s*vkq;V[k][q]=s*vkp+c*vkq;}}}
+  const ord=[...Array(n).keys()].sort((a,b)=>A[b][b]-A[a][a]);
+  return {vals:ord.map(i=>A[i][i]),vecs:ord.map(i=>V.map(r=>r[i]))};
+}
+function covMat(X){
+  const n=X.length,d=X[0].length;const mu=[];for(let j=0;j<d;j++)mu.push(mean(X.map(r=>r[j])));
+  const C=Array.from({length:d},()=>new Array(d).fill(0));
+  for(let i=0;i<n;i++)for(let a=0;a<d;a++)for(let b=a;b<d;b++)C[a][b]+=(X[i][a]-mu[a])*(X[i][b]-mu[b])/n;
+  for(let a=0;a<d;a++)for(let b=0;b<a;b++)C[a][b]=C[b][a];
+  return {C,mu};
+}
+
+/* ---- métriques ---- */
+function confusion(pred,y){let tp=0,fp=0,fn=0,tn=0;for(let i=0;i<y.length;i++){if(y[i]===1){pred[i]===1?tp++:fn++;}else{pred[i]===1?fp++:tn++;}}return {tp,fp,fn,tn};}
+function rocCurve(s,y){
+  const idx=s.map((_,i)=>i).sort((a,b)=>s[b]-s[a]);let P=0,N=0;y.forEach(v=>v?P++:N++);
+  let tp=0,fp=0;const pts=[[0,0]];let auc=0,px=0,py=0;
+  for(let k=0;k<idx.length;k++){const i=idx[k];y[i]?tp++:fp++;
+    if(k===idx.length-1||s[idx[k+1]]!==s[i]){const x=fp/N,yy=tp/P;auc+=(x-px)*(yy+py)/2;pts.push([x,yy]);px=x;py=yy;}}
+  return {pts,auc};
+}
+
+/* ---- loi de Student (test t apparié) ---- */
+function lgam(x){const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5];let y=x,t=x+5.5;t-=(x+0.5)*Math.log(t);let s=1.000000000190015;for(let j=0;j<6;j++)s+=c[j]/++y;return -t+Math.log(2.5066282746310005*s/x);}
+function betacf(a,b,x){let qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap;if(Math.abs(d)<1e-30)d=1e-30;d=1/d;let h=d;
+  for(let m=1;m<=200;m++){const m2=2*m;let aa=m*(b-m)*x/((qam+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<1e-30)d=1e-30;c=1+aa/c;if(Math.abs(c)<1e-30)c=1e-30;d=1/d;h*=d*c;
+    aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));d=1+aa*d;if(Math.abs(d)<1e-30)d=1e-30;c=1+aa/c;if(Math.abs(c)<1e-30)c=1e-30;d=1/d;const del=d*c;h*=del;if(Math.abs(del-1)<3e-12)break;}return h;}
+function betai(a,b,x){if(x<=0)return 0;if(x>=1)return 1;const bt=Math.exp(lgam(a+b)-lgam(a)-lgam(b)+a*Math.log(x)+b*Math.log(1-x));
+  return x<(a+1)/(a+b+2)?bt*betacf(a,b,x)/a:1-bt*betacf(b,a,1-x)/b;}
+const pTwoSided=(t,df)=>betai(df/2,0.5,df/(df+t*t));
+function pairedT(a,b){const d=a.map((v,i)=>v-b[i]);const n=d.length;const m=mean(d);const s=stdev(d,false);
+  if(s===0)return {t:m===0?0:Infinity,p:m===0?1:0,m,s,n};const t=m/(s/Math.sqrt(n));return {t,p:pTwoSided(t,n-1),m,s,n};}
+
+/* ---- SVM : perte charnière + C||w||² sur la forme f(x)=Σ w_j k(x,x_j), descente Adam ---- */
+function kernelFn(kind,sig){
+  if(kind==='lin')return (a,b)=>a[0]*b[0]+a[1]*b[1]+1;
+  const s2=2*sig*sig;return (a,b)=>Math.exp(-((a[0]-b[0])**2+(a[1]-b[1])**2)/s2);
+}
+function trainSVM(X,y,k,C,iters){
+  const n=X.length;const K=X.map(a=>X.map(b=>k(a,b)));const w=new Array(n).fill(0),m=new Array(n).fill(0),v=new Array(n).fill(0);
+  const b1=0.9,b2=0.999;const T=(iters||800);
+  for(let it=1;it<=T;it++){const lr=0.06*Math.pow(0.03,it/T);
+    const f=K.map(r=>{let s=0;for(let j=0;j<n;j++)s+=r[j]*w[j];return s;});
+    const g=new Array(n).fill(0);
+    for(let i=0;i<n;i++)if(y[i]*f[i]<1){for(let j=0;j<n;j++)g[j]-=y[i]*K[i][j];}
+    for(let j=0;j<n;j++){g[j]+=2*C*w[j];m[j]=b1*m[j]+(1-b1)*g[j];v[j]=b2*v[j]+(1-b2)*g[j]*g[j];
+      w[j]-=lr*(m[j]/(1-Math.pow(b1,it)))/(Math.sqrt(v[j]/(1-Math.pow(b2,it)))+1e-8);}
+  }
+  const f=K.map(r=>{let s=0;for(let j=0;j<n;j++)s+=r[j]*w[j];return s;});
+  return {w,f,X,k};
+}
+const svmF=(mod,x)=>{let s=0;for(let j=0;j<mod.w.length;j++)if(mod.w[j]!==0)s+=mod.w[j]*mod.k(x,mod.X[j]);return s;};
+
+/* ---- jeu « n exemples, d variables dont 2 informatives » (diapos 32-59) ---- */
+function genFeat(n,seed,o){
+  o=Object.assign({d:22,sep:0.9,scales:false,copy:false},o||{});const r=rng(seed);const X=[],y=[];
+  const SC=[0.1,3,0.3,5,1,0.2,4,0.5,2,0.1,6,0.4];
+  for(let i=0;i<n;i++){
+    const l=i%2;let row=[(l?1:-1)*o.sep+gauss(r),(l?1:-1)*o.sep+gauss(r)];
+    if(o.copy)row.push(row[0]+0.1*gauss(r));
+    while(row.length<o.d+(o.copy?1:0))row.push(gauss(r));
+    if(o.scales)row=row.map((v,j)=>v*(j===0?20:j===1?1:SC[(j-2)%SC.length]));
+    X.push(row);y.push(l);
+  }
+  const info=[];for(let j=0;j<X[0].length;j++)info.push(j<2||(o.copy&&j===2));
+  return {X,y,info};
+}
+const cvAcc=(Z,y,K,seed,lam)=>{const n=Z.length;const F=kfold(n,K,rng(seed));let s=0;
+  F.forEach(te=>{const tr=compl(n,te);const w=lstsq(sub(Z,tr),sub(y,tr).map(v=>v?1:-1),lam||1e-3);
+    let c=0;te.forEach(i=>{if((lsPredict(w,Z[i])>0?1:0)===y[i])c++;});s+=c/te.length;});return s/K;};
+
+/* ================= Fiche « Sélection de modèles et cas avancés » ================= */
+
+/* ---- Macro / micro ---- */
+(function(){
+  const root=$('#lab-macro');
+  const M=[[880,15,5],[30,40,10],[10,5,5]];const names=['A','B','C'];
+  const tb=h('table',{class:'mini'});const tbody=h('tbody');
+  tb.append(h('thead',{},h('tr',{},h('th',{},'vrai \\ prédit'),names.map(n=>h('th',{class:'num'},n)))),tbody);
+  M.forEach((r,i)=>tbody.append(h('tr',{},h('th',{},names[i]),r.map((v,j)=>{const e=h('input',{type:'number',min:0,step:1,value:v,'aria-label':`vrai ${names[i]} prédit ${names[j]}`,style:i===j?'background:var(--moss-soft)':''});e.addEventListener('input',()=>{const x=parseInt(e.value);M[i][j]=isFinite(x)&&x>=0?x:0;render();});return h('td',{},e);}))));
+  const out=h('div',{class:'scroll'});const stats=h('div',{class:'stats'});const vd=h('p',{class:'verdict'});
+  root.append(h('div',{class:'scroll'},tb),out,stats,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>La classe A représente 90 % des exemples et est très bien détectée : la F1 <b>micro</b> (pondérée par les effectifs) est excellente, égale à l’exactitude. La F1 <b>macro</b> traite A, B et C à égalité : elle est tirée vers le bas par les classes rares, mal détectées. Pour une application où les classes rares comptent (fraudes, maladies), la macro-moyenne est plus honnête ; la micro reflète surtout la classe majoritaire.</p>'})));
+  function render(){
+    const K=3;const tot=sum(M.flat());const per=[];let TP=0,FP=0,FN=0;
+    for(let k=0;k<K;k++){const tp=M[k][k];let fp=0,fn=0;for(let j=0;j<K;j++){if(j!==k){fp+=M[j][k];fn+=M[k][j];}}
+      const p=tp+fp?tp/(tp+fp):0,r=tp+fn?tp/(tp+fn):0,f=p+r?2*p*r/(p+r):0;per.push({p,r,f,n:tp+fn});TP+=tp;FP+=fp;FN+=fn;}
+    const mp=TP+FP?TP/(TP+FP):0,mr=TP+FN?TP/(TP+FN):0,mf=mp+mr?2*mp*mr/(mp+mr):0;
+    const tbd=h('tbody');per.forEach((c,k)=>tbd.append(h('tr',{},h('td',{},'Classe '+names[k]),h('td',{class:'num'},String(c.n)),h('td',{class:'num'},fr(c.p,3)),h('td',{class:'num'},fr(c.r,3)),h('td',{class:'num'},fr(c.f,3)))));
+    out.innerHTML='';out.append(h('table',{class:'mini'},h('thead',{},h('tr',{},['Classe','Effectif','Précision','Rappel','F1'].map((t,i)=>h('th',{class:i?'num':''},t)))),tbd));
+    const macro=x=>mean(per.map(c=>c[x]));
+    stats.innerHTML='';stats.append(stat('Macro : précision ; rappel ; F1',[macro('p'),macro('r'),macro('f')].map(v=>fr(v,3)).join(' ; ')),stat('Micro : précision = rappel = F1',fr(mf,3),'= exactitude'),stat('Exactitude',fr(TP/tot,3)));
+    vd.innerHTML=macro('f')<mf-0.1?`<span class="ko">Macro F1 (${fr(macro('f'),2)}) très inférieure à micro F1 (${fr(mf,2)}) :</span> les classes rares sont mal traitées, la moyenne pondérée les masque.`:'Macro et micro sont proches : les classes sont traitées de façon comparable.';
+  }
+  render();
+})();
+
+/* ---- Seuil, ROC, PR ---- */
+(function(){
+  const root=$('#lab-roc');const N=2000,W=380,H=340;
+  const r=rng(5);const zp=Array.from({length:N},()=>gauss(r)),zn=Array.from({length:N},()=>gauss(r));
+  let pi=10,dp=1.5,thr=1.0;
+  const ctl=controls(root);
+  slider(ctl,{label:'Part de positifs (évènements rares)',min:1,max:50,value:10,fmt:v=>v+' %',onchange:v=>{pi=v;render();}});
+  slider(ctl,{label:'Séparation d′ des scores',min:0,max:4,step:0.1,value:1.5,fmt:v=>fr(v,1),onchange:v=>{dp=v;render();}});
+  slider(ctl,{label:'Seuil de décision',min:-3,max:6,step:0.05,value:1,fmt:v=>fr(v,2),onchange:v=>{thr=v;render();}});
+  const cm=h('div',{class:'scroll'});const stats=h('div',{class:'stats'});
+  const two=h('div',{class:'two'});const c1=mkCanvas(two,W,H,'Courbe ROC');const c2=mkCanvas(two,W,H,'Courbe précision-rappel');
+  const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(cm,stats,two,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<ul><li>Mets 1 % de positifs : l’<b>exactitude</b> du modèle nul est de 99 %. Les modèles réels font parfois moins bien que ce modèle nul en exactitude, alors qu’ils détectent des évènements.</li><li>Baisse le seuil : le <b>rappel</b> monte (on rate moins d’évènements), la <b>précision</b> baisse (plus de fausses alertes). Le point rouge glisse le long des courbes.</li><li>L’<b>AUC</b> ne dépend pas du seuil : elle vaut 0,5 quand d′ = 0 et tend vers 1 quand les scores se séparent.</li><li>Avec peu de positifs, la ROC reste flatteuse (le FPR est dilué par le grand nombre de négatifs) alors que la courbe précision-rappel montre honnêtement que beaucoup d’alertes sont fausses.</li></ul>'})));
+  function render(){
+    const nP=Math.max(1,Math.round(N*pi/100)),nN=N-nP;const s=[],y=[];for(let i=0;i<nP;i++){s.push(dp+zp[i]);y.push(1);}for(let i=0;i<nN;i++){s.push(zn[i]);y.push(0);}
+    const pred=s.map(v=>v>thr?1:0);const c=confusion(pred,y);const P=c.tp/(c.tp+c.fp||1),R=c.tp/(c.tp+c.fn||1),F=P+R?2*P*R/(P+R):0,A=(c.tp+c.tn)/N,FPR=c.fp/(c.fp+c.tn||1);
+    const cell=(v,ok)=>h('td',{class:'num',style:`text-align:center;font-size:1.05rem;background:${ok?'var(--moss-soft)':'var(--warn-bg)'}`},String(v));
+    cm.innerHTML='';cm.append(h('table',{class:'mini'},h('thead',{},h('tr',{},h('th',{},''),h('th',{style:'text-align:center'},'Prédit positif'),h('th',{style:'text-align:center'},'Prédit négatif'))),h('tbody',{},h('tr',{},h('th',{},'Vraiment positif'),cell('TP = '+c.tp,true),cell('FN = '+c.fn,false)),h('tr',{},h('th',{},'Vraiment négatif'),cell('FP = '+c.fp,false),cell('TN = '+c.tn,true)))));
+    const {pts,auc}=rocCurve(s,y);
+    stats.innerHTML='';stats.append(stat('Exactitude',fr(A*100,1)+' %','modèle nul : '+fr(Math.max(nP,nN)/N*100,1)+' %'),stat('Précision',fr(P,3),'TP/(TP+FP)'),stat('Rappel (TPR)',fr(R,3),'TP/(TP+FN)'),stat('F1',fr(F,3)),stat('FPR',fr(FPR,3),'FP/(FP+TN)'),stat('AUC',fr(auc,3)));
+    // ROC
+    let g=c1.g;g.clearRect(0,0,W,H);const ex=x=>36+x*(W-50),ey=y=>H-30-y*(H-46);
+    const axes=(g,xl,yl)=>{g.strokeStyle=css('--rule');g.fillStyle=css('--muted');g.font='11px sans-serif';g.lineWidth=1;for(let k=0;k<=4;k++){const v=k/4;g.beginPath();g.moveTo(ex(v),16);g.lineTo(ex(v),H-30);g.moveTo(36,ey(v));g.lineTo(W-14,ey(v));g.stroke();g.fillText(fr(v,2),ex(v)-9,H-16);g.fillText(fr(v,2),2,ey(v)+4);}g.fillText(xl,W-100,H-2);g.fillText(yl,40,12);};
+    axes(g,'FPR','TPR (rappel)');g.setLineDash([4,3]);g.strokeStyle=css('--muted');g.beginPath();g.moveTo(ex(0),ey(0));g.lineTo(ex(1),ey(1));g.stroke();g.setLineDash([]);
+    g.strokeStyle=css('--c1');g.lineWidth=2.5;g.beginPath();pts.forEach((p,i)=>i?g.lineTo(ex(p[0]),ey(p[1])):g.moveTo(ex(p[0]),ey(p[1])));g.stroke();
+    g.fillStyle=css('--minus');g.beginPath();g.arc(ex(FPR),ey(R),6,0,7);g.fill();
+    // PR
+    g=c2.g;g.clearRect(0,0,W,H);axes(g,'rappel','précision');
+    const idx=s.map((_,i)=>i).sort((a,b)=>s[b]-s[a]);let tp=0,fp=0;g.strokeStyle=css('--c2');g.lineWidth=2.5;g.beginPath();let first=true;
+    idx.forEach((i,k)=>{y[i]?tp++:fp++;if(k%3===0||k===N-1){const pr=tp/(tp+fp),rc=tp/nP;first?g.moveTo(ex(rc),ey(pr)):g.lineTo(ex(rc),ey(pr));first=false;}});g.stroke();
+    g.setLineDash([4,3]);g.strokeStyle=css('--muted');g.beginPath();g.moveTo(ex(0),ey(nP/N));g.lineTo(ex(1),ey(nP/N));g.stroke();g.setLineDash([]);g.fillStyle=css('--muted');g.fillText('hasard : '+fr(nP/N,2),ex(0.55),ey(nP/N)-5);
+    g.fillStyle=css('--minus');g.beginPath();g.arc(ex(R),ey(c.tp+c.fp?P:1),6,0,7);g.fill();
+    vd.innerHTML=A<Math.max(nP,nN)/N?'<span class="ko">Exactitude inférieure au modèle nul</span> alors que le rappel est de '+fr(R,2)+' : l’exactitude est trompeuse ici.':'Exactitude au-dessus du modèle nul.';
+  }
+  onTheme(render);render();
+})();
+
+/* ---- Comparer deux modèles ---- */
+(function(){
+  const root=$('#lab-cmp');
+  let n=200,dA=2,dB=6,K=10,R=1,seed=1;
+  const ctl=controls(root);
+  slider(ctl,{label:'Nombre d’exemples n',min:40,max:1000,step:20,value:200,onchange:v=>{n=v;run();}});
+  slider(ctl,{label:'Profondeur du modèle A',min:1,max:12,value:2,onchange:v=>{dA=v;run();}});
+  slider(ctl,{label:'Profondeur du modèle B',min:1,max:12,value:6,onchange:v=>{dB=v;run();}});
+  slider(ctl,{label:'Parties K',min:3,max:10,value:10,onchange:v=>{K=v;run();}});
+  slider(ctl,{label:'Répétitions de la validation croisée',min:1,max:3,value:1,onchange:v=>{R=v;run();}});
+  const bt=btns(root);bt.append(btn('Nouveau tirage',()=>{seed++;run();}));
+  const out=h('div');const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(out,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Le test t apparié s’appuie sur les <b>différences par partie</b> : t = moyenne des différences / (écart-type / √K′), avec K′ = K × répétitions, et K′ − 1 degrés de liberté. Avec peu de données (n = 40), les scores par partie sont très bruités : la p-value reste grande même si les moyennes diffèrent. Avec beaucoup de données (n = 1000), une différence minuscule devient « significative » : le cours dit que presque tout est significatif au-delà de 10 000 exemples. Significatif ne veut pas dire important : regarde aussi l’écart de moyennes.</p><p>Complément : les K scores partagent des données d’apprentissage, donc ne sont pas indépendants : la p-value affichée est plutôt <em>optimiste</em>.</p>'})));
+  function run(){
+    const D=genSet('moons',n,1.0,seed*7+1);const a=[],b=[];
+    for(let rep=0;rep<R;rep++){const F=kfold(n,K,rng(seed*101+rep));F.forEach(te=>{const tr=compl(n,te);const Xt=sub(D.X,tr),yt=sub(D.y,tr);const ta=buildTree(Xt,yt,{maxDepth:dA}),tb_=buildTree(Xt,yt,{maxDepth:dB});
+      const sc=t=>acc(te.map(i=>treeProba(t,D.X[i])>=0.5?1:0),sub(D.y,te));a.push(sc(ta));b.push(sc(tb_));});}
+    const T=pairedT(b,a);
+    const tb=h('tbody');tb.append(h('tr',{},h('td',{},'Modèle A (profondeur '+dA+')'),h('td',{class:'num'},fr(mean(a)*100,1)+' % ± '+fr(stdev(a,false)*100,1))),h('tr',{},h('td',{},'Modèle B (profondeur '+dB+')'),h('td',{class:'num'},fr(mean(b)*100,1)+' % ± '+fr(stdev(b,false)*100,1))),h('tr',{class:'hl'},h('td',{},'Différence B − A (moyenne ± écart-type des différences)'),h('td',{class:'num'},fr(T.m*100,2)+' pt ± '+fr(T.s*100,1))));
+    out.innerHTML='';out.append(h('div',{class:'scroll'},h('table',{class:'mini'},h('thead',{},h('tr',{},h('th',{},'Validation croisée ('+a.length+' scores)'),h('th',{class:'num'},'Exactitude moyenne ± écart-type'))),tb)));
+    const stats=h('div',{class:'stats'});stats.append(stat('Statistique t',isFinite(T.t)?fr(T.t,2):'∞','df = '+(T.n-1)),stat('p-value (bilatérale)',T.p<0.001?'< 0,001':fr(T.p,3)),stat('Écart de moyennes',fr(T.m*100,2)+' pt'));out.append(stats);
+    vd.innerHTML=T.p<0.05?(Math.abs(T.m)<0.01?'<span class="ok">Significatif</span> mais l’écart est minuscule (moins d’un point) : significatif ne veut pas dire important.':`<span class="ok">Différence significative à 5 %</span> : ${T.m>0?'B':'A'} est meilleur.`):'<span class="ko">Pas de différence significative</span> avec ces données : on ne peut pas dire que l’un est meilleur.';
+  }
+  run();
+})();
+
+/* ---- Hyperparamètres : grille, aléatoire, protocole ---- */
+(function(){
+  const root=$('#lab-hyper');
+  const DEP=[1,2,3,4,5,6,8,10],MIN=[1,2,4,8,16,32];
+  let mode='grid',crit='val',budget=12,seed=1,res,rnd=[];
+  const ctl=controls(root);
+  seg(ctl,'Exploration',[['grid','Grille complète (48 cellules)'],['random','Recherche aléatoire (budget)']],'grid',v=>{mode=v;draw();});
+  slider(ctl,{label:'Budget N (essais)',min:4,max:48,value:12,onchange:v=>{budget=v;pickRandom();draw();}});
+  seg(ctl,'Critère de sélection',[['val','Jeu de validation (protocole propre)'],['test','Jeu de test (protocole dégradé)']],'val',v=>{crit=v;draw();});
+  const bt=btns(root);bt.append(btn('Nouveau tirage',()=>{seed++;compute();}),btn('Répéter 20 tirages (moyenne)',()=>rep()));
+  const cv=mkCanvas(root,560,330,'Exactitude selon profondeur et taille minimale des feuilles');
+  const stats=h('div',{class:'stats'});const vd=h('p',{class:'verdict','aria-live':'polite'});const avg=h('p',{class:'verdict'});
+  root.append(stats,vd,avg,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Chaque cellule est un arbre entraîné sur 100 points et évalué sur 80 points de validation (ou 100 de test). Avec le critère « test », on <b>choisit la cellule dont le test est le plus flatteur</b> : c’est du sur-apprentissage du jeu de test par les hyperparamètres, la performance annoncée est plus haute que la vérité (mesurée sur 2 000 nouveaux points). Avec « validation », le test final n’a servi qu’à annoncer un chiffre : il est honnête, à l’incertitude près.</p><p>La recherche aléatoire avec un petit budget trouve souvent une cellule presque aussi bonne que la grille complète. Complément : Optuna choisit les essais successifs de façon adaptative plutôt qu’au hasard. « Répéter 20 tirages » donne l’optimisme moyen de chaque protocole.</p>'})));
+  function evalAll(sd){
+    const tr=genSet('moons',100,1.0,sd*11+1),va=genSet('moons',80,1.0,sd*11+2),te=genSet('moons',100,1.0,sd*11+3),tu=genSet('moons',2000,1.0,sd*11+4);
+    const g=DEP.map(d=>MIN.map(m=>{const t=buildTree(tr.X,tr.y,{maxDepth:d,minLeaf:m});const f=x=>treeProba(t,x)>=0.5?1:0;return {val:acc(va.X.map(f),va.y),test:acc(te.X.map(f),te.y),truth:acc(tu.X.map(f),tu.y)};}));return g;
+  }
+  function cells(sel){return sel.map(([i,j])=>({i,j,c:res[i][j]}));}
+  function all(){const a=[];for(let i=0;i<DEP.length;i++)for(let j=0;j<MIN.length;j++)a.push([i,j]);return a;}
+  function pickRandom(){const r=rng(seed*53+budget);rnd=shuffle(all(),r).slice(0,budget);}
+  function choose(g,c,cand){let b=null;cand.forEach(([i,j])=>{const v=g[i][j][c];if(!b||v>b.v+1e-12)b={i,j,v,cell:g[i][j]};});return b;}
+  function compute(){res=evalAll(seed);pickRandom();draw();}
+  function draw(){
+    const g=cv.g,W=560,H=330;g.clearRect(0,0,W,H);const cw=(W-90)/DEP.length,ch=(H-80)/MIN.length;
+    const cand=mode==='grid'?all():rnd;const set=new Set(cand.map(([i,j])=>i+','+j));const b=choose(res,crit,cand);
+    g.font='11px sans-serif';g.fillStyle=css('--muted');
+    DEP.forEach((d,i)=>g.fillText(String(d),80+i*cw+cw/2-4,H-46));MIN.forEach((m,j)=>g.fillText(String(m),40,20+j*ch+ch/2+4));
+    g.fillText('profondeur maximale →',80,H-24);g.save();g.translate(12,H/2+30);g.rotate(-Math.PI/2);g.fillText('taille min. des feuilles',0,0);g.restore();
+    DEP.forEach((d,i)=>MIN.forEach((m,j)=>{const v=res[i][j][crit];const inS=set.has(i+','+j);
+      g.fillStyle=colorMix(css('--bg'),css('--moss'),clamp((v-0.55)/0.35,0,1));g.globalAlpha=inS?1:0.18;g.fillRect(80+i*cw,20+j*ch,cw-2,ch-2);g.globalAlpha=1;
+      if(inS){g.fillStyle=css('--ink');g.font='10px monospace';g.fillText(String(Math.round(v*100)),80+i*cw+cw/2-9,20+j*ch+ch/2+3);}}));
+    g.strokeStyle=css('--minus');g.lineWidth=3;g.strokeRect(80+b.i*cw,20+b.j*ch,cw-2,ch-2);
+    const ann=crit==='test'?b.cell.test:b.cell.test;const bestPossible=Math.max(...all().map(([i,j])=>res[i][j].truth));
+    stats.innerHTML='';stats.append(stat('Cellule choisie','profondeur '+DEP[b.i]+', feuilles ≥ '+MIN[b.j]),stat('Score sur le jeu de sélection',fr(b.v*100,1)+' %','('+(crit==='val'?'validation':'test')+')'),stat('Performance annoncée (test)',fr(ann*100,1)+' %'),stat('Vérité (2 000 nouveaux points)',fr(b.cell.truth*100,1)+' %'),stat('Meilleure vérité possible dans la grille',fr(bestPossible*100,1)+' %'));
+    const gap=(ann-b.cell.truth)*100;
+    vd.innerHTML=crit==='test'?(gap>1.5?`<span class="ko">Protocole dégradé : annoncé ${fr(gap,1)} pt au-dessus de la vérité.</span> Le jeu de test a servi à choisir, il n’est plus vierge.`:'Protocole dégradé : sur ce tirage l’optimisme est faible ; répète les tirages.'):`Protocole propre : le jeu de test n’a pas servi à choisir. Écart annoncé − vérité : ${fr(gap,1)} pt (bruit d’échantillonnage).`;
+  }
+  function rep(){avg.textContent='Calcul en cours…';setTimeout(()=>{let o=[0,0],n_=20;for(let s=1;s<=n_;s++){const g=evalAll(1000+s);const cand=all();['val','test'].forEach((c,k)=>{const b=choose(g,c,cand);o[k]+=(b.cell.test-b.cell.truth)*100/n_;});}
+    avg.innerHTML=`Moyenne sur ${n_} tirages (grille complète) de « annoncé − vérité » : <b>${fr(o[0],1)} pt</b> avec sélection sur la validation, <b>${fr(o[1],1)} pt</b> avec sélection sur le test.`;},30);}
+  onTheme(draw);compute();
+})();
+
+/* ---- Fléau de la dimensionnalité ---- */
+(function(){
+  const root=$('#lab-curse');const W=420,H=300;
+  let model='lin',m=10,seed=1,base,tst,noiseTr,noiseTe,curves=null;
+  const ctl=controls(root);
+  seg(ctl,'Classifieur',[['lin','Moindres carrés'],['nn','Plus proche voisin'],['tree','Arbre libre']],'lin',v=>{model=v;curves=null;draw();});
+  slider(ctl,{label:'Colonnes de bruit ajoutées',min:0,max:40,step:2,value:10,onchange:v=>{m=v;draw();}});
+  const bt=btns(root);bt.append(btn('Nouveau tirage',()=>{seed++;gen();}));
+  const two=h('div',{class:'two'});root.append(two);const c1=mkCanvas(two,W,H,'Exactitude selon le nombre de colonnes de bruit');const c2=mkCanvas(two,268,268,'Matrice de distances');
+  const stats=h('div',{class:'stats'});const vd=h('p',{class:'verdict'});
+  root.append(stats,h('p',{class:'legend'},'À droite : matrice de distances entre les 67 points d’apprentissage, triés par classe (foncé = proche). Avec deux dimensions utiles, on voit deux blocs.'),vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Avec 0 colonne de bruit, deux blocs nets sur la matrice de distances et un problème facile. Ajoute du bruit : les blocs se diluent, la dispersion relative des distances (écart-type / moyenne) chute : les points deviennent équidistants. L’exactitude d’apprentissage reste haute (elle monte même vers 100 % pour les moindres carrés quand d approche n = 67) mais celle de test <b>descend</b> : sur-apprentissage.</p>'})));
+  function gen(){base=genSet('blobs',67,0,seed*3+1);tst=genSet('blobs',300,0,seed*3+2);const r=rng(seed*3+3);noiseTr=base.X.map(()=>Array.from({length:40},()=>gauss(r)*0.5));noiseTe=tst.X.map(()=>Array.from({length:40},()=>gauss(r)*0.5));curves=null;draw();}
+  const feat=(D,N,k)=>D.X.map((x,i)=>x.concat(N[i].slice(0,k)));
+  function score(k){
+    const Xa=feat(base,noiseTr,k),Xt=feat(tst,noiseTe,k);let f;
+    if(model==='lin'){const w=lstsq(Xa,base.y.map(v=>v?1:-1),1e-6);f=x=>lsPredict(w,x)>0?1:0;}
+    else if(model==='nn'){f=x=>knnProba(Xa,base.y,x,1)>=0.5?1:0;}
+    else{const t=buildTree(Xa,base.y,{});f=x=>treeProba(t,x)>=0.5?1:0;}
+    return [acc(Xa.map(f),base.y),acc(Xt.map(f),tst.y)];
+  }
+  function draw(){
+    if(!curves){curves=[];for(let k=0;k<=40;k+=2)curves.push([k].concat(score(k)));}
+    let g=c1.g;g.clearRect(0,0,W,H);const ex=k=>36+k/40*(W-50),ey=v=>H-30-(v-0.4)/0.62*(H-46);
+    g.strokeStyle=css('--rule');g.fillStyle=css('--muted');g.font='11px sans-serif';g.lineWidth=1;
+    for(let k=0;k<=40;k+=10){g.beginPath();g.moveTo(ex(k),16);g.lineTo(ex(k),H-30);g.stroke();g.fillText(String(k),ex(k)-5,H-16);}
+    for(let v=0.4;v<=1.001;v+=0.2){g.beginPath();g.moveTo(36,ey(v));g.lineTo(W-14,ey(v));g.stroke();g.fillText(fr(v,1),4,ey(v)+4);}
+    g.fillText('colonnes de bruit',W-100,H-2);
+    const line=(idx,col)=>{g.strokeStyle=col;g.lineWidth=2.5;g.beginPath();curves.forEach((c,i)=>i?g.lineTo(ex(c[0]),ey(c[idx])):g.moveTo(ex(c[0]),ey(c[idx])));g.stroke();};
+    line(1,css('--c1'));line(2,css('--c2'));g.fillStyle=css('--c1');g.fillText('apprentissage',ex(4),ey(1)-6);g.fillStyle=css('--c2');g.fillText('test',ex(30),ey(0.5)-6);
+    g.strokeStyle=css('--moss');g.setLineDash([4,3]);g.beginPath();g.moveTo(ex(m),16);g.lineTo(ex(m),H-30);g.stroke();g.setLineDash([]);
+    // matrice de distances
+    const order=base.X.map((_,i)=>i).sort((a,b)=>base.y[a]-base.y[b]);const Xa=feat(base,noiseTr,m);const n=order.length;const D=[];let mx=0;const all=[];
+    for(let i=0;i<n;i++){D.push([]);for(let j=0;j<n;j++){let s=0;const a=Xa[order[i]],b=Xa[order[j]];for(let q=0;q<a.length;q++){const t=a[q]-b[q];s+=t*t;}const d=Math.sqrt(s);D[i].push(d);if(d>mx)mx=d;if(j>i)all.push(d);}}
+    const g2=c2.g;g2.clearRect(0,0,268,268);const cs=268/n;for(let i=0;i<n;i++)for(let j=0;j<n;j++){g2.fillStyle=colorMix(css('--c1'),css('--bg'),D[i][j]/mx);g2.fillRect(j*cs,i*cs,cs+.5,cs+.5);}
+    const cur=curves.find(c=>c[0]===m);const mu=mean(all),sd=stdev(all);
+    stats.innerHTML='';stats.append(stat('Dimension totale',String(2+m)),stat('Exactitude d’apprentissage',fr(cur[1]*100,1)+' %'),stat('Exactitude de test (300 pts)',fr(cur[2]*100,1)+' %'),stat('Dispersion relative des distances',fr(sd/mu,3),'écart-type / moyenne'));
+    vd.innerHTML=cur[1]-cur[2]>0.12?'<span class="ko">Sur-apprentissage :</span> l’apprentissage est bien meilleur que le test.':'Écart apprentissage/test encore modéré.';
+  }
+  onTheme(draw);gen();
+})();
+
+/* ---- Corrélations, poids, échelles ---- */
+(function(){
+  const root=$('#lab-rank');const W=640,H=200;
+  let scaled=false,stdz=true,copy=false,mdl='ls',seed=1;
+  const ctl=controls(root);
+  const mk=(lab,txt,cb)=>{const c=h('input',{type:'checkbox',onchange:()=>cb(c.checked)});ctl.append(h('div',{class:'ctl'},h('label',{},lab),h('label',{style:'font-weight:400;display:flex;gap:.4rem;align-items:center'},c,txt)));return c;};
+  mk('Échelles','hétérogènes (variable 0 × 20, bruits × 0,1 à × 6)',v=>{scaled=v;draw();});
+  const cs=mk('Pré-traitement','standardiser avant (moyenne 0, écart-type 1)',v=>{stdz=v;draw();});cs.checked=true;
+  mk('Masquage','ajouter une copie bruitée de la variable 0',v=>{copy=v;draw();});
+  seg(ctl,'Modèle linéaire',[['ls','Moindres carrés'],['ridge','Ridge (fort)']],'ls',v=>{mdl=v;draw();});
+  const bt=btns(root);bt.append(btn('Nouveau tirage',()=>{seed++;draw();}));
+  const c1=mkCanvas(root,W,H,'Corrélations avec la cible');const c2=mkCanvas(root,W,H,'Poids du modèle linéaire');
+  const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Standardisées, les 2 variables informatives (vertes) ont les poids les plus hauts <b>mais</b> beaucoup de variables de bruit ont un poids non négligeable : c’est la « mauvaise nouvelle » de la diapo. Avec le Ridge, les poids du bruit sont réduits.</p><p>Coche « échelles hétérogènes » et décoche « standardiser » : le poids d’une variable dépend de son unité (variable 0 multipliée par 20 ⇒ poids divisé par 20). Le classement par poids devient faux, alors que la corrélation, elle, ne dépend pas de l’échelle. Coche la copie : la variable 0 et sa copie se partagent le poids, chacune paraît moins importante (effet de masquage).</p>'})));
+  function bars(cv,vals,info,title){
+    const g=cv.g;g.clearRect(0,0,W,H);const n=vals.length;const bw=(W-30)/n;const mx=Math.max(...vals,1e-9);
+    g.fillStyle=css('--muted');g.font='11px sans-serif';g.fillText(title,4,12);
+    vals.forEach((v,i)=>{const hh=v/mx*(H-46);g.fillStyle=info[i]?css('--plus'):css('--muted');g.globalAlpha=info[i]?1:.65;g.fillRect(20+i*bw,H-24-hh,bw-2,hh);g.globalAlpha=1;g.fillStyle=css('--muted');g.font='9px sans-serif';if(i%2===0)g.fillText(String(i),20+i*bw,H-10);});
+  }
+  function draw(){
+    const D=genFeat(67,seed*9+1,{scales:scaled,copy});const y=D.y.map(v=>v?1:-1);
+    const Xf=stdz?standardize(D.X).Z:D.X;
+    const d=Xf[0].length;const cor=[];for(let j=0;j<d;j++){const c=Xf.map(r=>r[j]);const mc=mean(c),my=mean(y);let sxy=0,sxx=0,syy=0;c.forEach((v,i)=>{sxy+=(v-mc)*(y[i]-my);sxx+=(v-mc)**2;syy+=(y[i]-my)**2;});cor.push(Math.abs(sxy/Math.sqrt(sxx*syy+1e-12)));}
+    const w=lstsq(Xf,y,mdl==='ridge'?0.5:1e-6).slice(1).map(Math.abs);
+    bars(c1,cor,D.info,'|corrélation| avec la cible, variable par variable (vert = informative)');bars(c2,w,D.info,'|poids| du modèle linéaire (vert = informative)');
+    const rank=v=>{const o=v.map((x,i)=>i).sort((a,b)=>v[b]-v[a]);return D.info.map((f,i)=>f?o.indexOf(i)+1:0).filter(Boolean);};
+    vd.innerHTML=`Rangs des variables informatives : par corrélation <b>${rank(cor).join(', ')}</b> ; par poids <b>${rank(w).join(', ')}</b> (idéal : ${copy?'1, 2, 3':'1, 2'}).`+((!stdz&&scaled)?' <span class="ko">Poids non comparables : échelles différentes.</span>':'');
+  }
+  onTheme(draw);draw();
+})();
+
+/* ---- Backward / forward ---- */
+function cvR2(Z,y,K,seed){const n=Z.length;const F=kfold(n,K,rng(seed));let se=0;const yy=y.map(v=>v?1:-1);F.forEach(te=>{const tr=compl(n,te);const w=lstsq(sub(Z,tr),sub(yy,tr),1e-3);te.forEach(i=>{se+=(lsPredict(w,Z[i])-yy[i])**2;});});return 1-se/n;}
+(function(){
+  const root=$('#lab-search');const W=640,H=260;
+  const bt=btns(root);bt.append(btn('Lancer les deux méthodes',()=>run(),'pri'),btn('Nouveau tirage',()=>{seed++;run();}));
+  let seed=1;
+  const cv=mkCanvas(root,W,H,'Score selon le nombre de variables');const stats=h('div',{class:'stats'});const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(stats,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Les deux courbes atteignent leur meilleur niveau avec un petit nombre de variables (les 2 informatives d’abord), puis stagnent ou baissent quand on garde du bruit : c’est la forme de courbe dont parle la diapo. Le <b>forward</b> atteint ce niveau dès les 2 ou 3 premières étapes ; avec l’arrêt prématuré il s’arrête peu après. Le <b>backward</b> part de 22 variables et doit en retirer une vingtaine avant d’atteindre l’optimum : le prix du forward est « un peu » moindre (souvent environ deux fois). Sans arrêt prématuré les deux coûtent autant, en O(d²) évaluations.</p>'})));
+  function search(Z,y,dir){
+    const d=Z[0].length;let S=dir==='b'?[...Array(d).keys()]:[];let tests=0;const path=[];const sc=cols=>cols.length?cvR2(Z.map(r=>cols.map(j=>r[j])),y,5,7):0;
+    path.push({k:S.length,s:sc(S),tests:0,S:S.slice()});
+    while(dir==='b'?S.length>1:S.length<d){
+      let best=null;const cands=dir==='b'?S.slice():[...Array(d).keys()].filter(j=>!S.includes(j));
+      cands.forEach(j=>{const T=dir==='b'?S.filter(x=>x!==j):S.concat([j]);const s=sc(T);tests++;if(!best||s>best.s+1e-12)best={s,T};});
+      S=best.T;path.push({k:S.length,s:best.s,tests,S:S.slice()});}
+    return path;
+  }
+  function stopAt(path){let bestS=path[0].s,bestI=0,i=1;for(;i<path.length;i++){if(path[i].s>bestS+0.005){bestS=path[i].s;bestI=i;}if(i-bestI>=3)break;}return [Math.min(i,path.length-1),bestI];}
+  function run(){
+    const D=genFeat(67,seed*9+1,{sep:1.1});const Z=standardize(D.X).Z;const y=D.y;
+    const B=search(Z,y,'b'),F=search(Z,y,'f');
+    const g=cv.g;g.clearRect(0,0,W,H);const ex=k=>36+k/22*(W-50),ey=v=>H-30-(v+0.1)/1.0*(H-46);
+    g.strokeStyle=css('--rule');g.fillStyle=css('--muted');g.font='11px sans-serif';g.lineWidth=1;for(let k=0;k<=22;k+=2){g.beginPath();g.moveTo(ex(k),14);g.lineTo(ex(k),H-30);g.stroke();g.fillText(String(k),ex(k)-4,H-16);}
+    for(let v=0;v<=0.901;v+=0.3){g.beginPath();g.moveTo(36,ey(v));g.lineTo(W-10,ey(v));g.stroke();g.fillText(fr(v,1),4,ey(v)+4);}g.fillText('nombre de variables conservées',W-190,H-2);g.fillText('R² en validation croisée',40,12);
+    const line=(P,col)=>{g.strokeStyle=col;g.lineWidth=2.5;g.beginPath();P.forEach((p,i)=>i?g.lineTo(ex(p.k),ey(p.s)):g.moveTo(ex(p.k),ey(p.s)));g.stroke();};
+    line(B,css('--c1'));line(F,css('--c2'));g.fillStyle=css('--c1');g.fillText('backward (élimination)',ex(11),ey(0.3));g.fillStyle=css('--c2');g.fillText('forward (ajout)',ex(3.5),ey(0.84));
+    const pk=P=>P.reduce((b,p)=>p.s>b.s?p:b,P[0]);const pb=pk(B),pf=pk(F);const [ib,bi]=stopAt(B),[if_,fi]=stopAt(F);
+    stats.innerHTML='';stats.append(stat('Backward, arrêt prématuré',fr(B[bi].s,2)+' (R²) avec '+B[bi].k+' variables','maximum absolu : '+fr(pb.s,2)+' avec '+pb.k),stat('Forward, arrêt prématuré',fr(F[fi].s,2)+' (R²) avec '+F[fi].k+' variables','maximum absolu : '+fr(pf.s,2)+' avec '+pf.k),stat('Coût complet (apprentissages)',fr(B[B.length-1].tests*5,0)+' vs '+fr(F[F.length-1].tests*5,0),'backward vs forward, 5 plis'),stat('Coût avec arrêt prématuré',fr(B[ib].tests*5,0)+' vs '+fr(F[if_].tests*5,0),'patience de 3 étapes'));
+    vd.innerHTML=`Variables informatives = 0 et 1. Ensemble retenu par le forward avec arrêt prématuré : {${F[fi].S.slice().sort((a,b)=>a-b).join(', ')}}. Avec l’arrêt prématuré (progrès de moins de 0,005 pendant 3 étapes), le forward coûte <b>${fr(B[ib].tests/Math.max(F[if_].tests,1),1)} fois moins</b> d’évaluations que le backward.`;
+  }
+  onTheme(()=>run());run();
+})();
+
+/* ---- ACP ---- */
+(function(){
+  const root=$('#lab-pca');const W=420,H=280;
+  let sep=0.3,k=2,seed=1;
+  const ctl=controls(root);
+  slider(ctl,{label:'Force du signal (séparation des classes)',min:0.2,max:4,step:0.1,value:0.3,fmt:v=>fr(v,1),onchange:v=>{sep=v;draw();}});
+  slider(ctl,{label:'Composantes conservées k',min:1,max:10,value:2,onchange:v=>{k=v;draw();}});
+  const bt=btns(root);bt.append(btn('Nouveau tirage',()=>{seed++;draw();}));
+  const two=h('div',{class:'two'});root.append(two);const c1=mkCanvas(two,W,H,'Valeurs propres');const c2=mkCanvas(two,W,H,'Projection sur les 2 premières composantes');
+  const c3=mkCanvas(root,640,120,'Contribution des variables à la première composante');
+  const stats=h('div',{class:'stats'});const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(stats,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p>Avec un signal faible (0,3), les 22 valeurs propres décroissent doucement (pas de coude net) et les 2 premières composantes mélangent les classes : le bruit a autant de variance que le signal. Augmente la force du signal : la 1<sup>re</sup> valeur propre se détache, la première composante sépare les classes, et ses coefficients se concentrent sur les 2 variables informatives (barres du bas). L’ACP est <b>non supervisée</b> : elle capture la variance, pas l’information utile à la tâche.</p>'})));
+  function draw(){
+    const D=genFeat(67,seed*9+1,{sep});const {C,mu}=covMat(D.X);const E=eigSym(C);const d=E.vals.length;const tot=sum(E.vals);
+    // scree
+    let g=c1.g;g.clearRect(0,0,W,H);const ex=i=>34+i*(W-50)/d,ey=v=>H-26-v/E.vals[0]*(H-44);const bw=(W-50)/d;
+    g.strokeStyle=css('--rule');g.fillStyle=css('--muted');g.font='11px sans-serif';g.fillText('valeur propre (barres), variance cumulée (ligne)',34,12);
+    E.vals.forEach((v,i)=>{g.fillStyle=i<k?css('--moss'):css('--unknown');g.fillRect(ex(i),ey(v),bw-2,H-26-ey(v));if(i%3===0){g.fillStyle=css('--muted');g.fillText(String(i+1),ex(i),H-10);}});
+    g.strokeStyle=css('--c2');g.lineWidth=2;g.beginPath();let cum=0;E.vals.forEach((v,i)=>{cum+=v;const y=H-26-cum/tot*(H-44);i?g.lineTo(ex(i)+bw/2,y):g.moveTo(ex(i)+bw/2,y);});g.stroke();
+    // coude : plus forte courbure
+    let el=1,bestC=-1;for(let i=1;i<d-1;i++){const c=E.vals[i-1]-2*E.vals[i]+E.vals[i+1];if(c>bestC){bestC=c;el=i;}}
+    g.strokeStyle=css('--minus');g.setLineDash([4,3]);g.beginPath();g.moveTo(ex(el)+bw/2,16);g.lineTo(ex(el)+bw/2,H-26);g.stroke();g.setLineDash([]);g.fillStyle=css('--minus');g.fillText('coude ?',ex(el)+6,26);
+    // projection
+    const P=D.X.map(x=>{const c=x.map((v,j)=>v-mu[j]);return [0,1].map(q=>sum(c.map((v,j)=>v*E.vecs[q][j])));});
+    g=c2.g;g.clearRect(0,0,W,H);const mxp=Math.max(...P.flat().map(Math.abs));const px=v=>W/2+v/mxp*(W/2-16),py=v=>H/2-v/mxp*(H/2-16);
+    g.strokeStyle=css('--rule');g.beginPath();g.moveTo(0,H/2);g.lineTo(W,H/2);g.moveTo(W/2,0);g.lineTo(W/2,H);g.stroke();
+    P.forEach((p,i)=>{g.fillStyle=D.y[i]?css('--minus'):css('--c1');g.beginPath();g.arc(px(p[0]),py(p[1]),4.5,0,7);g.fill();});
+    g.fillStyle=css('--muted');g.fillText('PC1 →',W-40,H/2-4);g.fillText('PC2 ↑',W/2+4,12);
+    // chargements
+    g=c3.g;g.clearRect(0,0,640,120);const v1=E.vecs[0].map(Math.abs);const m1=Math.max(...v1);const bw3=(640-30)/d;g.fillStyle=css('--muted');g.font='11px sans-serif';g.fillText('|coefficient| de chaque variable dans la 1re composante (vert = informative)',4,12);
+    v1.forEach((v,i)=>{const hh=v/m1*80;g.fillStyle=D.info[i]?css('--plus'):css('--muted');g.globalAlpha=D.info[i]?1:.65;g.fillRect(20+i*bw3,104-hh,bw3-2,hh);g.globalAlpha=1;});
+    // accuracy sur k composantes
+    const Pk=D.X.map(x=>{const c=x.map((v,j)=>v-mu[j]);return E.vecs.slice(0,k).map(vv=>sum(c.map((v,j)=>v*vv[j])));});
+    const a=cvAcc(Pk,D.y,5,3);const vk=sum(E.vals.slice(0,k))/tot;
+    stats.innerHTML='';stats.append(stat('Variance expliquée par '+k+' composante(s)',fr(vk*100,1)+' %'),stat('Variance perdue',fr((1-vk)*100,1)+' %'),stat('Exactitude (CV) sur ces '+k+' composantes',fr(a*100,1)+' %'),stat('Coude repéré à la composante',String(el+1)));
+    vd.innerHTML=sep<1?'<span class="ko">Signal faible :</span> la variance des composantes principales vient surtout du bruit ; les classes ne sont pas séparées par PC1 et PC2.':'<span class="ok">Signal fort :</span> il domine la variance, PC1 le retrouve.';
+  }
+  onTheme(draw);draw();
+})();
+
+/* ---- Chemins de régularisation ---- */
+(function(){
+  const root=$('#lab-reg');const W=420,H=320;const NC=40;
+  let meth='lasso',rho=0.5,idx=20,seed=1;
+  const Cs=Array.from({length:NC},(_,i)=>3*Math.pow(0.001/3,i/(NC-1)));
+  const ctl=controls(root);
+  seg(ctl,'Régularisation',[['ridge','Ridge (L2)'],['lasso','Lasso (L1)'],['en','Elastic net']],'lasso',v=>{meth=v;compute();});
+  slider(ctl,{label:'Elastic net : part de L1',min:0,max:1,step:0.1,value:0.5,fmt:v=>fr(v,1),onchange:v=>{rho=v;if(meth==='en')compute();}});
+  const sl=slider(ctl,{label:'Force de la régularisation (fort → faible)',min:0,max:NC-1,value:20,fmt:v=>'C = '+fr(Cs[v],3),onchange:v=>{idx=v;draw();}});
+  const bt=btns(root);bt.append(btn('Nouveau tirage',()=>{seed++;compute();}));
+  const two=h('div',{class:'two'});root.append(two);const c1=mkCanvas(two,W,H,'Chemin de régularisation');const c2=mkCanvas(two,W,H,'Performance et nombre de poids');
+  const stats=h('div',{class:'stats'});const vd=h('p',{class:'verdict','aria-live':'polite'});
+  root.append(stats,vd,h('details',{class:'obs'},h('summary',{},'À observer'),h('div',{html:'<p><b>Lasso</b> : quand C diminue depuis la valeur forte, les poids <em>entrent un à un</em> ; à C fort, tous les poids sont exactement nuls (#w = 0). Les variables informatives (vertes) sont les premières à entrer. La courbe #w monte par paliers. <b>Ridge</b> : aucun poids n’est jamais exactement nul, #w = 100 % dès que C est fini ; les poids sont seulement affaiblis. <b>Elastic net</b> : intermédiaire (mets la part de L1 à 0,1 puis à 0,9).</p><p>Repère P<sub>test</sub> : trop de régularisation (poids nuls) et trop peu (poids du bruit non contrôlés) dégradent le test. Objectif utilisé ici : erreur quadratique moyenne + C₁·|w|₁ + C₂·‖w‖², sur variables standardisées.</p>'})));
+  let W_=[],trA=[],teA=[],nz=[],D;
+  function compute(){
+    D=genFeat(67,seed*9+1,{});const Te=genFeat(400,seed*9+2,{});const S=standardize(D.X);const Zt=standardize(Te.X,D.X).Z;
+    const y=D.y.map(v=>v?1:-1);const ym=mean(y);const yc=y.map(v=>v-ym);W_=[];trA=[];teA=[];nz=[];
+    Cs.forEach(C=>{let w;if(meth==='ridge')w=ridgeCF(S.Z,yc,C);else if(meth==='lasso')w=elasticNet(S.Z,yc,C,0,150);else w=elasticNet(S.Z,yc,rho*C,(1-rho)*C,150);
+      W_.push(w);const f=(z)=>sum(z.map((v,j)=>v*w[j]))+ym;trA.push(acc(S.Z.map(z=>f(z)>0?1:0),D.y));teA.push(acc(Zt.map(z=>f(z)>0?1:0),Te.y));nz.push(w.filter(v=>Math.abs(v)>1e-6).length/w.length);});
+    draw();
+  }
+  function draw(){
+    const C=Cs[idx];sl.wrap.querySelector('output').textContent='C = '+fr(C,3);
+    let g=c1.g;g.clearRect(0,0,W,H);const ex=i=>34+i/(NC-1)*(W-46),mx=Math.max(...W_.flat().map(Math.abs),0.01),ey=v=>H/2-v/mx*(H/2-24);
+    g.strokeStyle=css('--rule');g.beginPath();g.moveTo(34,ey(0));g.lineTo(W-10,ey(0));g.stroke();g.fillStyle=css('--muted');g.font='11px sans-serif';g.fillText('coefficients w_j selon la régularisation (forte à gauche, faible à droite)',34,12);
+    for(let j=0;j<22;j++){g.strokeStyle=D.info[j]?(j===0?css('--plus'):css('--c2')):css('--muted');g.globalAlpha=D.info[j]?1:.5;g.lineWidth=D.info[j]?2.6:1;g.beginPath();W_.forEach((w,i)=>i?g.lineTo(ex(i),ey(w[j])):g.moveTo(ex(i),ey(w[j])));g.stroke();}g.globalAlpha=1;
+    g.strokeStyle=css('--moss');g.setLineDash([4,3]);g.beginPath();g.moveTo(ex(idx),20);g.lineTo(ex(idx),H-10);g.stroke();g.setLineDash([]);
+    g=c2.g;g.clearRect(0,0,W,H);const ey2=v=>H-26-v*(H-46);
+    g.strokeStyle=css('--rule');g.fillStyle=css('--muted');for(let v=0;v<=1.001;v+=0.25){g.beginPath();g.moveTo(34,ey2(v));g.lineTo(W-10,ey2(v));g.stroke();g.fillText(fr(v,2),2,ey2(v)+4);}g.fillText('régularisation (décroissante) →',W-170,H-8);
+    const line=(a,col)=>{g.strokeStyle=col;g.lineWidth=2.4;g.beginPath();a.forEach((v,i)=>i?g.lineTo(ex(i),ey2(v)):g.moveTo(ex(i),ey2(v)));g.stroke();};
+    line(trA,css('--c1'));line(teA,css('--c2'));line(nz,css('--plus'));g.fillStyle=css('--c1');g.fillText('P train',ex(2),ey2(0.95)+14);g.fillStyle=css('--c2');g.fillText('P test',ex(2),ey2(0.95)+28);g.fillStyle=css('--plus');g.fillText('#w (part de poids non nuls)',ex(2),ey2(0.95)+42);
+    g.strokeStyle=css('--moss');g.setLineDash([4,3]);g.beginPath();g.moveTo(ex(idx),20);g.lineTo(ex(idx),H-26);g.stroke();g.setLineDash([]);
+    const w=W_[idx];const active=w.map((v,j)=>Math.abs(v)>1e-6?j:-1).filter(j=>j>=0);
+    stats.innerHTML='';stats.append(stat('Poids non nuls',active.length+' / 22'),stat('P train ; P test',fr(trA[idx]*100,0)+' % ; '+fr(teA[idx]*100,0)+' %'),stat('Variables actives',active.length?active.slice(0,10).join(', ')+(active.length>10?', …':''):'aucune'));
+    vd.innerHTML=(meth==='lasso'||meth==='en')?(active.length&&active.every(j=>D.info[j])?'<span class="ok">Seules les variables informatives (0 et 1) sont actives.</span>':(active.length?'Des variables de bruit sont aussi entrées.':'Régularisation trop forte : tous les poids sont nuls.')):'Ridge : tous les poids sont non nuls, seulement affaiblis (aucune sélection).';
+  }
+  onTheme(draw);compute();
+})();
+
+/* ---- Quiz ---- */
+Quiz($('#qz-main'),[
+  {t:'mcq',q:'Quelle est la formule de la <b>précision</b> (au sens du cours) ?',o:['TP / (TP + FP)','TP / (TP + FN)','(TP + TN) / n','FP / (FP + TN)'],a:0,e:'Précision : détections pertinentes / détections. TP/(TP+FN) est le rappel ; (TP+TN)/n l’accuracy ; FP/(FP+TN) le taux de faux positifs.'},
+  {t:'mcq',q:'Le <b>rappel</b> mesure…',o:['la part des vrais évènements qui ont été détectés','la part des alertes qui sont vraies','le taux de bonne classification','la part de faux positifs'],a:0,e:'Rappel = TP/(TP+FN) = détections pertinentes / taille de la classe.'},
+  {t:'num',q:'TP = 40, FP = 10, FN = 20. Quelle est la précision (en %) ?',a:80,e:'40/(40+10) = 0,8.'},
+  {t:'num',q:'TP = 40, FP = 10, FN = 10. Quelle est la F1 (en %) ?',a:80,e:'Précision = 40/50 = 0,8 ; rappel = 40/50 = 0,8 ; F1 = 0,8.'},
+  {t:'mcq',q:'La F1 est…',o:['la moyenne harmonique de la précision et du rappel','la moyenne arithmétique','le produit précision × rappel','le maximum des deux'],a:0,e:'F1 = 2·P·R/(P + R) : elle est haute seulement si les deux sont hautes.'},
+  {t:'mcq',q:'Macro-moyenne ou micro-moyenne : laquelle donne le même poids à chaque classe ?',o:['La macro-moyenne','La micro-moyenne','Les deux','Aucune'],a:0,e:'La micro-moyenne agrège les échantillons : elle pondère les classes par leurs effectifs.'},
+  {t:'mcq',q:'Fraude à 0,3 pour mille : un modèle qui répond toujours « pas de fraude » a environ…',o:['99,97 % d’accuracy et aucun évènement détecté','50 % d’accuracy','0 % d’accuracy','99 % de rappel'],a:0,e:'C’est l’impact des données déséquilibrées sur les métriques.'},
+  {t:'order',q:'Remets dans l’ordre la construction d’une courbe ROC.',items:['Choisir un classifieur qui renvoie un score','Faire varier le seuil (le biais) de décision','Pour chaque seuil, calculer TPR et FPR','Tracer TPR en fonction de FPR','Résumer par l’aire sous la courbe (AUC)'],e:''},
+  {t:'mcq',q:'Que vaut l’AUC d’un classifieur aléatoire ?',o:['0,5','0','1','0,25'],a:0,e:'Diagonale de la ROC : 0,5. Un classifieur parfait : 1.'},
+  {t:'mcq',q:'Quel axe de la courbe ROC utilise le rappel ?',o:['L’axe vertical (TPR)','L’axe horizontal (FPR)','Aucun','Les deux'],a:0,e:'Horizontal : FPR = FP/(FP+TN) ; vertical : TPR = rappel.'},
+  {t:'tf',q:'Il faut choisir la même fonction pour évaluer un modèle et pour l’optimiser pendant l’apprentissage.',a:false,e:'On apprend souvent avec une perte lisse (charnière, entropie croisée) et on évalue avec une métrique adaptée (F1, AUC…). Ne pas les confondre.'},
+  {t:'mcq',q:'Que signifie « significativité » dans la comparaison de deux modèles ?',o:['Le modèle est-il vraiment meilleur que l’autre, ou est-ce le hasard des données ?','Le modèle est-il plus grand ?','Le modèle a-t-il plus de variables ?','Le modèle est-il plus rapide ?'],a:0,e:'Peu de données : stats avancées ; beaucoup de données : presque toujours significatif ; intermédiaire : test de Student sur validations croisées.'},
+  {t:'mcq',q:'Quelle est la différence entre paramètre et hyperparamètre ?',o:['Le paramètre est réglé par le modèle (<code>fit</code>), l’hyperparamètre par l’utilisateur','C’est la même chose','L’hyperparamètre est réglé par le modèle','Le paramètre est réglé par validation croisée'],a:0,e:'Ex. hyperparamètres : profondeur d’un arbre, C, σ, nombre de voisins.'},
+  {t:'tf',q:'Choisir les hyperparamètres qui maximisent le score sur le jeu de test, puis annoncer ce score, est un protocole honnête.',a:false,e:'Le jeu de test devient un jeu de validation : sur-apprentissage du test par les hyperparamètres, performance surestimée.'},
+  {t:'mcq',q:'Combien de jeux de données faut-il dans le protocole propre, et à quoi servent-ils ?',o:['3 : apprentissage (paramètres), validation (hyperparamètres), test (évaluation finale)','2 : apprentissage et test','1 seul','4 : un par hyperparamètre'],a:0,e:'Ou une validation croisée imbriquée (boucle interne / boucle externe).'},
+  {t:'mcq',q:'Que fait un « Grid Search » ?',o:['Il teste tous les jeux d’hyperparamètres d’une grille et les score (souvent par validation croisée)','Il choisit les variables par corrélation','Il réduit la dimension','Il tire des poids au hasard'],a:0,e:'On tâtonne d’abord à la main pour fixer la plage, puis on teste finement sur la grille.'},
+  {t:'mcq',q:'Régression aux moindres carrés avec d &gt; n : pourquoi le problème est-il mal posé ?',o:['XᵀX est d × d mais de rang n : n équations indépendantes pour d inconnues','Il y a trop d’exemples','La matrice est diagonale','Le bruit est nul'],a:0,e:'Il faut régulariser ou réduire la dimension.'},
+  {t:'mcq',q:'Conséquence de l’ajout de colonnes de bruit sur un classifieur de base ?',o:['Exactitude d’apprentissage qui monte, exactitude de test qui baisse (sur-apprentissage)','Rien','Test qui monte','Apprentissage qui baisse'],a:0,e:'Les distances se concentrent : les points deviennent équidistants.'},
+  {t:'mcq',q:'Pourquoi ne pas comparer directement les poids w<sub>j</sub> de variables d’échelles différentes ?',o:['Un poids dépend de l’unité de la variable : il faut standardiser','Les poids sont toujours égaux','Les poids sont toujours nuls','Parce que le modèle est non linéaire'],a:0,e:'Autre piège : le masquage, où deux variables corrélées se partagent le poids.'},
+  {t:'mcq',q:'Quel est le coût de la sélection <b>backward</b> complète (d variables) en nombre de tests ?',o:['Environ d(d−1)/2 tests (d itérations de d−1 puis moins de tests)','d tests','2<sup>d</sup> tests','1 test'],a:0,e:'Chaque test peut lui-même coûter n<sub>CV</sub> apprentissages. Le forward a le même ordre, mais s’arrête tôt si l’optimum est atteint avec peu de variables.'},
+  {t:'mcq',q:'L’ACP est-elle de la sélection ou de la construction de caractéristiques ?',o:['De la construction : chaque composante est une combinaison de variables','De la sélection : elle supprime des variables','Ni l’une ni l’autre','Les deux exactement'],a:0,e:'La réduction de dimension vient ensuite, en gardant les composantes de plus grandes valeurs propres.'},
+  {t:'mcq',q:'Pourquoi l’ACP peut-elle échouer à isoler l’information utile ?',o:['Elle maximise la variance sans regarder les étiquettes : si le bruit a une grande variance, il domine','Elle est non linéaire','Elle utilise trop de variables','Elle ne marche qu’avec 2 dimensions'],a:0,e:'Voir le laboratoire : signal faible ⇒ PC1 et PC2 ne séparent pas les classes.'},
+  {t:'mcq',q:'Ridge (L2) contre Lasso (L1) : qui annule exactement des poids ?',o:['Le Lasso (gradient sign(w))','Le Ridge (gradient 2w)','Les deux','Aucun'],a:0,e:'Ridge : w ← w(1 − 2ε), affaiblissement ≠ annulation.'},
+  {t:'mcq',q:'À quoi sert l’Elastic net ?',o:['Combiner la sélection du L1 et le confort/la performance du L2','Remplacer la validation croisée','Réduire la dimension par ACP','Normaliser les données'],a:0,e:'En pratique C₁ est « epsilonesque » et on joue surtout sur C₂.'},
+  {t:'num',q:'Dans la formule du Ridge L = Σ (Σ<sub>j</sub> w<sub>j</sub>x<sub>ij</sub> − y<sub>i</sub>)² + C‖w‖², que devient w quand C → ∞ ? (donne la valeur de la norme de w)',a:0,e:'w → 0 : sous-apprentissage extrême. Pour C = 0, on retrouve les moindres carrés.'}
+]);
+
+</script>
+</body>
+</html>

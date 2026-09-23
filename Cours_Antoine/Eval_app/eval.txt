@@ -1,0 +1,40 @@
+Que mesurer pour carctériser la perf du modele ?
+- Matrice de confusion (TP,FP,TN,FN) (ce qui donne accuracy, precision, recall=TPR, FPR)
+    accuracy = TP+TN / total : taux bonne prédiction
+    recall (TPR) = TP / TP+FN : alerte bien détectée
+    FPR = FP / FP+TN : fausse alerte
+    precision = TP / TP+FP : taux alerte à raison
+
+- Ensembles de données:
+Apprentissage pour fiter le modèle
+Validation pour la recherche de bon hyperparamètre
+Test pour calculer la perf (le plus important sinon fuite données)
+
+- Intervalle de confiance (encore plus important sur petit jeu donnée):
+On estime que les erreur dispersée selon loi binomiale, estimée par loi normale
+
+- Pour peu de données ==> Validation croisées
+estimateur non biaisés car test sur des plis non recouverts
+Quoi faire de ces modèles ? 
+    Soit on fait voter les != et on prend la moyenne
+    
+    Soit on refait un nouveau modele sur toutes les données en app (et ce modele ne peut pas etre testé, mais on suppose qu'il est au moins aussi bon que la moyenne des autres --> Risqué car l'algo peut partir sur un min local et tout casser)
+
+- Leave-one-out :
+non biaisé, mais variance très haute
+tend à sous-estimer l'erreur si les données ne sont pas vrm i.i.d
+
+- Bootstrap :
+on train sur m données (m construit avec une combinaison des n données de bases, doublon/remise possble)
+et on train sur t données construite de meme maniere
+--> Ici biaisé
+estimation de erreur = m-e sur k ens. de test + m-e sur ensemble total
+
+
+- Courbe ROC: FPR = f(TPR)
+permet de regler notre modele en choisissant si on accepte des FP ou TP raté
+
+courbe en escalier : chaque nouveau point est un nouvel example vu par le classifieur. Si c'est un positif, on va en haut, sinon a droite
+Meilleur = "rectanle" (x=0 pour tout les positifs puis 1=y)
+Pire = diagonale (x=y)
+L'AUC (integrale de la courbe ROC) donne la perf en 1 chiffre (plutot que un graph)
