@@ -1,0 +1,29 @@
+Je prépare des fiches de révision à partir de mes cours (diapos du prof en PDF, parfois complétées par mes propres notes en .txt). Voici les règles à suivre à chaque fois, strictement :
+
+FORMAT
+- Fiche en Markdown (.md), jamais en HTML/CSS/JS, jamais d'artefact interactif ni de mini-simulateur/labo. L'objectif est de limiter la consommation de tokens tout en gardant une fiche agréable à lire et fonctionnel pour optimiser l'apprentissage.
+- Structure : titre, sommaire cliquable en haut (liens vers les ancres de chaque section), sections numérotées, section "Pièges à éviter" à la toute fin.
+- Mise en forme soignée façon cheat-sheet : tableaux pour comparer des notions, gras sur les termes clés, blocs de citation (>) en guise d'encadrés visuels avec un emoji de repère selon le type :
+  - 💡 idée clé / intuition
+  - ⚠️ attention / point de vigilance
+  - 🚩 piège fréquent
+  - 🔎 complément (connaissance que j'ajoute, absente du cours)
+  - 📝 Tes notes (contenu qui vient de mes notes perso, pas des diapos)
+- Équations en vraies formules LaTeX (bloc $$...$$ ou inline $...$), avec indices/exposants/fractions correctement écrits — jamais d'équations en ASCII approximatif. Après chaque équation importante, lister en puces la légende de chaque symbole. Si l'équation a des hypothèses (∀, ∃, conditions), les écrire explicitement avant la formule.
+- Fichier livré en téléchargement (present_files), jamais en artefact.
+
+CONTENU
+- Pas d'historique ni de dates (frises chronologiques, années, "en telle année on a découvert...") : ça ne sert que la culture générale, pas la révision.
+- En revanche, résumer en détail et sans rien sauter : toute la théorie, toutes les équations données en cours, tous les exemples travaillés, toutes les explications de mécanismes/algorithmes. Bien sur ajouter les explications qui vont avec pour comprendre à quoi ca sert et comment/dans quel cas s'en servir en pratique.
+- Si une notion est évoquée trop rapidement ou de façon elliptique dans les diapos, complète avec tes propres connaissances pour que la fiche soit autonome et compréhensible — mais balise clairement ces ajouts avec 🔎 Complément, pour que je puisse te dire si je veux que tu reformules.
+- Si je fournis mes notes perso en plus des diapos : intègre-les, balise-les avec 📝 Tes notes, et corrige-moi si une formule/un terme que j'ai noté est imprécis ou faux (en expliquant pourquoi). Bien sur met les notes en lien avec les diapos (c'est rare que le prof parle de notion qui ne sont pas dutout dans le diapo)
+- Si un exemple ou une notion de mes notes ne se retrouve pas dans le texte des diapos (equation en image, exercice donné à l'oral, etc.), ne l'écarte pas : vérifie d'abord dans les diapos elles-mêmes (y compris en régénérant les pages en image si le texte extrait est incomplet, ce qui arrive souvent avec les formules) avant de me demander d'où ça vient.
+- A la fin fait un quizz/auto-test pour que je sois sur d'avoir bien toutes les infos du diapo (avec les réponses caché avant que j'y reponde dans ma tête). FAit asser de questions pour faire le tour du cours dans sa globalité (tu peux donner plus de points aux questions les plus importantes selon toi).
+
+MÉTHODE
+- Une fiche = un cours (tout les fichiers portant le meme nom à l'extension pret, ex "ML-intro.pdf, ML-intro.txt, ML-intro.csv" sont les 3 à synthétiser en un seul cours). Si plusieurs cours sont fournis dans le même message, fais une fiche par cours.
+- Avant de traiter un PDF, vérifie s'il faut passer par la compétence de lecture de fichiers (file-reading) du système.
+- Si le texte extrait d'un PDF est insuffisant pour une diapo importante (formule affichée comme image), régénère cette diapo en image et lis-la directement plutôt que de deviner ou d'improviser.
+- En cas de doute réel sur une notion, une notation, ou l'origine d'un exemple : pose-moi la question plutôt que de trancher seul.
+
+Je vais te donner un premier cours (PDF des diapos, + éventuellement mes notes en .txt). Fais-moi la fiche selon ces règles.
