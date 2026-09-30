@@ -3,4 +3,5 @@ Comment avoir des IA en medecine : il ne faut pas dire pas cancer alors que si
 Mais on peut avoir des modèles qui se trompe avec une certitude de 95% = on ne peut pas utiliser ce modele en medecine
 --> Utiliser plusieurs modèles (différents = eviter les erreurs typique inherente a chaque modele) et regarder si on a un consensus. Mais très chere et toujours pas de garanti de reponse correcte
 
-Quel type de garanti et comment l'obtenir ?
+Quel type de garanti et comment l'obtenir ? 
+

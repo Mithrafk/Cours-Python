@@ -1,0 +1,17 @@
+nom,nom_scientifique,famille,cycle,besoins,photo
+Tomate,Solanum lycopersicum,Solanaceae,annuel,soleil;arrosage regulier,tomate.jpg
+tomate ,Solanum lycopersicum,Solanacées,Annuel,soleil;arrosage régulier,tomate.jpg
+Tournesol,Helianthus annuus,Asteraceae,annuel,soleil,tournesol.jpg
+Haricot,Phaseolus vulgaris,Fabaceae,annuel,soleil;arrosage moyen,haricot.jpg
+Pois,Pisum sativum,FABACEAE,annuel,soleil;arrosage moyen,pois.jpg
+Lavande,Lavandula angustifolia,Lamiaceae,vivace,soleil;arrosage_faible,lavande.jpg
+Menthe,Mentha sp.,Lamiaceae,VIVACE,mi-ombre;arrosage fréquent,
+Chêne,Quercus robur,Fagaceae,vivace,soleil,chene.jpg
+Rose,Rosa gallica,Rosaceae,Vivace,soleil;arrosage_moyen,rose.jpg
+Pissenlit,Taraxacum officinale,asteraceae,vivace,soleil,pissenlit.jpg
+,Ocimum basilicum,Lamiaceae,annuel,soleil;arrosage fréquent,basilic.jpg
+Romarin,Salvia rosmarinus,Lamiaceae,vivace,soleil;arrosage faible,romarin.jpg
+Carotte,Daucus carota,Apiaceae,bisannuel,soleil;arrosage moyen,carotte.jpg
+Carotte,Daucus carota,Apiaceae,bisannuel,soleil;arrosage moyen,carotte.jpg
+Ortie,Urtica dioica,Urticaceae,vivace,mi-ombre,ortie.jpg
+Basilic,Ocimum basilicum,Lamiaceae,annuel,soleil;arrosage frequent,basilic.jpg
