@@ -1,0 +1,12 @@
+Projet Vsoil
+Debut 2027 - 1an et demi : 1 stagiaire + 12mois CDD
+Pas question analyse de données / IA -> Objectif installé serveur (web) pour executer modele de prevsion de pratacabilité eds sols + prevision meteo
+Problème pour le stage : MAIS profil interessant pour le CDD (dev site web, robustesse réseau, accès sécurité ...)
+Partie recup donénes + analyse en fin projet (partenaire ONF)
+Reflechir sur les fonctionnalités utilisateur (pourquoi mettre ca en place ... Pas que du code, mais epnsé aux utilisateus, pas trop dans l'info/code et simplifier au max (automatisation))
+Prévision BD qui recup carac du sol. Si jamais on peut recup des parametre de la parcelle tout seul c'est encore mieux. Mais si le technicien qui connais parfaitement il peut rentrer ses données
+Le but pas un produit commercialisé mais plutot montrer que c'est possible de faire un produit finalisable.
+
+Recrutement CDD :
+mi-2027 à mi-2028 ;
+Normalement, pas de prbolème de retrait de financement même suivant l'election
