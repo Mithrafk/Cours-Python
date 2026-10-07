@@ -1,4 +1,4 @@
-Je prépare des fiches de révision à partir de mes cours (diapos du prof en PDF, parfois complétées par mes propres notes en .txt). Voici les règles à suivre à chaque fois, strictement :
+Je prépare des fiches de révision à partir de mes cours (diapos du prof en PDF, parfois complétées par mes propres notes en .txt ou .md). Voici les règles à suivre à chaque fois, strictement :
 
 FORMAT
 - Fiche en Markdown (.md), jamais en HTML/CSS/JS, jamais d'artefact interactif ni de mini-simulateur/labo. L'objectif est de limiter la consommation de tokens tout en gardant une fiche agréable à lire et fonctionnel pour optimiser l'apprentissage.
@@ -21,9 +21,9 @@ CONTENU
 - A la fin fait un quizz/auto-test pour que je sois sur d'avoir bien toutes les infos du diapo (avec les réponses caché avant que j'y reponde dans ma tête). FAit asser de questions pour faire le tour du cours dans sa globalité (tu peux donner plus de points aux questions les plus importantes selon toi).
 
 MÉTHODE
-- Une fiche = un cours (tout les fichiers portant le meme nom à l'extension pret, ex "ML-intro.pdf, ML-intro.txt, ML-intro.csv" sont les 3 à synthétiser en un seul cours). Si plusieurs cours sont fournis dans le même message, fais une fiche par cours.
+- Une fiche = un cours (tout les fichiers portant le meme nom à l'extension pret, ex "ML-intro.pdf, ML-intro.txt, ML-intro.md, ML-intro.csv" sont les 3 à synthétiser en un seul cours). Si plusieurs cours sont fournis dans le même message, fais une fiche par cours.
 - Avant de traiter un PDF, vérifie s'il faut passer par la compétence de lecture de fichiers (file-reading) du système.
 - Si le texte extrait d'un PDF est insuffisant pour une diapo importante (formule affichée comme image), régénère cette diapo en image et lis-la directement plutôt que de deviner ou d'improviser.
 - En cas de doute réel sur une notion, une notation, ou l'origine d'un exemple : pose-moi la question plutôt que de trancher seul.
 
-Je vais te donner un premier cours (PDF des diapos, + éventuellement mes notes en .txt). Fais-moi la fiche selon ces règles.
+Je vais te donner un premier cours (PDF des diapos, + éventuellement mes notes en .txt ou .md. Fais-moi la fiche selon ces règles.
