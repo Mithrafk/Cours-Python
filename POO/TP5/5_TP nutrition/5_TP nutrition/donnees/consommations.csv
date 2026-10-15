@@ -1,0 +1,17 @@
+id_conso,id_individu,code_aliment,date,repas,quantite_g
+1,1,1001,2026-09-01,petit_dejeuner,60
+2,1,4001,2026-09-01,petit_dejeuner,200
+3,1,2001,2026-09-01,collation,150
+4,1,1002,2026-09-01,dejeuner,180
+5,1,5001,2026-09-01,dejeuner,120
+6,1,3001,2026-09-01,dejeuner,100
+7,2,1001,2026-09-01,petit_dejeuner,80
+8,2,4001,2026-09-01,petit_dejeuner,250
+9,2,1002,2026-09-01,dejeuner,220
+10,2,5001,2026-09-01,diner,150
+11,3,2001,2026-09-01,collation,180
+12,3,3001,2026-09-01,dejeuner,150
+13,4,1001,2026-09-01,petit_dejeuner,100
+14,4,5001,2026-09-01,dejeuner,180
+15,5,1002,2026-09-01,dejeuner,160
+16,5,3001,2026-09-01,diner,120

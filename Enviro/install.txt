@@ -1,0 +1,27 @@
+deactivate
+rm -rf Enviro/ml-deep Enviro/ml-env
+python -m venv Enviro/venv/ml-deep --prompt ml-deep
+source Enviro/venv/ml-deep/Scripts/activate
+python -m pip install --upgrade pip
+python -m pip install -r Enviro/requirements/ml-deep.txt
+
+python -m pip check
+python -c "import numpy, torch; print(numpy.__version__, torch.__version__, torch.cuda.is_available())"
+
+### Verifier le .gitignore du gitignor
+
+git check-ignore -v Enviro/venv/ml-deep/pyvenv.cfg
+git status
+
+python -m ipykernel install --user --name ml-deep --display-name "ML Deep"
+
+
+### Exporter venv 
+{ echo "--extra-index-url https://download.pytorch.org/whl/cu128"; python -m pip freeze; } > Enviro/requirements/ml-deep.txt
+
+
+###Après git pull
+python -m venv Enviro/venv/ml-deep --prompt ml-deep
+source Enviro/venv/ml-deep/Scripts/activate
+python -m pip install --upgrade pip
+python -m pip install -r Enviro/requirements/ml-deep.txt

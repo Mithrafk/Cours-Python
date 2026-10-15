@@ -1,0 +1,6 @@
+code_const,nom,unite
+1,Energie,kcal/100g
+2,Proteines,g/100g
+3,Lipides,g/100g
+4,Glucides,g/100g
+5,Fibres,g/100g
