@@ -2,16 +2,18 @@
 TP INCA/Ciqual - Squelette étudiant
 Ne modifiez pas les noms des fonctions demandées.
 """
+from pathlib import Path
+
 import pandas as pd
 
-DOSSIER = "donnees"
+DOSSIER = Path(__file__).resolve().parent / "donnees"
 
-individus = pd.read_csv(f"{DOSSIER}/individus.csv")
-groupes = pd.read_csv(f"{DOSSIER}/groupes.csv")
-aliments = pd.read_csv(f"{DOSSIER}/aliments.csv")
-constituants = pd.read_csv(f"{DOSSIER}/constituants.csv")
-composition = pd.read_csv(f"{DOSSIER}/composition.csv")
-consommations = pd.read_csv(f"{DOSSIER}/consommations.csv")
+individus = pd.read_csv(DOSSIER / "individus.csv")
+groupes = pd.read_csv(DOSSIER / "groupes.csv")
+aliments = pd.read_csv(DOSSIER / "aliments.csv")
+constituants = pd.read_csv(DOSSIER / "constituants.csv")
+composition = pd.read_csv(DOSSIER / "composition.csv")
+consommations = pd.read_csv(DOSSIER / "consommations.csv")
 
 
 def rechercher_aliment(texte):
